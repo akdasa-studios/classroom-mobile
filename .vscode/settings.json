@@ -1,0 +1,48 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "files.exclude": {
+    "**/.git": true,
+    "node_modules/": true,
+  },
+  "explorer.fileNesting.enabled": false,
+  "explorer.fileNesting.patterns": {
+    "*.vue": "${capture}ViewModel.ts"
+  },
+  /* -------------------------------------------------------------------------- */
+  /*                                   linter                                   */
+  /* -------------------------------------------------------------------------- */
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "vue"
+  ],
+  /* -------------------------------------------------------------------------- */
+  /*                                    tests                                   */
+  /* -------------------------------------------------------------------------- */
+  "jest.jestCommandLine": "npx jest",
+  /* -------------------------------------------------------------------------- */
+  /*                                 file types                                 */
+  /* -------------------------------------------------------------------------- */
+  "[feature]": {
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true,
+  },
+  "jest.autoRun": "off",
+  /* -------------------------------------------------------------------------- */
+  /*                                   github                                   */
+  /* -------------------------------------------------------------------------- */
+  "githubIssues.issueBranchTitle": "${user}/issue-${issueNumber}",
+  "ionic.previewInEditor": true,
+  "i18n-ally.localesPaths": [
+    "src/locale"
+  ],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.translate.engines": [
+    "google"
+  ]
+}

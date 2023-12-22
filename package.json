@@ -1,0 +1,22 @@
+{
+  "name": "bcs-school-of-devotion-app",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akdasa-studios/bcs-school-of-devotion.git"
+  },
+  "author": "Advaita Krishna das",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akdasa-studios/bcs-school-of-devotion/issues"
+  },
+  "homepage": "https://github.com/akdasa-studios/bcs-school-of-devotion#readme"
+}
