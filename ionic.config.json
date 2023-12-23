@@ -1,0 +1,7 @@
+{
+  "name": "BCS School of Devotion",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
