@@ -12,6 +12,7 @@ export const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'explore',
+        name: 'education',
         component: () => import('./pages/ExplorePage.vue')
       },
       {
