@@ -11,6 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@protocol': path.resolve(__dirname, './submodules/protocol'),
     },
   },
 })

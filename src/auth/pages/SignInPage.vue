@@ -1,5 +1,5 @@
 <template>
-  <ion-page class="stick ion-padding">
+  <ion-page class="ion-padding">
     <div class="top">
       Welcome
     </div>
@@ -16,12 +16,12 @@
         type="number"
         placeholder="Code"
       />
-      {{ emailAuthentication.lastError.value }}
+      {{ emailAuthentication.lastErrorCode.value }}
     </div>
     <div class="bottom">
       <async-button
         expand="block"
-        :progress="emailAuthentication.requestIsInProgress.value"
+        :progress="emailAuthentication.isInProgress.value"
         @click="authenticationStep == 0 ? onSignInClicked() : onValidateCodeClicked()"
       >
         <template v-if="authenticationStep == 0">
@@ -73,7 +73,11 @@ async function onSignInClicked() {
 
 async function onValidateCodeClicked() {
   const result = await emailAuthentication.signIn(code.value)
-  if (!result.error) {
+  if (result.error) { return }
+
+  if (result.registrationRequired) {
+    router.push({name: 'signup'});
+  } else {
     router.navigate({name: 'education'}, "root", "replace");
   }
 }

@@ -1,6 +1,5 @@
-import { ref } from 'vue';
-import { RequestSignInCodeTask, SignInTask, RequestSignInCodeResponse, SignInResponse } from '../services/SignInService';
-import { AsyncTaskState } from '@/shared';
+import { useAsyncTaskStateView } from '@/shared/composables/useAsyncTasksStateView';
+import { GetSignInCodeResponse, GetSignInCodeTask, SignInResponse, SignInTask } from '@protocol/auth/SignIn';
 
 
 /**
@@ -12,20 +11,17 @@ export function useEmailAuthentication() {
   /*                                 Depenencies                                */
   /* -------------------------------------------------------------------------- */
 
-  const requestSignInCodeTask = new RequestSignInCodeTask({
-    stateChanged: onAsyncTaskStateChanged
-  })
-  const signInTask = new SignInTask({
-    stateChanged: onAsyncTaskStateChanged
-  })
+  const getSignInCodeTask = new GetSignInCodeTask()
+  const signInTask = new SignInTask()
+  const asyncTasksStatus = useAsyncTaskStateView([
+    getSignInCodeTask, signInTask
+  ])
 
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
 
-  const isInProgress = ref(false)
-  const lastError = ref("")
 
 
   /* -------------------------------------------------------------------------- */
@@ -40,8 +36,8 @@ export function useEmailAuthentication() {
    */
   async function requestSignInCode(
     email: string
-  ): Promise<RequestSignInCodeResponse> {
-    return requestSignInCodeTask.execute({
+  ): Promise<GetSignInCodeResponse> {
+    return getSignInCodeTask.execute({
       email: email
     })
   }
@@ -59,16 +55,5 @@ export function useEmailAuthentication() {
     })
   }
 
-
-  /* -------------------------------------------------------------------------- */
-  /*                                  Handlers                                  */
-  /* -------------------------------------------------------------------------- */
-
-  function onAsyncTaskStateChanged(state: AsyncTaskState) {
-    if (state.isInProgress) { lastError.value = "" }
-    if (state.error) { lastError.value = state.error.code }
-    isInProgress.value = state.isInProgress
-  }
-
-  return { requestSignInCode, signIn, requestIsInProgress: isInProgress, lastError }
+  return { requestSignInCode, signIn, isInProgress: asyncTasksStatus.isInProgress, lastErrorCode: asyncTasksStatus.lastErrorCode }
 }
