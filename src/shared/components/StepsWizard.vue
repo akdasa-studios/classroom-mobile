@@ -1,13 +1,7 @@
 <template>
-  <div
-    v-for="a in [0,1]"
-    :key="a"
-  >
-    <slot
-      v-if="a == props.currentStep"
-      :name="'item'+a.toString()"
-    />
-  </div>
+  <slot
+    :name="'item'+props.currentStep.toString()"
+  />
 </template>
 
 

@@ -1,8 +1,10 @@
 <template>
-  <help-text>
-    Enter the <b>code</b> that we have sent to your email
-  </help-text>
-  <code-input v-bind="$attrs" />
+  <div>
+    <help-text>
+      Enter the <b>code</b> that we have sent to your email
+    </help-text>
+    <code-input v-bind="$attrs" />
+  </div>
 </template>
 
 

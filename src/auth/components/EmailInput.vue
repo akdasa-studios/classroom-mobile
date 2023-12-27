@@ -7,19 +7,12 @@
       autocomplete="email"
       inputmode="email"
       pattern="email"
-    >
-      <ion-icon
-        slot="end"
-        :icon="mailOutline"
-        aria-hidden="true"
-      />
-    </ion-input>
+    />
   </with-borders>
 </template>
 
 
 <script lang="ts" setup>
-import { IonInput, IonIcon } from '@ionic/vue'
-import { mailOutline } from 'ionicons/icons'
+import { IonInput } from '@ionic/vue'
 import { WithBorders } from '@/shared'
 </script>

@@ -4,21 +4,22 @@
       class="logo"
       src="/logo.png"
     >
-    <ErrorMessage
-      :error-code="emailAuthentication.lastErrorCode.value"
-    />
 
     <steps-wizard
       :steps-count="2"
       :current-step="authenticationStep"
     >
       <template #item0>
-        <EnterEmailWizardStep v-model="email" />
+        <enter-email-wizard-step v-model="email" />
       </template>
       <template #item1>
-        <EnterCodeWizardStep v-model="code" />
+        <enter-code-wizard-step v-model="code" />
       </template>
     </steps-wizard>
+
+    <error-message
+      :error-code="emailAuthentication.lastErrorCode.value"
+    />
 
     <async-button
       expand="block"
@@ -75,7 +76,7 @@ async function onValidateCodeClicked() {
   if (result.error) { return }
 
   if (result.registrationRequired) {
-    router.push({name: 'signup'});
+    router.navigate({name: 'signup'}, "root", "replace");
   } else {
     router.navigate({name: 'education'}, "root", "replace");
   }
@@ -93,9 +94,8 @@ async function onValidateCodeClicked() {
 .logo {
   width: 75lvw;
   position: absolute;
-  top: 50%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 </style>

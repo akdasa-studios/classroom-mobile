@@ -22,14 +22,14 @@ const props = defineProps<{
 
 
 <style scoped>
-ion-item::part(native) {
-  /* background: #19422d; */
-  /* color: #fff; */
+.ios ion-item {
+  border-radius: 15px;
+  margin: 4px 2px;
+}
 
-  /* border-color: #fff; */
-  /* border-style: dashed; */
-  /* border-width: 2px; */
-
-  border-radius: 7px;
+.md ion-item {
+  margin: 4px 2px;
+  border-radius: 4px;
+  margin-inline: 2px;
 }
 </style>

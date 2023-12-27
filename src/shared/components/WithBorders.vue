@@ -1,5 +1,8 @@
 <template>
-  <ion-item lines="none">
+  <ion-item
+    lines="none"
+    class="rounded"
+  >
     <slot />
   </ion-item>
 </template>
@@ -12,13 +15,18 @@ import { IonItem } from "@ionic/vue"
 
 <style scoped>
 ion-item {
-  --background: var(--ion-color-light);
   --color: var(--ion-color-light-contrast);
-
   --border-color: var(--ion-color-light-shade);
   --border-style: solid;
   --border-width: 1px;
+}
 
-  --border-radius: 7px;
+.ios ion-item {
+  --border-radius: 15px;
+}
+
+.md ion-item {
+  --border-radius: 4px;
+  margin-inline: 2px;
 }
 </style>

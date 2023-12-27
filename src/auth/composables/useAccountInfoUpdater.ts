@@ -1,21 +1,21 @@
 import { useAsyncTaskStateView } from '@/shared/composables/useAsyncTasksStateView';
-import { GetSignInCodeResponse, GetSignInWithEmailCodeTask, SignInResponse, SignInWithEmailTask } from '@protocol/auth/SignIn';
+import { UpdateAccountResponse, UpdateAccountInfoTask } from '@protocol/auth/SignUp';
 
 
-export function useEmailAuthentication() {
+export function useAccountInfoUpdater() {
   /* -------------------------------------------------------------------------- */
   /*                                 Depenencies                                */
   /* -------------------------------------------------------------------------- */
 
-  const getSignInCodeTask = new GetSignInWithEmailCodeTask()
-  const signInTask = new SignInWithEmailTask()
+  const signUpTask = new UpdateAccountInfoTask()
+
 
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
 
   const asyncTasksStatus = useAsyncTaskStateView([
-    getSignInCodeTask, signInTask
+    signUpTask
   ])
 
 
@@ -23,29 +23,12 @@ export function useEmailAuthentication() {
   /*                                   Actions                                  */
   /* -------------------------------------------------------------------------- */
 
-  /**
-   * Requests a sign-in code for the specified email.
-   * @param email The email address to request the sign-in code for.
-   * @returns A promise that resolves to a RequestSignInCodeResponse object.
-   */
-  async function requestSignInCode(
-    email: string
-  ): Promise<GetSignInCodeResponse> {
-    return getSignInCodeTask.execute({
-      email: email
-    })
-  }
-
-  /**
-   * Signs in the user with the provided code.
-   * @param code The code used for authentication.
-   * @returns A promise that resolves to a SignInResponse.
-   */
-  async function signIn(
-    code: string
-  ): Promise<SignInResponse> {
-    return signInTask.execute({
-      code: code
+  async function update(
+    name: string,
+    phoneNumber: string
+  ): Promise<UpdateAccountResponse> {
+    return signUpTask.execute({
+      name, phoneNumber
     })
   }
 
@@ -55,8 +38,7 @@ export function useEmailAuthentication() {
   /* -------------------------------------------------------------------------- */
 
   return {
-    requestSignInCode,
-    signIn,
+    update,
     isInProgress: asyncTasksStatus.isInProgress,
     lastErrorCode: asyncTasksStatus.lastErrorCode
   }
