@@ -1,13 +1,15 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 
+import { routes as authRoutes } from './auth/routes'
 import { routes as educationRoutes } from './education/routes'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/education'
+    redirect: '/auth/signin',
   },
+  ...authRoutes,
   ...educationRoutes
 ]
 
