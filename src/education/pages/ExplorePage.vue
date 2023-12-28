@@ -17,6 +17,7 @@
       <ion-card
         v-for="card in courses"
         :key="card.title"
+        @click="onCourseCardClicked"
       >
         <img
           :alt="card.title"
@@ -38,8 +39,18 @@
 <script setup lang="ts">
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
-  IonCardHeader, IonCardSubtitle, IonCardTitle
+  IonCardHeader, IonCardSubtitle, IonCardTitle, useIonRouter
 } from '@ionic/vue';
+
+/* -------------------------------------------------------------------------- */
+/*                                Dependencies                                */
+/* -------------------------------------------------------------------------- */
+
+const router = useIonRouter();
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
 
 const courses = [
   {
@@ -55,4 +66,13 @@ const courses = [
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquam tincidunt est non blandit. Donec vel dui dignissim, hendrerit lorem in, laoreet enim. Vivamus interdum consectetur convallis.',
   }
 ]
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  Handlers                                  */
+/* -------------------------------------------------------------------------- */
+
+function onCourseCardClicked() {
+  router.push({ name: "course", params: { "id": "123456" } })
+}
 </script>

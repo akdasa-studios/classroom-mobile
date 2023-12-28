@@ -5,81 +5,53 @@
       src="/logo.png"
     >
 
+    <error-message :error-code="lastErrorCode" />
+
     <steps-wizard
-      :steps-count="2"
       :current-step="authenticationStep"
     >
       <template #item0>
-        <enter-email-wizard-step v-model="email" />
+        <enter-email-wizard-step
+          @complete="onWizardStepCompleted"
+          @error="onError"
+        />
       </template>
       <template #item1>
-        <enter-code-wizard-step v-model="code" />
+        <enter-code-wizard-step
+          @complete="onWizardStepCompleted"
+          @error="onError"
+        />
       </template>
     </steps-wizard>
-
-    <error-message
-      :error-code="emailAuthentication.lastErrorCode.value"
-    />
-
-    <async-button
-      expand="block"
-      :progress="emailAuthentication.isInProgress.value"
-      @click="authenticationStep == 0 ? onSignInClicked() : onValidateCodeClicked()"
-    >
-      <template v-if="authenticationStep == 0">
-        Request Code
-      </template>
-      <template v-else-if="authenticationStep == 1">
-        Sign In
-      </template>
-    </async-button>
   </ion-page>
 </template>
 
 
 <script lang="ts" setup>
-import { IonPage, useIonRouter } from '@ionic/vue'
-import { EnterCodeWizardStep, EnterEmailWizardStep, ErrorMessage, useEmailAuthentication } from '@/auth'
-import { AsyncButton, StepsWizard } from '@/shared'
+import { IonPage } from '@ionic/vue'
+import { EnterCodeWizardStep, EnterEmailWizardStep, ErrorMessage } from '@/auth'
+import { StepsWizard } from '@/shared'
 import { ref } from 'vue';
-
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
-const router = useIonRouter()
-const emailAuthentication = useEmailAuthentication()
-
+import { KnownErrors } from '@protocol/core/KnownErrors';
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const email = ref()
-const code = ref()
 const authenticationStep = ref(0)
+const lastErrorCode = ref<KnownErrors>(KnownErrors.NoError)
 
 
 /* -------------------------------------------------------------------------- */
-/*                                   Handles                                  */
+/*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-async function onSignInClicked() {
-  const result = await emailAuthentication.requestSignInCode(email.value)
-  if (!result.error) {
-    authenticationStep.value += 1
-  }
+function onWizardStepCompleted() {
+  authenticationStep.value += 1
 }
 
-async function onValidateCodeClicked() {
-  const result = await emailAuthentication.signIn(code.value)
-  if (result.error) { return }
-
-  if (result.registrationRequired) {
-    router.navigate({name: 'signup'}, "root", "replace");
-  } else {
-    router.navigate({name: 'education'}, "root", "replace");
-  }
+function onError(errorCode: KnownErrors) {
+  lastErrorCode.value = errorCode
 }
 </script>
 

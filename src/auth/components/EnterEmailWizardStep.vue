@@ -1,13 +1,73 @@
 <template>
   <div>
     <help-text>
-      <b>Welcome to the School of Devotion!</b> Enter your email and we will send you a code to log in.
+      {{ $t("welcome") }}
+      {{ $t("enter-your-email") }}
     </help-text>
-    <email-input v-bind="$attrs" />
+
+    <email-input v-model="email" />
+
+    <async-button
+      :progress="getSignInCodeTask.isInProgress.value"
+      expand="block"
+      @click="onSignInClicked()"
+    >
+      {{ $t('request-signin-code') }}
+    </async-button>
   </div>
 </template>
 
 
 <script lang="ts" setup>
 import { EmailInput, HelpText } from '@/auth'
+import { AsyncButton, useTask } from '@/shared';
+import { GetSignInWithEmailCodeTask } from '@protocol/auth/SignIn';
+import { KnownErrors } from '@protocol/core/KnownErrors';
+import { ref, watch } from 'vue';
+
+/* -------------------------------------------------------------------------- */
+/*                                  Interface                                 */
+/* -------------------------------------------------------------------------- */
+
+const emit = defineEmits<{
+  complete: []
+  error: [errorCode: KnownErrors]
+}>()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                Dependencies                                */
+/* -------------------------------------------------------------------------- */
+
+const getSignInCodeTask = useTask(new GetSignInWithEmailCodeTask())
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const email = ref()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hooks                                   */
+/* -------------------------------------------------------------------------- */
+
+watch(getSignInCodeTask.lastError, (v) => emit("error", v))
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   Handles                                  */
+/* -------------------------------------------------------------------------- */
+
+async function onSignInClicked() {
+  const result = await getSignInCodeTask.execute({ email: email.value })
+  if (!result.error) { emit("complete"); }
+}
 </script>
+
+
+<fluent locale="en">
+welcome = Welcome to the School of Devotion!
+enter-your-email = Enter your email and we will send you a code to log in.
+request-signin-code = Request Code
+</fluent>

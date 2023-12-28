@@ -34,7 +34,7 @@
 
     <async-button
       expand="block"
-      :progress="accountInfo.isInProgress.value"
+      :progress="signUpTask.isInProgress.value"
       @click="onSignUpButtonClicked"
     >
       Sign Up
@@ -46,15 +46,15 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { IonPage, IonInput, IonList, IonCheckbox, useIonRouter } from '@ionic/vue'
-import { useAccountInfoUpdater } from '@/auth'
-import { AsyncButton } from '@/shared';
+import { AsyncButton, useTask } from '@/shared';
+import { UpdateAccountInfoTask } from '@protocol/auth/SignUp';
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const accountInfo = useAccountInfoUpdater()
+const signUpTask = useTask(new UpdateAccountInfoTask())
 
 
 /* -------------------------------------------------------------------------- */
@@ -71,7 +71,9 @@ const conditionsAccepted = ref(false)
 /* -------------------------------------------------------------------------- */
 
 async function onSignUpButtonClicked() {
-  const result = await accountInfo.update(name.value, phoneNumber.value);
+  const result = await signUpTask.execute({
+    name: name.value, phoneNumber: phoneNumber.value
+  });
   if (!result.error) {
     router.navigate({name: 'education'}, "root", "replace");
   }

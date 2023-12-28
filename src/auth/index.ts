@@ -1,7 +1,3 @@
-// composables
-export * from './composables/useEmailAuthentication'
-export * from './composables/useAccountInfoUpdater'
-
 // components
 export { default as HelpText } from './components/HelpText.vue'
 export { default as EmailInput } from './components/EmailInput.vue'
