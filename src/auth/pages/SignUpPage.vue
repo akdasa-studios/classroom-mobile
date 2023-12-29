@@ -48,6 +48,7 @@ import { ref } from 'vue';
 import { IonPage, IonInput, IonList, IonCheckbox, useIonRouter } from '@ionic/vue'
 import { AsyncButton, useTask } from '@/shared'
 import { UpdateAccountInfoTask } from '@protocol/auth'
+import { ResponseCode } from '@protocol/core'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
@@ -74,7 +75,7 @@ async function onSignUpButtonClicked() {
   const result = await signUpTask.execute({
     name: name.value, phoneNumber: phoneNumber.value
   });
-  if (!result.error) {
+  if (result.status === ResponseCode.Ok) {
     router.navigate({name: 'education'}, "root", "replace");
   }
 }

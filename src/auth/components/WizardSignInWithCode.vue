@@ -22,7 +22,7 @@ import { CodeInput, HelpText } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
 import { useIonRouter } from '@ionic/vue'
 import { SignInWithCodeTask } from '@protocol/auth'
-import { KnownErrorCode } from '@protocol/core'
+import { KnownErrorCode, ResponseCode } from '@protocol/core'
 import { ref, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */
@@ -63,9 +63,9 @@ watch(getSignInCodeTask.lastError, (v) => emit("error", v))
 
 async function onValidateCodeClicked() {
   const result = await getSignInCodeTask.execute({ code: code.value })
-  if (result.error) { return }
+  if (result.status === ResponseCode.Error) { return }
 
-  if (result.registrationRequired) {
+  if (result.data.registrationRequired) {
     router.navigate({name: 'signup'}, "root", "replace");
   } else {
     router.navigate({name: 'education'}, "root", "replace");

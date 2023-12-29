@@ -22,7 +22,7 @@
 import { EmailInput, HelpText } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
 import { GetSignInCodeByEmailTask } from '@protocol/auth'
-import { KnownErrorCode } from '@protocol/core'
+import { KnownErrorCode, ResponseCode } from '@protocol/core'
 import { ref, watch } from 'vue';
 
 /* -------------------------------------------------------------------------- */
@@ -61,7 +61,7 @@ watch(getSignInCodeTask.lastError, (v) => emit("error", v))
 
 async function onSignInClicked() {
   const result = await getSignInCodeTask.execute({ email: email.value })
-  if (!result.error) { emit("complete"); }
+  if (result.status === ResponseCode.Ok) { emit("complete"); }
 }
 </script>
 
