@@ -32,14 +32,14 @@ import { IonPage } from '@ionic/vue'
 import { EnterCodeWizardStep, EnterEmailWizardStep, ErrorMessage } from '@/auth'
 import { StepsWizard } from '@/shared'
 import { ref } from 'vue';
-import { KnownErrors } from '@protocol/core/KnownErrors';
+import { KnownErrorCode } from '@protocol/core';
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
 const authenticationStep = ref(0)
-const lastErrorCode = ref<KnownErrors>(KnownErrors.NoError)
+const lastErrorCode = ref<KnownErrorCode>(KnownErrorCode.NoError)
 
 
 /* -------------------------------------------------------------------------- */
@@ -50,7 +50,7 @@ function onWizardStepCompleted() {
   authenticationStep.value += 1
 }
 
-function onError(errorCode: KnownErrors) {
+function onError(errorCode: KnownErrorCode) {
   lastErrorCode.value = errorCode
 }
 </script>

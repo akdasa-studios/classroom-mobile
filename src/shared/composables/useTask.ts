@@ -1,6 +1,4 @@
-import { IAsyncTask } from '@protocol/core/AsyncTask';
-import { KnownErrors } from '@protocol/core/KnownErrors';
-import { Request, Response } from '@protocol/core/Requests';
+import { IAsyncTask, KnownErrorCode, Request, Response } from '@protocol/core'
 import { ref } from 'vue';
 
 export function useTask<
@@ -10,13 +8,13 @@ export function useTask<
   task: IAsyncTask<TRequest, TResponse>
 ) {
 
-  const lastError    = ref<KnownErrors>(KnownErrors.NoError);
+  const lastError    = ref<KnownErrorCode>(KnownErrorCode.NoError);
   const isInProgress = ref(false);
 
   async function execute(
     request: TRequest
   ): Promise<TResponse> {
-    lastError.value = KnownErrors.NoError
+    lastError.value = KnownErrorCode.NoError
     isInProgress.value = true
 
     const result = await task.execute(request)

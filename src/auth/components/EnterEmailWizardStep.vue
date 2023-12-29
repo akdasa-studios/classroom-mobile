@@ -20,9 +20,9 @@
 
 <script lang="ts" setup>
 import { EmailInput, HelpText } from '@/auth'
-import { AsyncButton, useTask } from '@/shared';
-import { GetSignInWithEmailCodeTask } from '@protocol/auth/SignIn';
-import { KnownErrors } from '@protocol/core/KnownErrors';
+import { AsyncButton, useTask } from '@/shared'
+import { GetSignInWithEmailCodeTask } from '@protocol/auth'
+import { KnownErrorCode } from '@protocol/core'
 import { ref, watch } from 'vue';
 
 /* -------------------------------------------------------------------------- */
@@ -31,7 +31,7 @@ import { ref, watch } from 'vue';
 
 const emit = defineEmits<{
   complete: []
-  error: [errorCode: KnownErrors]
+  error: [errorCode: KnownErrorCode]
 }>()
 
 

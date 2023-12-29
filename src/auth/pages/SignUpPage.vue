@@ -46,8 +46,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { IonPage, IonInput, IonList, IonCheckbox, useIonRouter } from '@ionic/vue'
-import { AsyncButton, useTask } from '@/shared';
-import { UpdateAccountInfoTask } from '@protocol/auth/SignUp';
+import { AsyncButton, useTask } from '@/shared'
+import { UpdateAccountInfoTask } from '@protocol/auth'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */

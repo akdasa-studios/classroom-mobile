@@ -21,8 +21,8 @@
 import { CodeInput, HelpText } from '@/auth'
 import { AsyncButton, useTask } from '@/shared';
 import { useIonRouter } from '@ionic/vue';
-import { SignInWithEmailTask } from '@protocol/auth/SignIn';
-import { KnownErrors } from '@protocol/core/KnownErrors';
+import { SignInWithEmailTask } from '@protocol/auth';
+import { KnownErrorCode } from '@protocol/core';
 import { ref, watch } from 'vue';
 
 /* -------------------------------------------------------------------------- */
@@ -31,7 +31,7 @@ import { ref, watch } from 'vue';
 
 const emit = defineEmits<{
   complete: []
-  error: [errorCode: KnownErrors]
+  error: [errorCode: KnownErrorCode]
 }>()
 
 
@@ -78,3 +78,4 @@ async function onValidateCodeClicked() {
 validate-code = Validate code
 </fluent>
 
+import { SignInWithEmailTask } from '@protocol/auth/SignInWithEmailTask';

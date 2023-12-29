@@ -8,8 +8,6 @@ export const ruBundle = new FluentBundle('ru')
 
 authResources.ru.forEach(x => ruBundle.addResource(x))
 
-console.log(ruBundle)
-
 export const fluent = createFluentVue({
   bundles: [ruBundle]
 })

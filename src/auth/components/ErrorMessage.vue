@@ -1,6 +1,6 @@
 <template>
   <ion-item
-    v-if="props.errorCode !== KnownErrors.NoError"
+    v-if="props.errorCode !== KnownErrorCode.NoError"
     color="danger"
     lines="none"
   >
@@ -13,10 +13,10 @@
 
 <script lang="ts" setup>
 import { IonItem, IonLabel } from '@ionic/vue'
-import { KnownErrors } from '@protocol/core/KnownErrors';
+import { KnownErrorCode } from '@protocol/core'
 
 const props = defineProps<{
-  errorCode: KnownErrors
+  errorCode: KnownErrorCode
 }>();
 </script>
 
