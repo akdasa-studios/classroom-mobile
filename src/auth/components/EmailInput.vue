@@ -3,7 +3,7 @@
     <ion-input
       v-bind="$attrs"
       type="email"
-      placeholder="Email"
+      :placeholder="$t('email')"
       autocomplete="email"
       inputmode="email"
       pattern="email"
@@ -16,3 +16,8 @@
 import { IonInput } from '@ionic/vue'
 import { WithBorders } from '@/shared'
 </script>
+
+
+<fluent locale="en">
+email = EMail
+</fluent>

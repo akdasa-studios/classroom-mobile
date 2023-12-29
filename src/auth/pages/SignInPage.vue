@@ -1,9 +1,6 @@
 <template>
   <ion-page class="ion-padding page">
-    <img
-      class="logo"
-      src="/logo.png"
-    >
+    <school-of-devotion-logo />
 
     <error-message :error-code="lastErrorCode" />
 
@@ -11,13 +8,13 @@
       :current-step="authenticationStep"
     >
       <template #item0>
-        <enter-email-wizard-step
+        <wizard-get-sign-in-code-by-email
           @complete="onWizardStepCompleted"
           @error="onError"
         />
       </template>
       <template #item1>
-        <enter-code-wizard-step
+        <wizard-sign-in-with-code
           @complete="onWizardStepCompleted"
           @error="onError"
         />
@@ -29,10 +26,10 @@
 
 <script lang="ts" setup>
 import { IonPage } from '@ionic/vue'
-import { EnterCodeWizardStep, EnterEmailWizardStep, ErrorMessage } from '@/auth'
+import { WizardGetSignInCodeByEmail, WizardSignInWithCode, ErrorMessage, SchoolOfDevotionLogo } from '@/auth'
 import { StepsWizard } from '@/shared'
-import { ref } from 'vue';
-import { KnownErrorCode } from '@protocol/core';
+import { ref } from 'vue'
+import { KnownErrorCode } from '@protocol/core'
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */

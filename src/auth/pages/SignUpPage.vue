@@ -1,26 +1,26 @@
 <template>
   <ion-page class="ion-padding">
     <ion-list>
-      <h1>Sign Up</h1>
-      We need some information to complete registration
+      <h1>{{ $t('sign-up') }}</h1>
+      {{ $t('need-some-information') }}
       <br>
       <br>
 
       <ion-input
         v-model="name"
-        label="Name"
+        :label="$t('name')"
         label-placement="stacked"
         fill="outline"
-        placeholder="Krishna das"
+        :placeholder="$t('name-placeholder')"
       />
       <br>
 
       <ion-input
         v-model="phoneNumber"
-        label="Phone number"
+        :label="$t('phone-number')"
         label-placement="stacked"
         fill="outline"
-        placeholder="123456"
+        placeholder="+19991111111"
       />
       <br>
       <ion-checkbox
@@ -28,7 +28,7 @@
         label-placement="end"
         justify="start"
       >
-        I agree to the terms and conditions
+        {{ $t('i-agree-to-the-terms') }}
       </ion-checkbox>
     </ion-list>
 
@@ -37,7 +37,7 @@
       :progress="signUpTask.isInProgress.value"
       @click="onSignUpButtonClicked"
     >
-      Sign Up
+      {{ $t('sign-up') }}
     </async-button>
   </ion-page>
 </template>
@@ -79,3 +79,13 @@ async function onSignUpButtonClicked() {
   }
 }
 </script>
+
+
+<fluent locale="en">
+sign-up = Sign Up
+need-some-information = We need some information to complete registration
+name = Name
+name-placeholder = Krishna das
+phone-number = Phone Number
+i-agree-to-the-terms = I agree to the terms and conditions
+</fluent>

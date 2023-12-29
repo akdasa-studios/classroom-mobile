@@ -1,29 +1,29 @@
 <template>
   <div>
     <help-text>
-      {{ $t("welcome") }}
-      {{ $t("enter-your-email") }}
+      {{ $t('enter-code') }}
     </help-text>
 
-    <email-input v-model="email" />
+    <code-input v-model="code" />
 
     <async-button
       :progress="getSignInCodeTask.isInProgress.value"
       expand="block"
-      @click="onSignInClicked()"
+      @click="onValidateCodeClicked()"
     >
-      {{ $t('request-signin-code') }}
+      {{ $t('sign-in') }}
     </async-button>
   </div>
 </template>
 
 
 <script lang="ts" setup>
-import { EmailInput, HelpText } from '@/auth'
+import { CodeInput, HelpText } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
-import { GetSignInWithEmailCodeTask } from '@protocol/auth'
+import { useIonRouter } from '@ionic/vue'
+import { SignInWithCodeTask } from '@protocol/auth'
 import { KnownErrorCode } from '@protocol/core'
-import { ref, watch } from 'vue';
+import { ref, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -39,13 +39,15 @@ const emit = defineEmits<{
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const getSignInCodeTask = useTask(new GetSignInWithEmailCodeTask())
+const router = useIonRouter()
+const getSignInCodeTask = useTask(new SignInWithCodeTask())
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const email = ref()
+const code = ref()
 
 
 /* -------------------------------------------------------------------------- */
@@ -59,15 +61,20 @@ watch(getSignInCodeTask.lastError, (v) => emit("error", v))
 /*                                   Handles                                  */
 /* -------------------------------------------------------------------------- */
 
-async function onSignInClicked() {
-  const result = await getSignInCodeTask.execute({ email: email.value })
-  if (!result.error) { emit("complete"); }
+async function onValidateCodeClicked() {
+  const result = await getSignInCodeTask.execute({ code: code.value })
+  if (result.error) { return }
+
+  if (result.registrationRequired) {
+    router.navigate({name: 'signup'}, "root", "replace");
+  } else {
+    router.navigate({name: 'education'}, "root", "replace");
+  }
 }
 </script>
 
 
 <fluent locale="en">
-welcome = Welcome to the School of Devotion!
-enter-your-email = Enter your email and we will send you a code to log in.
-request-signin-code = Request Code
+enter-code = Enter the code that we have sent to your email
+sign-in = Sign In
 </fluent>
