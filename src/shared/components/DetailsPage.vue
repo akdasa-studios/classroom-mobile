@@ -21,12 +21,7 @@
         </ion-toolbar>
       </ion-header>
 
-      <div
-        v-if="isLoading"
-        class="spinner"
-      >
-        <ion-spinner name="dots" />
-      </div>
+      <loading-spinner v-if="isLoading" />
       <slot v-else />
     </ion-content>
   </ion-page>
@@ -34,26 +29,14 @@
 
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons, IonSpinner } from '@ionic/vue'
+import {
+  IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
+  IonBackButton, IonButtons
+} from '@ionic/vue'
+import { LoadingSpinner } from '@/shared'
 
 defineProps<{
   title: string,
   isLoading: boolean
 }>()
 </script>
-
-
-<style scoped>
-.spinner {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-}
-
-ion-spinner {
-  width: 100px;
-  height: 100px;
-}
-</style>

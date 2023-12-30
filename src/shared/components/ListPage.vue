@@ -14,7 +14,12 @@
         </ion-toolbar>
       </ion-header>
 
+      <loading-spinner
+        v-if="isLoading && items.length === 0"
+      />
+
       <long-list
+        v-else
         v-slot="sp"
         :items="items"
         :infinite-scroll-enabled="infiniteScrollEnabled"
@@ -30,7 +35,7 @@
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
 } from '@ionic/vue'
-import { LongList } from '@/shared'
+import { LoadingSpinner, LongList } from '@/shared'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -40,6 +45,7 @@ defineProps<{
   title: string,
   items: T[]
   infiniteScrollEnabled: boolean
+  isLoading: boolean
 }>()
 
 const emit = defineEmits<{

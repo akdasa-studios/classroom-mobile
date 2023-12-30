@@ -4,6 +4,7 @@
     :items="courses"
     :infinite-scroll-enabled="infiniteScrollEnabled"
     :title="$t('courses')"
+    :is-loading="getCoursesListTask.isInProgress.value"
     @fetch="onCoursesListFetchRequested"
   >
     <course-card
