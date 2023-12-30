@@ -18,7 +18,10 @@ export const routes: Array<RouteRecordRaw> = [
       {
         name: 'course',
         path: 'courses/:id',
-        component: () => import('./pages/CourseDetailsPage.vue')
+        component: () => import('./pages/CourseDetailsPage.vue'),
+        props: route => ({
+          id: route.params.id,
+        }),
       },
       {
         path: 'my-courses',
