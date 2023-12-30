@@ -1,5 +1,8 @@
+// layouts
+export { default as LogoAndControlsLayout } from './layouts/LogoAndControlsLayout.vue'
+
 // components
-export { default as HelpText } from './components/HelpText.vue'
+export { default as HelpMessage } from './components/HelpMessage.vue'
 export { default as EmailInput } from './components/EmailInput.vue'
 export { default as CodeInput } from './components/CodeInput.vue'
 export { default as WizardGetSignInCodeByEmail } from './components/WizardGetSignInCodeByEmail.vue'

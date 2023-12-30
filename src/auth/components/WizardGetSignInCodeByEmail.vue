@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <help-text>
-      {{ $t("welcome") }}
-      {{ $t("enter-your-email") }}
-    </help-text>
+  <help-message>
+    {{ $t("welcome") }}
+    {{ $t("enter-your-email") }}
+  </help-message>
 
-    <email-input v-model="email" />
+  <email-input v-model="email" />
 
-    <async-button
-      :progress="getSignInCodeTask.isInProgress.value"
-      expand="block"
-      @click="onSignInClicked()"
-    >
-      {{ $t('request-signin-code') }}
-    </async-button>
-  </div>
+  <async-button
+    :progress="getSignInCodeTask.isInProgress.value"
+    expand="block"
+    @click="onSignInClicked()"
+  >
+    {{ $t('request-signin-code') }}
+  </async-button>
 </template>
 
 
 <script lang="ts" setup>
-import { EmailInput, HelpText } from '@/auth'
+import { EmailInput, HelpMessage } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
 import { GetSignInCodeByEmailTask } from '@protocol/auth'
 import { KnownErrorCode, ResponseCode } from '@protocol/core'
@@ -40,6 +38,7 @@ const emit = defineEmits<{
 /* -------------------------------------------------------------------------- */
 
 const getSignInCodeTask = useTask(new GetSignInCodeByEmailTask())
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */

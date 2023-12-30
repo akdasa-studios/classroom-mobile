@@ -1,26 +1,23 @@
 <template>
-  <div>
-    <help-text>
-      {{ $t('enter-code') }}
-    </help-text>
+  <help-message>
+    {{ $t('enter-code') }}
+  </help-message>
 
-    <code-input v-model="code" />
+  <code-input v-model="code" />
 
-    <async-button
-      :progress="getSignInCodeTask.isInProgress.value"
-      expand="block"
-      @click="onValidateCodeClicked()"
-    >
-      {{ $t('sign-in') }}
-    </async-button>
-  </div>
+  <async-button
+    :progress="getSignInCodeTask.isInProgress.value"
+    expand="block"
+    @click="onValidateCodeClicked()"
+  >
+    {{ $t('sign-in') }}
+  </async-button>
 </template>
 
 
 <script lang="ts" setup>
-import { CodeInput, HelpText } from '@/auth'
+import { CodeInput, HelpMessage } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
-import { useIonRouter } from '@ionic/vue'
 import { SignInWithCodeTask } from '@protocol/auth'
 import { KnownErrorCode, ResponseCode } from '@protocol/core'
 import { ref, watch } from 'vue'
@@ -30,7 +27,7 @@ import { ref, watch } from 'vue'
 /* -------------------------------------------------------------------------- */
 
 const emit = defineEmits<{
-  complete: []
+  complete: [isRegistrationRequired: boolean]
   error: [errorCode: KnownErrorCode]
 }>()
 
@@ -39,7 +36,6 @@ const emit = defineEmits<{
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const router = useIonRouter()
 const getSignInCodeTask = useTask(new SignInWithCodeTask())
 
 
@@ -64,12 +60,7 @@ watch(getSignInCodeTask.lastError, (v) => emit('error', v))
 async function onValidateCodeClicked() {
   const result = await getSignInCodeTask.execute({ code: code.value })
   if (result.status === ResponseCode.Error) { return }
-
-  if (result.data.registrationRequired) {
-    router.navigate({name: 'signup'}, 'root', 'replace')
-  } else {
-    router.navigate({name: 'education'}, 'root', 'replace')
-  }
+  emit('complete', result.data.registrationRequired)
 }
 </script>
 
