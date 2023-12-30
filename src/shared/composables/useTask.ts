@@ -1,5 +1,5 @@
 import { CompletedResponse, IAsyncTask, KnownErrorCode, Request, Response, ResponseCode } from '@protocol/core'
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 export function useTask<
   TRequest extends Request,
@@ -11,8 +11,8 @@ export function useTask<
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
 
-  const lastError    = ref<KnownErrorCode>(KnownErrorCode.NoError);
-  const isInProgress = ref(false);
+  const lastError    = ref<KnownErrorCode>(KnownErrorCode.NoError)
+  const isInProgress = ref(false)
 
 
   /* -------------------------------------------------------------------------- */

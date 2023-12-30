@@ -8,5 +8,5 @@
 <script lang="ts" setup>
 const props = defineProps<{
   currentStep: number
-}>();
+}>()
 </script>

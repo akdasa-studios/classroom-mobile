@@ -9,7 +9,7 @@
 
 
 <script lang="ts" setup>
-import { IonItem } from "@ionic/vue"
+import { IonItem } from '@ionic/vue'
 </script>
 
 

@@ -17,7 +17,7 @@ import { KnownErrorCode } from '@protocol/core'
 
 const props = defineProps<{
   errorCode: KnownErrorCode
-}>();
+}>()
 </script>
 
 

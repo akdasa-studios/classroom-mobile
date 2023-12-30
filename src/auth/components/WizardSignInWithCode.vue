@@ -54,7 +54,7 @@ const code = ref()
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-watch(getSignInCodeTask.lastError, (v) => emit("error", v))
+watch(getSignInCodeTask.lastError, (v) => emit('error', v))
 
 
 /* -------------------------------------------------------------------------- */
@@ -66,9 +66,9 @@ async function onValidateCodeClicked() {
   if (result.status === ResponseCode.Error) { return }
 
   if (result.data.registrationRequired) {
-    router.navigate({name: 'signup'}, "root", "replace");
+    router.navigate({name: 'signup'}, 'root', 'replace')
   } else {
-    router.navigate({name: 'education'}, "root", "replace");
+    router.navigate({name: 'education'}, 'root', 'replace')
   }
 }
 </script>

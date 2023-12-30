@@ -1,78 +1,80 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Explore</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">
-            Explore
-          </ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-card
-        v-for="card in courses"
-        :key="card.title"
-        @click="onCourseCardClicked"
-      >
-        <img
-          :alt="card.title"
-          src="https://i.pinimg.com/736x/6b/ae/e0/6baee0da8198f165022776bfa2c9a8c3.jpg"
-        >
-        <ion-card-header>
-          <ion-card-title>{{ card.title }}</ion-card-title>
-          <ion-card-subtitle>{{ card.title }}</ion-card-subtitle>
-        </ion-card-header>
-
-        <ion-card-content>
-          {{ card.description }}
-        </ion-card-content>
-      </ion-card>
-    </ion-content>
-  </ion-page>
+  <list-page
+    v-slot="sp"
+    :items="courses"
+    :infinite-scroll-enabled="infiniteScrollEnabled"
+    :title="$t('courses')"
+    @fetch="onCoursesListFetchRequested"
+  >
+    <course-card
+      :title="sp.item.title"
+      :subtitle="sp.item.subtitle"
+      :description="sp.item.description"
+      :cover-image-url="sp.item.coverImageUrl"
+      @click="() => onCourseCardClicked(sp.item.id.toString())"
+    />
+  </list-page>
 </template>
 
 <script setup lang="ts">
-import {
-  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardContent,
-  IonCardHeader, IonCardSubtitle, IonCardTitle, useIonRouter
-} from '@ionic/vue';
+import { ref } from 'vue'
+import { onIonViewDidEnter, useIonRouter } from '@ionic/vue'
+import { useTask } from '@/shared'
+import { ResponseCode } from '@protocol/core'
+import { Course, GetCoursesListTask } from '@protocol/courses'
+import { ListPage } from '@/shared'
+import { CourseCard } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const router = useIonRouter();
+const router = useIonRouter()
+const getCoursesListTask = useTask(new GetCoursesListTask())
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const courses = [
-  {
-    title: 'Pranama',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquam tincidunt est non blandit. Donec vel dui dignissim, hendrerit lorem in, laoreet enim. Vivamus interdum consectetur convallis.',
-  },
-  {
-    title: 'Initiation',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquam tincidunt est non blandit. Donec vel dui dignissim, hendrerit lorem in, laoreet enim. Vivamus interdum consectetur convallis.',
-  },
-  {
-    title: 'Second initiation',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquam tincidunt est non blandit. Donec vel dui dignissim, hendrerit lorem in, laoreet enim. Vivamus interdum consectetur convallis.',
-  }
-]
+const courses = ref<Course[]>([])
+const infiniteScrollEnabled = ref(true)
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hooks                                   */
+/* -------------------------------------------------------------------------- */
+
+onIonViewDidEnter(() => onCoursesListFetchRequested(0))
 
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-function onCourseCardClicked() {
-  router.push({ name: "course", params: { "id": "123456" } })
+function onCourseCardClicked(
+  id: string
+) {
+  router.push({ name: 'course', params: { 'id': id } })
+}
+
+async function onCoursesListFetchRequested(
+  offset: number,
+  complete?: () => void
+) {
+  const fetchCount = 4
+  const result = await getCoursesListTask.execute({
+    count: fetchCount, offset: offset
+  })
+  if (result.status === ResponseCode.Ok) {
+    courses.value = offset === 0
+      ? result.data.items
+      : courses.value.concat(result.data.items)
+    infiniteScrollEnabled.value = result.data.items.length == fetchCount
+  }
+  if (complete) { complete() }
 }
 </script>
+
+
+<fluent locale="en">
+courses = Courses
+</fluent>
