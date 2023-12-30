@@ -1,5 +1,5 @@
 <template>
-  <details-page
+  <item-details-page
     :title="title || ''"
     :is-loading="getCourseDetailsTask.isInProgress.value"
   >
@@ -7,13 +7,15 @@
       :src="coverImageUrl"
     >
 
-    {{ description }}
-  </details-page>
+    <p class="ion-padding">
+      {{ description }}
+    </p>
+  </item-details-page>
 </template>
 
 
 <script setup lang="ts">
-import { DetailsPage, useLocalStorageCache, useTask } from '@/shared'
+import { ItemDetailsPage, useLocalStorageCache, useTask } from '@/shared'
 import { onIonViewWillEnter } from '@ionic/vue'
 import { ResponseCode } from '@protocol/core'
 import { GetCourseDetailsTaskTask } from '@protocol/courses'

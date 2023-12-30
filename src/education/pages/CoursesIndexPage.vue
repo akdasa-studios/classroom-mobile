@@ -1,5 +1,5 @@
 <template>
-  <list-page
+  <list-items-page
     v-slot="sp"
     :items="courses"
     :infinite-scroll-enabled="infiniteScrollEnabled"
@@ -14,7 +14,7 @@
       :cover-image-url="sp.item.coverImageUrl"
       @click="() => onCourseCardClicked(sp.item.id.toString())"
     />
-  </list-page>
+  </list-items-page>
 </template>
 
 <script setup lang="ts">
@@ -23,7 +23,7 @@ import { onIonViewDidEnter, useIonRouter } from '@ionic/vue'
 import { useLocalStorageCache, useTask } from '@/shared'
 import { ResponseCode } from '@protocol/core'
 import { Course, GetCoursesListTask } from '@protocol/courses'
-import { ListPage } from '@/shared'
+import { ListItemsPage } from '@/shared'
 import { CourseCard } from '@/education'
 
 /* -------------------------------------------------------------------------- */

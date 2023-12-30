@@ -11,7 +11,7 @@
 
     <ion-content
       :fullscreen="true"
-      class="ion-padding"
+      :class="{ 'ion-padding': hasPadding }"
     >
       <ion-header collapse="condense">
         <ion-toolbar>
@@ -21,22 +21,18 @@
         </ion-toolbar>
       </ion-header>
 
-      <loading-spinner v-if="isLoading" />
-      <slot v-else />
+      <slot />
     </ion-content>
   </ion-page>
 </template>
 
-
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import {
-  IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
-  IonBackButton, IonButtons
+  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton
 } from '@ionic/vue'
-import { LoadingSpinner } from '@/shared'
 
 defineProps<{
   title: string,
-  isLoading: boolean
+  hasPadding?: boolean
 }>()
 </script>
