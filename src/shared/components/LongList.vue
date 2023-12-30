@@ -33,13 +33,15 @@ import {
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
+export type FetchMode = 'refresh' | 'append'
+
 const props = defineProps<{
   items: T[]
   infiniteScrollEnabled: boolean
 }>()
 
 const emit = defineEmits<{
-  fetch: [offset: number, complete: () => void]
+  fetch: [mode: FetchMode, offset: number, complete: () => void]
 }>()
 
 
@@ -48,11 +50,12 @@ const emit = defineEmits<{
 /* -------------------------------------------------------------------------- */
 
 async function onFetchRequested(
-  mode: 'refresh' | 'append',
+  mode: FetchMode,
   event: RefresherCustomEvent | InfiniteScrollCustomEvent
 ) {
   emit(
     'fetch',
+    mode,
     mode == 'refresh' ? 0 : props.items.length,
     () => { event.target.complete() }
   )

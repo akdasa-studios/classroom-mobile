@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { onIonViewDidEnter, useIonRouter } from '@ionic/vue'
-import { useTask } from '@/shared'
+import { useLocalStorageCache, useTask } from '@/shared'
 import { ResponseCode } from '@protocol/core'
 import { Course, GetCoursesListTask } from '@protocol/courses'
 import { ListPage } from '@/shared'
@@ -30,7 +30,11 @@ import { CourseCard } from '@/education'
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const getCoursesListTask = useTask(new GetCoursesListTask())
+const getCoursesListTask = useTask(
+  new GetCoursesListTask(),
+  useLocalStorageCache('courses')
+)
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
@@ -43,7 +47,11 @@ const infiniteScrollEnabled = ref(true)
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-onIonViewDidEnter(() => onCoursesListFetchRequested(0))
+onIonViewDidEnter(() => {
+  if (courses.value.length === 0) {
+    onCoursesListFetchRequested('append', 0)
+  }
+})
 
 
 /* -------------------------------------------------------------------------- */
@@ -57,9 +65,12 @@ function onCourseCardClicked(
 }
 
 async function onCoursesListFetchRequested(
+  mode: 'refresh' | 'append',
   offset: number,
   complete?: () => void
 ) {
+  if (mode === 'refresh') { getCoursesListTask.invalidateCache() }
+
   const fetchCount = 4
   const result = await getCoursesListTask.execute({
     count: fetchCount, offset: offset

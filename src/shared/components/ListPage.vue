@@ -43,7 +43,11 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  fetch: [offset: number, complete: () => void]
+  fetch: [
+    mode: 'refresh' | 'append',
+    offset: number,
+    complete: () => void
+  ]
 }>()
 
 
@@ -52,9 +56,10 @@ const emit = defineEmits<{
 /* -------------------------------------------------------------------------- */
 
 async function onFetchRequested(
+  mode: 'refresh' | 'append',
   offset: number,
   complete: () => void
 ) {
-  emit('fetch', offset, complete)
+  emit('fetch', mode, offset, complete)
 }
 </script>

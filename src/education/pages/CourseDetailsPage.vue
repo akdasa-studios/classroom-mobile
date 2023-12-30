@@ -1,37 +1,20 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>{{ title }}</ion-title>
-        <ion-buttons slot="start">
-          <ion-back-button />
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">
-            {{ title }}
-          </ion-title>
-        </ion-toolbar>
-      </ion-header>
+  <details-page
+    :title="title || ''"
+    :is-loading="getCourseDetailsTask.isInProgress.value"
+  >
+    <img
+      :src="coverImageUrl"
+    >
 
-      <img
-        :src="coverImageUrl"
-      >
-
-      <ion-content class="ion-padding">
-        {{ description }}
-      </ion-content>
-    </ion-content>
-  </ion-page>
+    {{ description }}
+  </details-page>
 </template>
 
 
 <script setup lang="ts">
-import { useTask } from '@/shared'
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons, onIonViewWillEnter } from '@ionic/vue'
+import { DetailsPage, useLocalStorageCache, useTask } from '@/shared'
+import { onIonViewWillEnter } from '@ionic/vue'
 import { ResponseCode } from '@protocol/core'
 import { GetCourseDetailsTaskTask } from '@protocol/courses'
 import { ref } from 'vue'
@@ -49,7 +32,10 @@ const props = defineProps<{
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const getCourseDetailsTask = useTask(new GetCourseDetailsTaskTask())
+const getCourseDetailsTask = useTask(
+  new GetCourseDetailsTaskTask(),
+  useLocalStorageCache('course-details')
+)
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
@@ -73,7 +59,6 @@ onIonViewWillEnter(onFetchRequested)
 
 async function onFetchRequested() {
   const result = await getCourseDetailsTask.execute({ id: props.id })
-  console.log(result)
   if (result.status === ResponseCode.Ok) {
     title.value = result.data.title
     description.value = result.data.description
