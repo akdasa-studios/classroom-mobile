@@ -65,7 +65,7 @@ function onWizardSignInWithCodeCompleted(
   if (isRegistrationRequired) {
     router.navigate({name: 'signup'}, 'root', 'replace')
   } else {
-    router.navigate({name: 'education'}, 'root', 'replace')
+    router.navigate({name: 'courses'}, 'root', 'replace')
   }
 }
 

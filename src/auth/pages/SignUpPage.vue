@@ -76,7 +76,7 @@ async function onSignUpButtonClicked() {
     name: name.value, phoneNumber: phoneNumber.value
   })
   if (result.status === ResponseCode.Ok) {
-    router.navigate({name: 'education'}, 'root', 'replace')
+    router.navigate({name: 'courses'}, 'root', 'replace')
   }
 }
 </script>

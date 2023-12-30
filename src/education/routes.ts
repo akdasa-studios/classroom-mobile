@@ -12,8 +12,8 @@ export const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'courses',
-        name: 'education',
-        component: () => import('./pages/ExplorePage.vue'),
+        name: 'courses',
+        component: () => import('./pages/CoursesIndexPage.vue'),
       },
       {
         name: 'course',
