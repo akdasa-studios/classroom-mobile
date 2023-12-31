@@ -24,6 +24,14 @@ export const routes: Array<RouteRecordRaw> = [
         }),
       },
       {
+        name: 'enroll',
+        path: 'courses/:id/enroll',
+        component: () => import('./pages/EnrollPage.vue'),
+        props: route => ({
+          id: route.params.id,
+        }),
+      },
+      {
         path: 'my-courses',
         component: () => import('./pages/MyCourses.vue')
       },

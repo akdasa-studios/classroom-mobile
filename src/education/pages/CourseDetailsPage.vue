@@ -1,24 +1,37 @@
 <template>
-  <item-details-page
-    :title="title || ''"
-    :is-loading="getCourseDetailsTask.isInProgress.value"
+  <item-details-with-task-page
+    :title="title"
+    :task="getCourseDetailsTask"
+    :request="{ id: props.id }"
+    @data-loaded="onDataLoaded"
   >
-    <img
-      :src="coverImageUrl"
-    >
+    <template #success="{ data }">
+      <img :src="data.coverImageUrl">
 
-    <p class="ion-padding">
-      {{ description }}
-    </p>
-  </item-details-page>
+      <p class="ion-padding">
+        {{ data.description }}
+
+        <ion-button
+          :disabled="!data.isOpenToEnroll"
+          expand="block"
+          @click="onEnrollButtonClicked"
+        >
+          {{ $t('enroll') }}
+        </ion-button>
+      </p>
+    </template>
+
+    <template #error>
+      Some shit happened
+    </template>
+  </item-details-with-task-page>
 </template>
 
 
 <script setup lang="ts">
-import { ItemDetailsPage, useLocalStorageCache, useTask } from '@/shared'
-import { onIonViewWillEnter } from '@ionic/vue'
-import { ResponseCode } from '@protocol/core'
-import { GetCourseDetailsTaskTask } from '@protocol/courses'
+import { IonButton, useIonRouter } from '@ionic/vue'
+import { ItemDetailsWithTaskPage } from '@/shared'
+import { GetCourseDetailsResponse, GetCourseDetailsTaskTask } from '@protocol/courses'
 import { ref } from 'vue'
 
 /* -------------------------------------------------------------------------- */
@@ -34,37 +47,31 @@ const props = defineProps<{
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const getCourseDetailsTask = useTask(
-  new GetCourseDetailsTaskTask(),
-  useLocalStorageCache('course-details')
-)
+const router = useIonRouter()
+const getCourseDetailsTask = new GetCourseDetailsTaskTask()
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const title = ref<string>()
-const description = ref<string>()
-const coverImageUrl = ref<string>()
-
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-onIonViewWillEnter(onFetchRequested)
+const title = ref('')
 
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-async function onFetchRequested() {
-  const result = await getCourseDetailsTask.execute({ id: props.id })
-  if (result.status === ResponseCode.Ok) {
-    title.value = result.data.title
-    description.value = result.data.description
-    coverImageUrl.value = result.data.coverImageUrl
-  }
+function onEnrollButtonClicked() {
+  router.push({ name: 'enroll', params: { 'id': props.id } })
+}
+
+function onDataLoaded(response: GetCourseDetailsResponse) {
+  title.value = response.title
 }
 </script>
+
+
+<fluent locale="en">
+enroll = Enroll
+</fluent>

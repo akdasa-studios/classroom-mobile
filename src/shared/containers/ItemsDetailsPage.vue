@@ -1,5 +1,8 @@
 <template>
-  <page-with-header-layout :title="title">
+  <page-with-header-layout
+    :title="title"
+    :has-padding="hasPadding"
+  >
     <loading-spinner v-if="isLoading" />
     <slot v-else />
   </page-with-header-layout>
@@ -12,5 +15,6 @@ import { LoadingSpinner, PageWithHeaderLayout } from '@/shared'
 defineProps<{
   title: string,
   isLoading: boolean
+  hasPadding?: boolean
 }>()
 </script>

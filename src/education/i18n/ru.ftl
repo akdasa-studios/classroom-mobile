@@ -1,2 +1,10 @@
 courses = Курсы
 my-groups = Мои группы
+enroll = Записаться
+group = Группа
+select-group = Выберите группу и куратора, к которым хотите присоединиться
+comments = Комментарии
+comments-to-join = Оставьте комментарий если необходимо
+time = Время
+select-time = Выберите удобное время для занятий с группой
+enrollment-request-submited = Заявка отправлена

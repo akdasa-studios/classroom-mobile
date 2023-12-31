@@ -11,7 +11,9 @@
 
     <ion-content
       :fullscreen="true"
-      :class="{ 'ion-padding': hasPadding }"
+      :class="{
+        'ion-padding': hasPadding,
+      }"
     >
       <ion-header collapse="condense">
         <ion-toolbar>
@@ -25,6 +27,7 @@
     </ion-content>
   </ion-page>
 </template>
+
 
 <script setup lang="ts" generic="T">
 import {

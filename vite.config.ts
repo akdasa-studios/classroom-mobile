@@ -6,7 +6,11 @@ import { SFCFluentPlugin } from 'unplugin-fluent-vue/vite'
 
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      script: {
+        defineModel: true
+      }
+    }),
     SFCFluentPlugin({
       blockType: 'fluent',
       checkSyntax: true,

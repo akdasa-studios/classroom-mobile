@@ -5,7 +5,7 @@
     :infinite-scroll-enabled="infiniteScrollEnabled"
     :title="title"
     :is-loading="taskWrapper.isInProgress.value"
-    @fetch="onCoursesListFetchRequested"
+    @fetch="onListFetchRequested"
   >
     <slot :item="sp.item" />
   </list-items-page>
@@ -59,11 +59,11 @@ onMounted(onEntered)
 
 async function onEntered() {
   if (items.value.length === 0) {
-    onCoursesListFetchRequested('append', 0)
+    onListFetchRequested('append', 0)
   }
 }
 
-async function onCoursesListFetchRequested(
+async function onListFetchRequested(
   mode: 'refresh' | 'append',
   offset: number,
   complete?: () => void
