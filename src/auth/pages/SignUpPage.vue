@@ -20,9 +20,20 @@
         :label="$t('phone-number')"
         label-placement="stacked"
         fill="outline"
-        placeholder="+19991111111"
+        placeholder="888-888-8888"
+        type="tel"
       />
       <br>
+
+      <ion-input
+        v-model="location"
+        :label="$t('location')"
+        label-placement="stacked"
+        fill="outline"
+        :placeholder="$t('location-placeholder')"
+      />
+      <br>
+
       <ion-checkbox
         v-model="conditionsAccepted"
         label-placement="end"
@@ -34,7 +45,9 @@
 
     <async-button
       expand="block"
-      :progress="signUpTask.isInProgress.value"
+      :disabled="!isSugnUpButtonEmabled"
+      :busy="signUpTask.isInProgress.value"
+      :error-code="signUpTask.lastError.value"
       @click="onSignUpButtonClicked"
     >
       {{ $t('sign-up') }}
@@ -44,7 +57,7 @@
 
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { IonPage, IonInput, IonList, IonCheckbox, useIonRouter } from '@ionic/vue'
 import { AsyncButton, useTask } from '@/shared'
 import { UpdateAccountInfoTask } from '@protocol/auth'
@@ -63,8 +76,12 @@ const signUpTask = useTask(new UpdateAccountInfoTask())
 /* -------------------------------------------------------------------------- */
 
 const name = ref()
+const location = ref()
 const phoneNumber = ref()
 const conditionsAccepted = ref(false)
+const isSugnUpButtonEmabled = computed(
+  () => name.value && phoneNumber.value && conditionsAccepted.value && location.value
+)
 
 
 /* -------------------------------------------------------------------------- */
@@ -89,4 +106,6 @@ name = Name
 name-placeholder = Krishna das
 phone-number = Phone Number
 i-agree-to-the-terms = I agree to the terms and conditions
+location = City
+location-placeholder = Vrindavan
 </fluent>

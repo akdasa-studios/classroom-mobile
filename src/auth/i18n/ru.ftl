@@ -11,4 +11,10 @@ need-some-information = Для завершения регистрации на�
 name = Имя
 name-placeholder = Кришна дас
 phone-number = Номер телефона
+location = Город
+location-placeholder = Вриндаван
 i-agree-to-the-terms = Я согласен с условиями и положениями
+
+error-invalid-email = Неверный адрес EMail
+error-invalid-signin-code = Неверный код аутентификации
+error-invalid-value = Неверное значение

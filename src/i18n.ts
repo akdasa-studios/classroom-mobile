@@ -10,6 +10,8 @@ export const ruBundle = new FluentBundle('ru')
 authResources.ru.forEach(x => ruBundle.addResource(x))
 educationResources.ru.forEach(x => ruBundle.addResource(x))
 
+authResources.en.forEach(x => enBundle.addResource(x))
+
 export const fluent = createFluentVue({
   bundles: [ruBundle]
 })

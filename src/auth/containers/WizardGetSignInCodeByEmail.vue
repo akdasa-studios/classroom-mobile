@@ -7,8 +7,9 @@
   <email-input v-model="email" />
 
   <async-button
-    :progress="getSignInCodeTask.isInProgress.value"
-    expand="block"
+    :busy="getSignInCodeTask.isInProgress.value"
+    :error-code="getSignInCodeTask.lastError.value"
+    :disabled="email.length === 0"
     @click="onSignInClicked()"
   >
     {{ $t('request-signin-code') }}
@@ -20,8 +21,8 @@
 import { EmailInput, HelpMessage } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
 import { GetSignInCodeByEmailTask } from '@protocol/auth'
-import { KnownErrorCode, ResponseCode } from '@protocol/core'
-import { ref, watch } from 'vue'
+import { ResponseCode } from '@protocol/core'
+import { ref } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -29,7 +30,6 @@ import { ref, watch } from 'vue'
 
 const emit = defineEmits<{
   complete: []
-  error: [errorCode: KnownErrorCode]
 }>()
 
 
@@ -44,14 +44,7 @@ const getSignInCodeTask = useTask(new GetSignInCodeByEmailTask())
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const email = ref()
-
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-watch(getSignInCodeTask.lastError, (v) => emit('error', v))
+const email = ref('')
 
 
 /* -------------------------------------------------------------------------- */

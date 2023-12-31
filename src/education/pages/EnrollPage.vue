@@ -38,7 +38,7 @@
       <!-- Enreoll -->
       <async-button
         expand="block"
-        :progress="submitEnrolmentFormTask.isInProgress.value"
+        :busy="submitEnrolmentFormTask.isInProgress.value"
         @click="onEnrollButtonClicked"
       >
         {{ $t("enroll") }}

@@ -3,10 +3,15 @@
     {{ $t('enter-code') }}
   </help-message>
 
-  <code-input v-model="code" />
+  <code-input
+    v-model="code"
+    @back-button-click="onBackButtonClicked"
+  />
 
   <async-button
-    :progress="getSignInCodeTask.isInProgress.value"
+    :busy="getSignInCodeTask.isInProgress.value"
+    :error-code="getSignInCodeTask.lastError.value"
+    :disabled="code.length === 0"
     expand="block"
     @click="onValidateCodeClicked()"
   >
@@ -19,8 +24,8 @@
 import { CodeInput, HelpMessage } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
 import { SignInWithCodeTask } from '@protocol/auth'
-import { KnownErrorCode, ResponseCode } from '@protocol/core'
-import { ref, watch } from 'vue'
+import { ResponseCode } from '@protocol/core'
+import { ref } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -28,7 +33,7 @@ import { ref, watch } from 'vue'
 
 const emit = defineEmits<{
   complete: [isRegistrationRequired: boolean]
-  error: [errorCode: KnownErrorCode]
+  goBack: []
 }>()
 
 
@@ -43,14 +48,7 @@ const getSignInCodeTask = useTask(new SignInWithCodeTask())
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const code = ref()
-
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-watch(getSignInCodeTask.lastError, (v) => emit('error', v))
+const code = ref('')
 
 
 /* -------------------------------------------------------------------------- */
@@ -61,6 +59,10 @@ async function onValidateCodeClicked() {
   const result = await getSignInCodeTask.execute({ code: code.value })
   if (result.status === ResponseCode.Error) { return }
   emit('complete', result.data.registrationRequired)
+}
+
+function onBackButtonClicked() {
+  emit('goBack')
 }
 </script>
 

@@ -6,19 +6,16 @@
       </template>
 
       <template #controls>
-        <error-message :error-code="lastErrorCode" />
-
         <steps-wizard :current-step="authenticationStep">
           <template #item0>
             <wizard-get-sign-in-code-by-email
               @complete="onWizardGetSignInCodeByEmailCompleted"
-              @error="onError"
             />
           </template>
           <template #item1>
             <wizard-sign-in-with-code
               @complete="onWizardSignInWithCodeCompleted"
-              @error="onError"
+              @go-back="onWizardGoBack"
             />
           </template>
         </steps-wizard>
@@ -30,11 +27,9 @@
 
 <script lang="ts" setup>
 import { IonPage, useIonRouter } from '@ionic/vue'
-import { WizardGetSignInCodeByEmail, WizardSignInWithCode, ErrorMessage, SchoolOfDevotionLogo, LogoAndControlsLayout } from '@/auth'
+import { WizardGetSignInCodeByEmail, WizardSignInWithCode, SchoolOfDevotionLogo, LogoAndControlsLayout } from '@/auth'
 import { StepsWizard } from '@/shared'
 import { ref } from 'vue'
-import { KnownErrorCode } from '@protocol/core'
-
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
@@ -48,12 +43,15 @@ const router = useIonRouter()
 /* -------------------------------------------------------------------------- */
 
 const authenticationStep = ref(0)
-const lastErrorCode = ref<KnownErrorCode>(KnownErrorCode.NoError)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
+
+function onWizardGoBack() {
+  authenticationStep.value -= 1
+}
 
 function onWizardGetSignInCodeByEmailCompleted() {
   authenticationStep.value += 1
@@ -67,9 +65,5 @@ function onWizardSignInWithCodeCompleted(
   } else {
     router.navigate({name: 'courses'}, 'root', 'replace')
   }
-}
-
-function onError(errorCode: KnownErrorCode) {
-  lastErrorCode.value = errorCode
 }
 </script>

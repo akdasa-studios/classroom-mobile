@@ -1,24 +1,90 @@
 <template>
   <ion-button
+    :disabled="disabled || busy"
+    :color="isInErrorState ? 'danger' : 'primary'"
     expand="block"
-    :disabled="props.progress"
+    @click="onButtonClicked"
   >
     <ion-spinner
-      v-if="props.progress"
+      v-if="busy"
       class="spinner"
       name="dots"
     />
-    <slot v-else />
+
+    <template v-if="isInErrorState">
+      <ion-icon
+        slot="start"
+        :icon="alertCircleOutline"
+      />
+      {{ errorCode ? $t(errorCode) : 'Error' }}
+    </template>
+
+    <slot v-if="!(busy || isInErrorState)" />
   </ion-button>
 </template>
 
 
 <script lang="ts" setup>
-import { IonButton, IonSpinner } from '@ionic/vue'
+import { IonButton, IonSpinner, IonIcon } from '@ionic/vue'
+import { KnownErrorCode } from '@protocol/core'
+import { ref, toRefs, watch } from 'vue'
+import { alertCircleOutline } from 'ionicons/icons'
 
-const props = defineProps({
-  progress: Boolean
-})
+/* -------------------------------------------------------------------------- */
+/*                                  Interface                                 */
+/* -------------------------------------------------------------------------- */
+
+const props = defineProps<{
+  busy: boolean,
+  disabled: boolean,
+  errorCode?: KnownErrorCode
+}>()
+
+const emit = defineEmits<{
+  click: []
+}>()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const isInErrorState = ref(false)
+const { errorCode } = toRefs(props)
+let timer: NodeJS.Timeout | undefined = undefined
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hooks                                   */
+/* -------------------------------------------------------------------------- */
+
+watch(errorCode, onErrorStateChanged)
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  Handlers                                  */
+/* -------------------------------------------------------------------------- */
+
+function onErrorStateChanged(
+  errorCode: KnownErrorCode | undefined
+) {
+  const errorOccured = !isInErrorState.value && errorCode !== KnownErrorCode.NoError
+  if (errorOccured) {
+    isInErrorState.value = true
+    if (timer) { clearTimeout(timer) }
+    timer = setTimeout(() => isInErrorState.value = false, 2500)
+  } else {
+    if (timer) { clearTimeout(timer) }
+  }
+}
+
+function onButtonClicked() {
+  if (isInErrorState.value) {
+    isInErrorState.value = false
+    return
+  }
+  emit('click')
+}
 </script>
 
 
