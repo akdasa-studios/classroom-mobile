@@ -36,7 +36,7 @@ import { alertCircleOutline } from 'ionicons/icons'
 
 const props = defineProps<{
   busy: boolean,
-  disabled: boolean,
+  disabled?: boolean,
   errorCode?: KnownErrorCode
 }>()
 

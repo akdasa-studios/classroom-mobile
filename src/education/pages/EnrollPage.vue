@@ -35,7 +35,7 @@
         aria-label="Comments"
       />
 
-      <!-- Enreoll -->
+      <!-- Enroll -->
       <async-button
         expand="block"
         :busy="submitEnrolmentFormTask.isInProgress.value"

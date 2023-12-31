@@ -16,7 +16,7 @@
 
 
 <script lang="ts" setup>
-import { IonInput  } from '@ionic/vue'
+import { IonInput, IonIcon } from '@ionic/vue'
 import { WithBorders } from '@/shared'
 import { arrowBackOutline } from 'ionicons/icons'
 
