@@ -44,21 +44,24 @@ const taskWrapper = useTask<PaginatedRequest, PaginatedResponse<TModel>>(
 const items = ref<TModel[]>([]) as Ref<TModel[]>
 const infiniteScrollEnabled = ref(true)
 
+
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-onMounted(() => { // TODO: change to the other hook
-  console.log('enter')
-  if (items.value.length === 0) {
-    onCoursesListFetchRequested('append', 0)
-  }
-})
+// TODO: change to the other hook
+onMounted(onEntered)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
+
+async function onEntered() {
+  if (items.value.length === 0) {
+    onCoursesListFetchRequested('append', 0)
+  }
+}
 
 async function onCoursesListFetchRequested(
   mode: 'refresh' | 'append',
