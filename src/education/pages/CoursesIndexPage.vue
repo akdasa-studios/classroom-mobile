@@ -1,29 +1,25 @@
 <template>
-  <list-items-page
-    v-slot="sp"
-    :items="courses"
-    :infinite-scroll-enabled="infiniteScrollEnabled"
+  <list-items-with-task-page
+    v-slot="{ item }"
     :title="$t('courses')"
-    :is-loading="getCoursesListTask.isInProgress.value"
-    @fetch="onCoursesListFetchRequested"
+    :task="task"
+    :fetch-count="4"
   >
     <course-card
-      :title="sp.item.title"
-      :subtitle="sp.item.subtitle"
-      :description="sp.item.description"
-      :cover-image-url="sp.item.coverImageUrl"
-      @click="() => onCourseCardClicked(sp.item.id.toString())"
+      :title="item.title"
+      :subtitle="item.subtitle"
+      :description="item.description"
+      :cover-image-url="item.coverImageUrl"
+      @click="() => onCourseCardClicked(item.id.toString())"
     />
-  </list-items-page>
+  </list-items-with-task-page>
 </template>
 
+
 <script setup lang="ts">
-import { ref } from 'vue'
-import { onIonViewDidEnter, useIonRouter } from '@ionic/vue'
-import { useLocalStorageCache, useTask } from '@/shared'
-import { ResponseCode } from '@protocol/core'
-import { Course, GetCoursesListTask } from '@protocol/courses'
-import { ListItemsPage } from '@/shared'
+import { useIonRouter } from '@ionic/vue'
+import { GetCoursesListTask } from '@protocol/courses'
+import { ListItemsWithTaskPage } from '@/shared'
 import { CourseCard } from '@/education'
 
 /* -------------------------------------------------------------------------- */
@@ -31,28 +27,7 @@ import { CourseCard } from '@/education'
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const getCoursesListTask = useTask(
-  new GetCoursesListTask(),
-  useLocalStorageCache('courses')
-)
-
-
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
-const courses = ref<Course[]>([])
-const infiniteScrollEnabled = ref(true)
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-onIonViewDidEnter(() => {
-  if (courses.value.length === 0) {
-    onCoursesListFetchRequested('append', 0)
-  }
-})
+const task =  new GetCoursesListTask()
 
 
 /* -------------------------------------------------------------------------- */
@@ -63,26 +38,6 @@ function onCourseCardClicked(
   id: string
 ) {
   router.push({ name: 'course', params: { 'id': id } })
-}
-
-async function onCoursesListFetchRequested(
-  mode: 'refresh' | 'append',
-  offset: number,
-  complete?: () => void
-) {
-  if (mode === 'refresh') { getCoursesListTask.invalidateCache() }
-
-  const fetchCount = 4
-  const result = await getCoursesListTask.execute({
-    count: fetchCount, offset: offset
-  })
-  if (result.status === ResponseCode.Ok) {
-    courses.value = offset === 0
-      ? result.data.items
-      : courses.value.concat(result.data.items)
-    infiniteScrollEnabled.value = result.data.items.length == fetchCount
-  }
-  if (complete) { complete() }
 }
 </script>
 

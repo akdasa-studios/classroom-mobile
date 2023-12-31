@@ -7,6 +7,7 @@ export { default as PageWithHeaderLayout } from './layouts/PageWithHeaderLayout.
 
 // containers
 export { default as ListItemsPage } from './containers/ListItemsPage.vue'
+export { default as ListItemsWithTaskPage } from './containers/ListItemsWithTaskPage.vue'
 export { default as ItemDetailsPage } from './containers/ItemsDetailsPage.vue'
 
 // components
