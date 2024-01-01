@@ -27,6 +27,7 @@ const props = defineProps<{
   title: string
 }>()
 
+
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
@@ -51,7 +52,6 @@ const infiniteScrollEnabled = ref(true)
 
 // TODO: change to the other hook
 onMounted(onEntered)
-
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */

@@ -60,15 +60,16 @@
 import { computed, ref } from 'vue'
 import { IonPage, IonInput, IonList, IonCheckbox, useIonRouter } from '@ionic/vue'
 import { AsyncButton, useTask } from '@/shared'
-import { UpdateAccountInfoTask } from '@protocol/auth'
 import { ResponseCode } from '@protocol/core'
+import { UpdateAccountTask } from '@/auth'
+
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const signUpTask = useTask(new UpdateAccountInfoTask())
+const signUpTask = useTask(new UpdateAccountTask())
 
 
 /* -------------------------------------------------------------------------- */
@@ -80,7 +81,7 @@ const location = ref()
 const phoneNumber = ref()
 const conditionsAccepted = ref(false)
 const isSugnUpButtonEmabled = computed(
-  () => name.value && phoneNumber.value && conditionsAccepted.value && location.value
+  () => true || name.value && phoneNumber.value && conditionsAccepted.value && location.value
 )
 
 

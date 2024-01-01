@@ -59,7 +59,7 @@
 import { IonTextarea, toastController } from '@ionic/vue'
 import { useIonRouter } from '@ionic/vue'
 import { ItemDetailsWithTaskPage, AsyncButton, HeaderAndNote, useTask } from '@/shared'
-import { GetEnrollmentDetailsTask, SubmitEnrolmentFormTask } from '@protocol/courses'
+import { GetEnrollmentDetailsTask, SubmitEnrolmentFormTask } from '@/education'
 import { ref } from 'vue'
 import { GroupSelector, TimeRangeSelector } from '@/education'
 import { ResponseCode } from '@protocol/core'

@@ -11,3 +11,8 @@ export { default as SchoolOfDevotionLogo } from './components/SchoolOfDevotionLo
 // containers
 export { default as WizardGetSignInCodeByEmail } from './containers/WizardGetSignInCodeByEmail.vue'
 export { default as WizardSignInWithCode } from './containers/WizardSignInWithCode.vue'
+
+// tasks
+export * from './tasks/GetSignInCodeByEmailTask'
+export * from './tasks/SignInWithCodeTask'
+export * from './tasks/UpdateAccountTask'

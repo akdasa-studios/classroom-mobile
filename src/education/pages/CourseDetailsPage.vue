@@ -31,7 +31,8 @@
 <script setup lang="ts">
 import { IonButton, useIonRouter } from '@ionic/vue'
 import { ItemDetailsWithTaskPage } from '@/shared'
-import { GetCourseDetailsResponse, GetCourseDetailsTaskTask } from '@protocol/courses'
+import { GetCourseDetailsTaskTask } from '@/education'
+import { GetCourseDetailsResponse } from '@protocol/courses'
 import { ref } from 'vue'
 
 /* -------------------------------------------------------------------------- */
