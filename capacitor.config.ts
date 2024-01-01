@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'com.akdasa.bcs-school-of-devotion',
+  appId: 'com.akdasa.bcsSchoolOfDevotion',
   appName: 'BCS School of Devotion',
   webDir: 'dist',
   server: {
