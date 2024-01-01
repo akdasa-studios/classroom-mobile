@@ -21,9 +21,8 @@
 
 
 <script lang="ts" setup>
-import { CodeInput, HelpMessage } from '@/auth'
+import { CodeInput, HelpMessage, SignInWithCodeTask } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
-import { SignInWithCodeTask } from '@protocol/auth'
 import { ResponseCode } from '@protocol/core'
 import { ref } from 'vue'
 

@@ -18,9 +18,8 @@
 
 
 <script lang="ts" setup>
-import { EmailInput, HelpMessage } from '@/auth'
+import { EmailInput, GetSignInCodeByEmailTask, HelpMessage } from '@/auth'
 import { AsyncButton, useTask } from '@/shared'
-import { GetSignInCodeByEmailTask } from '@protocol/auth'
 import { ResponseCode } from '@protocol/core'
 import { ref } from 'vue'
 

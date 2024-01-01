@@ -18,16 +18,15 @@
 
 <script setup lang="ts">
 import { useIonRouter } from '@ionic/vue'
-import { GetCoursesListTask } from '@protocol/courses'
 import { ListItemsWithTaskPage } from '@/shared'
-import { CourseCard } from '@/education'
+import { CourseCard, GetCoursesListTask } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const task =  new GetCoursesListTask()
+const task   = new GetCoursesListTask()
 
 
 /* -------------------------------------------------------------------------- */
