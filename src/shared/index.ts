@@ -18,4 +18,4 @@ export { default as WithBorders } from './components/WithBorders.vue'
 export { default as StepsWizard } from './components/StepsWizard.vue'
 export { default as LoadingSpinner } from './components/LoadingSpinner.vue'
 export { default as HeaderAndNote } from './components/HeaderAndNote.vue'
-
+export { default as TimePicker } from './components/TimePicker.vue'

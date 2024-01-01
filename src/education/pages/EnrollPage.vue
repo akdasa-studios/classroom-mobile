@@ -22,16 +22,19 @@
         :note="$t('select-time')"
       />
       <time-range-selector
-        v-model="timeBlock"
+        v-model="timeRanges"
+        :presets="timeRangePresets"
+        custom-preset-text="Свой вариант"
+        add-range-text="Добавить"
       />
 
       <!-- Comments -->
       <header-and-note
         :header="$t('comments')"
+        :note="$t('comments-to-join')"
       />
       <ion-textarea
         v-model="comments"
-        :placeholder="$t('comments-to-join')"
         aria-label="Comments"
       />
 
@@ -61,6 +64,7 @@ import { ref } from 'vue'
 import { GroupSelector, TimeRangeSelector } from '@/education'
 import { ResponseCode } from '@protocol/core'
 import { useFluent } from 'fluent-vue'
+import { TimeRange, TimeRangePreset } from '../components/TimeRange'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -69,8 +73,6 @@ import { useFluent } from 'fluent-vue'
 const props = defineProps<{
   id: string
 }>()
-
-type Interval = { lower: number, upper: number };
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
@@ -81,11 +83,20 @@ const getEnrollmentDetailsTask = new GetEnrollmentDetailsTask()
 const submitEnrolmentFormTask = useTask(new SubmitEnrolmentFormTask())
 const fluent = useFluent()
 
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const timeRangePresets: TimeRangePreset[] = [
+  { name: 'Выходные до 11 утра', range: { start: [6, 0],  end: [11, 0], days: [6,7] } },
+  { name: 'Будни до 9:00',       range: { start: [6, 0],  end: [9, 0],  days: [1,2,3,4,5] } },
+  { name: 'Будни после 18:00',   range: { start: [18, 0], end: [21, 0], days: [1,2,3,4,5] } },
+  { name: 'Любое время ',        range: { start: [0, 0],  end: [24, 0], days: [1,2,3,4,5,6,7] } },
+]
 
 const groupId = ref('')
-const timeBlock = ref<Interval>({ lower: 8, upper: 18 })
+const timeRanges = ref<TimeRange[]>([])
 const comments = ref('')
-
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
@@ -97,8 +108,8 @@ async function onEnrollButtonClicked() {
     comments: comments.value,
     timeBlocks: [
       {
-        startHours: timeBlock.value.lower,
-        endHours: timeBlock.value.upper
+        startHours: timeRanges.value[0].start[0],
+        endHours: timeRanges.value[0].end[0]
       }
     ]
   })
