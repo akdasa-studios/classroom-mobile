@@ -101,7 +101,9 @@ function onIntervalEditClicked(
 }
 
 
-function onTimePickerClosed(value) {
+function onTimePickerClosed(
+  value: any
+) {
   isTimePickerOpen.value = false
   if (!value) { return }
 
