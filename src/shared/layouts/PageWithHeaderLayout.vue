@@ -7,6 +7,7 @@
           <ion-back-button />
         </ion-buttons>
       </ion-toolbar>
+      <slot name="toolbar" />
     </ion-header>
 
     <ion-content
@@ -23,7 +24,7 @@
         </ion-toolbar>
       </ion-header>
 
-      <slot />
+      <slot name="content" />
     </ion-content>
   </ion-page>
 </template>

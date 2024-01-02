@@ -1,9 +1,9 @@
 import { GetSignInCodeByEmailRequest, GetSignInCodeByEmailResponse } from '@protocol/auth'
-import { AsyncTask, KnownError, KnownErrorCode, sleep } from '@protocol/core'
+import { KnownError, KnownErrorCode, Task, sleep } from '@protocol/core'
 
 
 export class GetSignInCodeByEmailTask
-  extends AsyncTask<
+  extends Task<
     GetSignInCodeByEmailRequest,
     GetSignInCodeByEmailResponse
   >

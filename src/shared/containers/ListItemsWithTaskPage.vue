@@ -6,15 +6,17 @@
     :title="title"
     :is-loading="taskWrapper.isInProgress.value"
     @fetch="onListFetchRequested"
+    @search="onSearchQueryChanged"
   >
     <slot :item="sp.item" />
   </list-items-page>
 </template>
 
+
 <script setup lang="ts" generic="TModel">
 import { Ref, onMounted, ref } from 'vue'
-import { useLocalStorageCache, useTask } from '@/shared'
-import { IAsyncTask, PaginatedRequest, PaginatedResponse, ResponseCode } from '@protocol/core'
+import { useTask } from '@/shared'
+import { ITask, PaginatedRequest, PaginatedResponse, ResponseCode } from '@protocol/core'
 import { ListItemsPage } from '@/shared'
 
 /* -------------------------------------------------------------------------- */
@@ -22,9 +24,16 @@ import { ListItemsPage } from '@/shared'
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  task: IAsyncTask<PaginatedRequest, PaginatedResponse<TModel>>,
+  task: ITask<PaginatedRequest, PaginatedResponse<TModel>>,
+  requestMiddleware: (mode: string, a: PaginatedRequest) => PaginatedRequest,
   fetchCount: number
   title: string
+}>()
+
+const emit = defineEmits<{
+  search: [
+    query: string
+  ]
 }>()
 
 
@@ -34,7 +43,6 @@ const props = defineProps<{
 
 const taskWrapper = useTask<PaginatedRequest, PaginatedResponse<TModel>>(
   props.task,
-  useLocalStorageCache('courses')
 )
 
 
@@ -64,21 +72,33 @@ async function onEntered() {
 }
 
 async function onListFetchRequested(
-  mode: 'refresh' | 'append',
+  mode: 'refresh' | 'append' | 'search',
   offset: number,
   complete?: () => void
 ) {
-  if (mode === 'refresh') { taskWrapper.invalidateCache() }
+  console.log('onListFetchRequested', mode, offset)
 
-  const result = await taskWrapper.execute({
+  infiniteScrollEnabled.value = true
+  const request = props.requestMiddleware(mode, {
     count: props.fetchCount, offset: offset
   })
+  const result = await taskWrapper.execute(request)
   if (result.status === ResponseCode.Ok) {
     items.value = offset === 0
       ? result.data.items
       : items.value.concat(result.data.items)
+
     infiniteScrollEnabled.value = result.data.items.length == props.fetchCount
   }
+  console.log('!!!', infiniteScrollEnabled.value)
   if (complete) { complete() }
+}
+
+async function onSearchQueryChanged(
+  query: string
+) {
+  items.value = []
+  emit('search', query)
+  await onListFetchRequested('search', 0)
 }
 </script>

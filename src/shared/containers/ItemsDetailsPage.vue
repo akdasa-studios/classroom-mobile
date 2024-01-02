@@ -3,8 +3,10 @@
     :title="title"
     :has-padding="hasPadding"
   >
-    <loading-spinner v-if="isLoading" />
-    <slot v-else />
+    <template #content>
+      <loading-spinner v-if="isLoading" />
+      <slot v-else />
+    </template>
   </page-with-header-layout>
 </template>
 

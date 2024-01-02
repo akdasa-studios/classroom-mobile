@@ -9,3 +9,7 @@ export * from './tasks/GetCourseDetailsTask'
 export * from './tasks/GetCoursesListTask'
 export * from './tasks/GetEnrollmentDetailsTask'
 export * from './tasks/SubmitEnrolmentFormTask'
+
+
+// caches:
+export * from './caches/CoursesCache'

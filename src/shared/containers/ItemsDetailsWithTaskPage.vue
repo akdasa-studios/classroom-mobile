@@ -18,8 +18,8 @@
 
 
 <script setup lang="ts" generic="TRequest extends Request, TResponse extends Response">
-import { ItemDetailsPage, useLocalStorageCache, useTask } from '@/shared'
-import { CompletedResponse, IAsyncTask, Request, Response, ResponseCode } from '@protocol/core'
+import { ItemDetailsPage, useTask } from '@/shared'
+import { CompletedResponse, ITask, Request, Response, ResponseCode } from '@protocol/core'
 import { onMounted, ref } from 'vue'
 
 /* -------------------------------------------------------------------------- */
@@ -29,7 +29,7 @@ import { onMounted, ref } from 'vue'
 const props = defineProps<{
   title: string,
   hasPadding?: boolean
-  task: IAsyncTask<TRequest, TResponse>
+  task: ITask<TRequest, TResponse>
   request: TRequest
 }>()
 
@@ -41,10 +41,8 @@ const emit = defineEmits<{
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const taskWrapper = useTask(
-  props.task,
-  useLocalStorageCache('TODO')
-)
+const taskWrapper = useTask(props.task)
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */

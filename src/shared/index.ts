@@ -1,6 +1,6 @@
 // composables
 export * from './composables/useTask'
-export * from './composables/useLocalStorageCache'
+export * from './composables/useCachedPaginatedTask'
 
 // layouts
 export { default as PageWithHeaderLayout } from './layouts/PageWithHeaderLayout.vue'
@@ -19,3 +19,6 @@ export { default as StepsWizard } from './components/StepsWizard.vue'
 export { default as LoadingSpinner } from './components/LoadingSpinner.vue'
 export { default as HeaderAndNote } from './components/HeaderAndNote.vue'
 export { default as TimePicker } from './components/TimePicker.vue'
+
+// ports
+export * from './ports/CachingTask'

@@ -1,9 +1,9 @@
 import { UpdateAccountRequest, UpdateAccountResponse } from '@protocol/auth'
-import { AsyncTask, KnownError, KnownErrorCode, sleep } from '@protocol/core'
+import { KnownError, KnownErrorCode, Task, sleep } from '@protocol/core'
 
 
 export class UpdateAccountTask
-  extends AsyncTask<
+  extends Task<
     UpdateAccountRequest,
     UpdateAccountResponse
   >

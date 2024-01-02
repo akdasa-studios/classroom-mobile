@@ -1,9 +1,9 @@
-import { AsyncTask, KnownError, KnownErrorCode, sleep } from '@protocol/core'
+import { KnownError, KnownErrorCode, Task, sleep } from '@protocol/core'
 import { SubmitEnrolmentFormRequest, SubmitEnrolmentFormResponse } from '@protocol/courses'
 
 
 export class SubmitEnrolmentFormTask
-  extends AsyncTask<
+  extends Task<
     SubmitEnrolmentFormRequest,
     SubmitEnrolmentFormResponse
   > {

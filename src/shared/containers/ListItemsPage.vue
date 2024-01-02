@@ -1,30 +1,38 @@
 <template>
   <page-with-header-layout :title="title">
-    <loading-spinner
-      v-if="isLoading && items.length === 0"
-    />
-
-    <template
-      v-for="item in items"
-      v-else
-      :key="item"
-    >
-      <slot :item="item" />
+    <template #toolbar>
+      <ion-toolbar>
+        <ion-searchbar @ion-change="onSearchQueryChanged" />
+      </ion-toolbar>
     </template>
 
-    <ion-refresher
-      slot="fixed"
-      @ion-refresh="e => onFetchRequested('refresh', e)"
-    >
-      <ion-refresher-content />
-    </ion-refresher>
+    <template #content>
+      <loading-spinner
+        v-if="isLoading && items.length === 0"
+      />
 
-    <ion-infinite-scroll
-      :disabled="!infiniteScrollEnabled"
-      @ion-infinite="e => onFetchRequested('append', e)"
-    >
-      <ion-infinite-scroll-content />
-    </ion-infinite-scroll>
+      <template
+        v-for="item in items"
+        v-else
+        :key="item"
+      >
+        <slot :item="item" />
+      </template>
+
+      <ion-refresher
+        slot="fixed"
+        @ion-refresh="e => onFetchRequested('refresh', e)"
+      >
+        <ion-refresher-content />
+      </ion-refresher>
+
+      <ion-infinite-scroll
+        :disabled="!infiniteScrollEnabled || items.length === 0"
+        @ion-infinite="e => onFetchRequested('append', e)"
+      >
+        <ion-infinite-scroll-content />
+      </ion-infinite-scroll>
+    </template>
   </page-with-header-layout>
 </template>
 
@@ -32,7 +40,8 @@
 import {
   IonRefresher, IonRefresherContent,
   IonInfiniteScroll, IonInfiniteScrollContent,
-  InfiniteScrollCustomEvent, RefresherCustomEvent
+  InfiniteScrollCustomEvent, RefresherCustomEvent,
+  IonToolbar, IonSearchbar,
 } from '@ionic/vue'
 import { LoadingSpinner, PageWithHeaderLayout } from '@/shared'
 
@@ -52,6 +61,9 @@ const emit = defineEmits<{
     mode: 'refresh' | 'append',
     offset: number,
     complete: () => void
+  ],
+  search: [
+    query: string
   ]
 }>()
 
@@ -70,5 +82,11 @@ async function onFetchRequested(
     mode == 'refresh' ? 0 : props.items.length,
     () => { event.target.complete() }
   )
+}
+
+function onSearchQueryChanged(
+  query: any
+) {
+  emit('search', query.detail.value)
 }
 </script>

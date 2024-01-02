@@ -3,7 +3,9 @@
     v-slot="{ item }"
     :title="$t('courses')"
     :task="task"
-    :fetch-count="4"
+    :request-middleware="requestMiddleware"
+    :fetch-count="2"
+    @search="onSearchQueryChanged"
   >
     <course-card
       :title="item.title"
@@ -18,15 +20,30 @@
 
 <script setup lang="ts">
 import { useIonRouter } from '@ionic/vue'
-import { ListItemsWithTaskPage } from '@/shared'
-import { CourseCard, GetCoursesListTask } from '@/education'
+import { ListItemsWithTaskPage, useCachedPaginatedTask } from '@/shared'
+import { CoursesCache, CourseCard, GetCoursesListTask } from '@/education'
+import { GetCoursesListRequest } from '@protocol/courses'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const task   = new GetCoursesListTask()
+const task   = useCachedPaginatedTask(
+  new GetCoursesListTask(),
+  new CoursesCache(),
+  (req) => ({
+      title: req.title,
+      offset: req.offset,
+      count: req.count
+  })
+)
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+let searchQuery = ''
 
 
 /* -------------------------------------------------------------------------- */
@@ -37,6 +54,20 @@ function onCourseCardClicked(
   id: string
 ) {
   router.push({ name: 'course', params: { 'id': id } })
+}
+
+function requestMiddleware(
+  mode: string,
+  request: GetCoursesListRequest
+): GetCoursesListRequest {
+  if (mode === 'refresh') { task.invalidate() }
+  return { title: searchQuery, ...request }
+}
+
+function onSearchQueryChanged(
+  query: string
+) {
+  searchQuery = query
 }
 </script>
 

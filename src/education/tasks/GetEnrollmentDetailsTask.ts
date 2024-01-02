@@ -1,10 +1,10 @@
-import { AsyncTask, KnownError, KnownErrorCode, sleep } from '@protocol/core'
+import { KnownError, KnownErrorCode, Task, sleep } from '@protocol/core'
 import { GetEnrollmentDetailsRequest, GetEnrollmentDetailsResponse } from '@protocol/courses'
 import { courses, groups } from '@protocol/fixtures'
 
 
 export class GetEnrollmentDetailsTask
-  extends AsyncTask<
+  extends Task<
     GetEnrollmentDetailsRequest,
     GetEnrollmentDetailsResponse
   > {
