@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { IonButton, useIonRouter } from '@ionic/vue'
-import { ItemDetailsWithTaskPage, useGetEntityTask } from '@/shared'
+import { ItemDetailsWithTaskPage, serviceLocator, useGetEntityTask } from '@/shared'
 import { CoursesCache, GetCourseDetailsTask } from '@/education'
 import { GetCourseDetailsResponse } from '@protocol/courses'
 import { ref } from 'vue'
@@ -50,7 +50,9 @@ const props = defineProps<{
 const router = useIonRouter()
 const getCourseDetailsTask = useGetEntityTask(
   new GetCourseDetailsTask(),
-  new CoursesCache(),
+  new CoursesCache(
+    serviceLocator.get('localStorage')
+  ),
   (req) => ({ id: req.id })
 )
 

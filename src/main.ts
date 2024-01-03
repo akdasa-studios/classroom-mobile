@@ -24,8 +24,11 @@ import '@ionic/vue/css/display.css'
 
 /* Theme variables */
 import './theme.css'
+import { LocalStorageService, serviceLocator } from './shared'
 
-
+/** */
+serviceLocator.add('localStorage', new LocalStorageService())
+await serviceLocator.init()
 
 const app = createApp(App)
   .use(IonicVue)

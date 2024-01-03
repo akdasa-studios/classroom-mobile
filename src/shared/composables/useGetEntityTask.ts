@@ -1,16 +1,16 @@
-import { CachingTask } from '@/shared'
-import { Cache, GetItemRequest, GetItemResponse, ITask } from '@protocol/core'
+import { CachingTask, EntitiesCache, IEntitiesCacheRequest, IEntity } from '@/shared'
+import { GetItemRequest, GetItemResponse, ITask } from '@protocol/core'
 
 
 export function useGetEntityTask<
-  TCacheModel,
-  TCacheQuery,
+  TCacheModel extends IEntity,
+  TCacheRequest extends IEntitiesCacheRequest,
   TRequest extends GetItemRequest,
   TResponse extends GetItemResponse<TCacheModel>
 > (
   Task: ITask<TRequest, TResponse>,
-  cache: Cache<TCacheModel, TCacheQuery>,
-  requestToQuery: (request: TRequest) => TCacheQuery
+  cache: EntitiesCache<TCacheModel, TCacheRequest>,
+  requestToQuery: (request: TRequest) => TCacheRequest
 ) {
   const task = new CachingTask(
     Task,

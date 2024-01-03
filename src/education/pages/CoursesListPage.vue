@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { useIonRouter } from '@ionic/vue'
-import { ListItemsWithTaskPage, useCachedPaginatedTask } from '@/shared'
+import { ListItemsWithTaskPage, serviceLocator, useCachedPaginatedTask } from '@/shared'
 import { CoursesCache, CourseCard, GetCoursesListTask } from '@/education'
 import { GetCoursesListRequest } from '@protocol/courses'
 
@@ -31,7 +31,9 @@ import { GetCoursesListRequest } from '@protocol/courses'
 const router = useIonRouter()
 const task   = useCachedPaginatedTask(
   new GetCoursesListTask(),
-  new CoursesCache(),
+  new CoursesCache(
+    serviceLocator.get('localStorage')
+  ),
   (req) => ({
       title: req.title,
       offset: req.offset,

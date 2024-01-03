@@ -1,16 +1,15 @@
-import { CachingTask } from '@/shared'
-import { Cache, ITask, GetItemsRequest, GetItemsResponse } from '@protocol/core'
-
+import { CachingTask, EntitiesCache, IEntitiesCacheRequest, IEntity } from '@/shared'
+import { ITask, GetItemsRequest, GetItemsResponse } from '@protocol/core'
 
 export function useCachedPaginatedTask<
-  TCacheModel,
-  TCacheQuery,
+  TCacheModel extends IEntity,
+  TCacheRequest extends IEntitiesCacheRequest,
   TRequest extends GetItemsRequest,
   TResponse extends GetItemsResponse<TCacheModel>
 > (
   Task: ITask<TRequest, TResponse>,
-  cache: Cache<TCacheModel, TCacheQuery>,
-  requestToQuery: (request: TRequest) => TCacheQuery
+  cache: EntitiesCache<TCacheModel, TCacheRequest>,
+  requestToQuery: (request: TRequest) => TCacheRequest
 ) {
 
   const task = new CachingTask(

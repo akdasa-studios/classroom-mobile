@@ -23,3 +23,11 @@ export { default as TimePicker } from './components/TimePicker.vue'
 
 // ports
 export * from './ports/CachingTask'
+
+// services:
+export * from './services/IService'
+export * from './services/LocalStorageService'
+export * from './services/ServiceLocator'
+
+// caches:
+export * from './caches/EntitiesCache'
