@@ -25,9 +25,12 @@ import '@ionic/vue/css/display.css'
 /* Theme variables */
 import './theme.css'
 import { LocalStorageService, serviceLocator } from './shared'
+import { CoursesCache } from './education'
 
 /** */
-serviceLocator.add('localStorage', new LocalStorageService())
+const localStorage = new LocalStorageService()
+serviceLocator.add('localStorage', localStorage)
+serviceLocator.add('coursesCache', new CoursesCache(localStorage))
 await serviceLocator.init()
 
 const app = createApp(App)

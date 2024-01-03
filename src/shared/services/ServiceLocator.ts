@@ -1,21 +1,16 @@
-import { IService } from './IService'
 
 export class ServiceLocator {
-  private readonly _services = new Map<string, IService>()
-
-  constructor() {
-    console.log('SELO')
-  }
+  private readonly _services = new Map<string, any>()
 
   add(
     key: string,
-    service: IService
+    service: any
   ) {
     console.log('add', key, service)
     this._services.set(key, service)
   }
 
-  get<T extends IService>(
+  get<T>(
     key: string
   ): T {
     const service = this._services.get(key)
@@ -25,7 +20,7 @@ export class ServiceLocator {
   }
 
   async init() {
-    const initFuncs = Array.from(this._services.values()).map(x => x.init())
+    const initFuncs = Array.from(this._services.values()).map(x => x.init ? x.init() : () => {})
     await Promise.allSettled(initFuncs)
   }
 }

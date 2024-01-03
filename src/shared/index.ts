@@ -1,6 +1,5 @@
 // composables
 export * from './composables/useTask'
-export * from './composables/useCachedPaginatedTask'
 export * from './composables/useGetEntityTask'
 
 // layouts

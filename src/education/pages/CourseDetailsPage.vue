@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import { IonButton, useIonRouter } from '@ionic/vue'
-import { ItemDetailsWithTaskPage, serviceLocator, useGetEntityTask } from '@/shared'
-import { CoursesCache, GetCourseDetailsTask } from '@/education'
+import { CachingTask, ItemDetailsWithTaskPage, serviceLocator } from '@/shared'
+import { CoursesCache, GetCourseDetailsFromCacheTask, GetCourseDetailsTask } from '@/education'
 import { GetCourseDetailsResponse } from '@protocol/courses'
 import { ref } from 'vue'
 
@@ -48,12 +48,11 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const getCourseDetailsTask = useGetEntityTask(
+const cache  = serviceLocator.get<CoursesCache>('coursesCache')
+const getCourseDetailsTask = new CachingTask(
   new GetCourseDetailsTask(),
-  new CoursesCache(
-    serviceLocator.get('localStorage')
-  ),
-  (req) => ({ id: req.id })
+  new GetCourseDetailsFromCacheTask(cache),
+  async (res) => { await cache.save([res.item]) }
 )
 
 

@@ -4,16 +4,22 @@ export interface IEntity {
   id: string
 }
 
-export interface IEntitiesCacheRequest {
-  id?: string,
-  offset?: number,
-  count?: number
+export interface ICache<
+  TModel,
+  TRequest
+> {
+  get(request: TRequest): Promise<TModel[]>
+  save(items: TModel[]): void
+  invalidate(): void
 }
 
-export abstract class EntitiesCache<
+export abstract class LocalStorageCache<
   TEntity extends IEntity,
-  TCacheRequest extends IEntitiesCacheRequest
-> {
+  TCacheRequest
+> implements ICache <
+  TEntity,
+  TCacheRequest
+>{
   private _entities    = new Map<string, TEntity>()
   private _initialized = false
 
@@ -24,47 +30,32 @@ export abstract class EntitiesCache<
   }
 
   async get(
-    request: TCacheRequest
+    query: TCacheRequest
   ): Promise<TEntity[]> {
     await this.initializeCache()
 
-    // check if specified item is requested
-    if (request.id) {
-      const item = this._entities.get(request.id)
-      return item ? [item] : []
-    }
-
-    let items = this.filter(
+    return this.filter(
       Array.from(this._entities.values()),
-      request
+      query
     )
-
-    if (request.offset && request.count) {
-      items = items.filter((_, idx) =>
-        idx >= (request.offset || 0) &&
-        idx <  (request.offset || 0) + (request.count || 0))
-    }
-    return items
   }
 
   async save(
-    items: TEntity[]
+    items: (Partial<TEntity> & IEntity)[]
   ) {
     await this.initializeCache()
 
-    items.forEach(item => this._entities.set(item.id, item))
+    items.forEach(item => this._entities.set(item.id, item as TEntity))
     this._localStorage.set(
       this._key,
       Array.from(this._entities.entries())
     )
   }
 
-  protected abstract filter(
-    items: TEntity[], request: TCacheRequest
-  ): TEntity[]
+  protected abstract filter(items: TEntity[], query: TCacheRequest): TEntity[]
 
   invalidate(): void {
-    localStorage.removeItem(this._key)
+    localStorage.clear()
   }
 
   private async initializeCache() {
