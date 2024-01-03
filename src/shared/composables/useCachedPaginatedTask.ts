@@ -1,22 +1,17 @@
 import { CachingTask } from '@/shared'
-import { Cache, ITask, PaginatedRequest, PaginatedResponse } from '@protocol/core'
-import { Network } from '@capacitor/network'
+import { Cache, ITask, GetItemsRequest, GetItemsResponse } from '@protocol/core'
 
 
 export function useCachedPaginatedTask<
   TCacheModel,
   TCacheQuery,
-  TRequest extends PaginatedRequest,
-  TResponse extends PaginatedResponse<TCacheModel>
+  TRequest extends GetItemsRequest,
+  TResponse extends GetItemsResponse<TCacheModel>
 > (
   Task: ITask<TRequest, TResponse>,
   cache: Cache<TCacheModel, TCacheQuery>,
   requestToQuery: (request: TRequest) => TCacheQuery
 ) {
-  Network.addListener('networkStatusChange', status => {
-    console.log('Network status changed', status)
-    task.useCacheOnly = !status.connected
-  })
 
   const task = new CachingTask(
     Task,

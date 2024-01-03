@@ -10,7 +10,7 @@
     <course-card
       :title="item.title"
       :subtitle="item.subtitle"
-      :description="item.description"
+      :summary="item.summary"
       :cover-image-url="item.coverImageUrl"
       @click="() => onCourseCardClicked(item.id.toString())"
     />

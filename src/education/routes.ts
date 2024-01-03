@@ -13,7 +13,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         path: 'courses',
         name: 'courses',
-        component: () => import('./pages/CoursesIndexPage.vue'),
+        component: () => import('./pages/CoursesListPage.vue'),
       },
       {
         name: 'course',

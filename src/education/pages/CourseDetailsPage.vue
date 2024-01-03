@@ -6,13 +6,12 @@
     @data-loaded="onDataLoaded"
   >
     <template #success="{ data }">
-      <img :src="data.coverImageUrl">
+      <img :src="data.item.coverImageUrl">
 
       <p class="ion-padding">
-        {{ data.description }}
+        {{ data.item.description }}
 
         <ion-button
-          :disabled="!data.isOpenToEnroll"
           expand="block"
           @click="onEnrollButtonClicked"
         >
@@ -30,8 +29,8 @@
 
 <script setup lang="ts">
 import { IonButton, useIonRouter } from '@ionic/vue'
-import { ItemDetailsWithTaskPage } from '@/shared'
-import { GetCourseDetailsTaskTask } from '@/education'
+import { ItemDetailsWithTaskPage, useGetEntityTask } from '@/shared'
+import { CoursesCache, GetCourseDetailsTask } from '@/education'
 import { GetCourseDetailsResponse } from '@protocol/courses'
 import { ref } from 'vue'
 
@@ -49,7 +48,11 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const getCourseDetailsTask = new GetCourseDetailsTaskTask()
+const getCourseDetailsTask = useGetEntityTask(
+  new GetCourseDetailsTask(),
+  new CoursesCache(),
+  (req) => ({ id: req.id })
+)
 
 
 /* -------------------------------------------------------------------------- */
@@ -68,7 +71,7 @@ function onEnrollButtonClicked() {
 }
 
 function onDataLoaded(response: GetCourseDetailsResponse) {
-  title.value = response.title
+  title.value = response.item.title
 }
 </script>
 

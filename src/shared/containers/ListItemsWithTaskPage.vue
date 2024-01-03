@@ -16,7 +16,7 @@
 <script setup lang="ts" generic="TModel">
 import { Ref, onMounted, ref } from 'vue'
 import { useTask } from '@/shared'
-import { ITask, PaginatedRequest, PaginatedResponse, ResponseCode } from '@protocol/core'
+import { ITask, GetItemsRequest, GetItemsResponse, ResponseCode } from '@protocol/core'
 import { ListItemsPage } from '@/shared'
 
 /* -------------------------------------------------------------------------- */
@@ -24,8 +24,8 @@ import { ListItemsPage } from '@/shared'
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  task: ITask<PaginatedRequest, PaginatedResponse<TModel>>,
-  requestMiddleware: (mode: string, a: PaginatedRequest) => PaginatedRequest,
+  task: ITask<GetItemsRequest, GetItemsResponse<TModel>>,
+  requestMiddleware: (mode: string, a: GetItemsRequest) => GetItemsRequest,
   fetchCount: number
   title: string
 }>()
@@ -41,7 +41,7 @@ const emit = defineEmits<{
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const taskWrapper = useTask<PaginatedRequest, PaginatedResponse<TModel>>(
+const taskWrapper = useTask<GetItemsRequest, GetItemsResponse<TModel>>(
   props.task,
 )
 

@@ -12,3 +12,4 @@ sunday = Sunday
 any-day = Any day
 
 add = Add
+search = Search

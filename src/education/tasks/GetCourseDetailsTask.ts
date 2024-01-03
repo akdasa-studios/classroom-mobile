@@ -1,9 +1,9 @@
 import { KnownError, KnownErrorCode, Task, sleep } from '@protocol/core'
 import { GetCourseDetailsRequest, GetCourseDetailsResponse } from '@protocol/courses'
-import { courses, groups, loremIpsum } from '@protocol/fixtures'
+import { courses, loremIpsum } from '@protocol/fixtures'
 
 
-export class GetCourseDetailsTaskTask
+export class GetCourseDetailsTask
   extends Task<
     GetCourseDetailsRequest,
     GetCourseDetailsResponse
@@ -18,13 +18,17 @@ export class GetCourseDetailsTaskTask
       throw new KnownError(KnownErrorCode.UnknownError)
     }
 
-    const isOpenToEnroll = groups.some(x => x.courseId === request.id)
+    // const isOpenToEnroll = groups.some(x => x.courseId === request.id)
 
     return {
-      title: course.title,
-      description: course.description + loremIpsum + loremIpsum + loremIpsum,
-      coverImageUrl: course.coverImageUrl,
-      isOpenToEnroll: isOpenToEnroll
+      item: {
+        id: course.id,
+        title: course.title,
+        subtitle: course.subtitle,
+        summary: course.summary,
+        description: course.description + loremIpsum + loremIpsum + loremIpsum,
+        coverImageUrl: course.coverImageUrl,
+      },
     }
   }
 }

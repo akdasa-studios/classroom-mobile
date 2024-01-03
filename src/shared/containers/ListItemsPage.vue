@@ -2,7 +2,10 @@
   <page-with-header-layout :title="title">
     <template #toolbar>
       <ion-toolbar>
-        <ion-searchbar @ion-change="onSearchQueryChanged" />
+        <ion-searchbar
+          :placeholder="$t('search')"
+          @ion-change="onSearchQueryChanged"
+        />
       </ion-toolbar>
     </template>
 
@@ -10,6 +13,17 @@
       <loading-spinner
         v-if="isLoading && items.length === 0"
       />
+
+      <div
+        v-else-if="!isLoading && items.length === 0"
+        class="center"
+      >
+        <img
+          src="/monk.png"
+          class="img"
+        >
+        Nothing found
+      </div>
 
       <template
         v-for="item in items"
@@ -90,3 +104,22 @@ function onSearchQueryChanged(
   emit('search', query.detail.value)
 }
 </script>
+
+
+<style scoped>
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.img {
+  width: 120px;
+  height: 120px;
+  margin: 20px
+}
+</style>

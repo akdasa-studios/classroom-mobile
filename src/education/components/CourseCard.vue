@@ -13,7 +13,7 @@
     </ion-card-header>
 
     <ion-card-content>
-      {{ props.description }}
+      {{ props.summary }}
     </ion-card-content>
   </ion-card>
 </template>
@@ -25,7 +25,7 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle }
 const props = defineProps<{
   title: string,
   subtitle: string,
-  description: string,
+  summary: string,
   coverImageUrl: string
 }>()
 </script>
