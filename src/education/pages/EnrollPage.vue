@@ -38,6 +38,7 @@
 
       <!-- Enroll -->
       <async-button
+        :disabled="!networkStatus.connected.value"
         expand="block"
         :busy="submitEnrolmentFormTask.isInProgress.value"
         @click="onEnrollButtonClicked"
@@ -52,7 +53,7 @@
 <script setup lang="ts">
 import { IonTextarea, toastController } from '@ionic/vue'
 import { useIonRouter } from '@ionic/vue'
-import { PageWithHeaderLayout, AsyncButton, HeaderAndNote, useTask } from '@/shared'
+import { PageWithHeaderLayout, AsyncButton, HeaderAndNote, useTask, useNetworkStatus } from '@/shared'
 import { SubmitEnrolmentFormTask } from '@/education'
 import { ref } from 'vue'
 import { GroupSelector, TimeRangeSelector } from '@/education'
@@ -64,7 +65,7 @@ import { TimeRange, TimeRangePreset } from '../components/TimeRange'
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-const props = defineProps<{
+defineProps<{
   id: string
 }>()
 
@@ -73,6 +74,7 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
+const networkStatus = useNetworkStatus()
 const submitEnrolmentFormTask = useTask(new SubmitEnrolmentFormTask())
 const fluent = useFluent()
 
