@@ -1,73 +1,55 @@
 <template>
-  <list-items-with-task-page
+  <list-items-page
     v-slot="{ item }"
     :title="$t('courses')"
-    :task="task"
-    :request-middleware="requestMiddleware"
-    :fetch-count="2"
-    @search="onSearchQueryChanged"
+    :fetcher="fetcher"
   >
     <course-card
       :title="item.title"
       :subtitle="item.subtitle"
       :summary="item.summary"
       :cover-image-url="item.coverImageUrl"
-      @click="() => onCourseCardClicked(item.id.toString())"
+      @click="() => onCourseCardClicked(item.id)"
     />
-  </list-items-with-task-page>
+  </list-items-page>
 </template>
 
 
 <script setup lang="ts">
 import { useIonRouter } from '@ionic/vue'
-import { CachingTask, ListItemsWithTaskPage, serviceLocator } from '@/shared'
-import { CoursesCache, CourseCard, GetCoursesListTask, GetCoursesListFromCacheTask } from '@/education'
-import { GetCoursesListRequest, GetCoursesListResponse } from '@protocol/courses'
+import { ListItemsPage, useRepository } from '@/shared'
+import { Course, CourseCard, CourseIdentity } from '@/education'
+import { QueryBuilder } from '@framework/persistence'
+import { courses } from '@/shared/fixtures'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const cache  = serviceLocator.get<CoursesCache>('coursesCache')
-const router = useIonRouter()
-const task   =
-  new CachingTask(
-    new GetCoursesListTask(),
-    new GetCoursesListFromCacheTask(cache),
-    async (res: GetCoursesListResponse): Promise<void> => {
-      return await cache.save(res.items)
-    }
-  )
-
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
-let searchQuery = ''
-
+const router     = useIonRouter()
+const repository = useRepository<Course>('course', courses)
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
 function onCourseCardClicked(
-  id: string
+  id: CourseIdentity
 ) {
-  router.push({ name: 'course', params: { 'id': id } })
+  router.push({ name: 'course', params: { 'id': id.value } })
 }
 
-function requestMiddleware(
-  mode: string,
-  request: GetCoursesListRequest
-): GetCoursesListRequest {
-  if (mode === 'refresh') { task.invalidate() }
-  return { title: searchQuery, ...request }
-}
 
-function onSearchQueryChanged(
-  query: string
-) {
-  searchQuery = query
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+
+async function fetcher(searchQuery: string, offset: number, count: number) {
+  const qb = new QueryBuilder<Course>()
+  const result = await repository.find(
+    qb.contains('title', searchQuery
+  ), { skip: offset, limit: count })
+  return result.entities
 }
 </script>
 

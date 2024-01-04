@@ -16,12 +16,14 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@protocol/*": ["./submodules/protocol/*"]
+      "@protocol/*": ["./submodules/protocol/*"],
+      "@framework/*": ["./submodules/framework/lib/*"]
     }
   },
   "include": [
     "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue",
-    "submodules/protocol/**/*.ts"
+    "submodules/protocol/**/*.ts",
+    "submodues/framework/lib/**/*.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

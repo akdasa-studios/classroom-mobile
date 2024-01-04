@@ -1,71 +1,69 @@
 <template>
-  <item-details-page
-    :title="title"
-    :is-loading="taskWrapper.isInProgress.value"
-    :has-padding="hasPadding"
+  <with-loader
+    :busy="busy"
   >
-    <slot
-      v-if="response && response.status === ResponseCode.Ok"
-      name="success"
-      :data="response.data"
-    />
-    <slot
-      v-if="response && response.status === ResponseCode.Error"
-      name="error"
-    />
-  </item-details-page>
+    <template #loader>
+      <groups-list-item-skeleton />
+      <groups-list-item-skeleton />
+    </template>
+
+    <template #content>
+      <groups-list
+        v-model="selectedGroup"
+        :groups="groups"
+      />
+    </template>
+  </with-loader>
 </template>
 
 
-<script setup lang="ts" generic="TRequest extends Request, TResponse extends Response">
-import { ItemDetailsPage, useTask } from '@/shared'
-import { CompletedResponse, ITask, Request, Response, ResponseCode } from '@protocol/core'
-import { onMounted, ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, ref, shallowRef } from 'vue'
+import { GroupsList, Group, GroupsListItemSkeleton } from '@/education'
+import { WithLoader, useRepository } from '@/shared'
+import { groupsFixtures } from '@/shared/fixtures'
+import { QueryBuilder } from '@framework/persistence'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  title: string,
-  hasPadding?: boolean
-  task: ITask<TRequest, TResponse>
-  request: TRequest
+  courseId: string
 }>()
 
-const emit = defineEmits<{
-  dataLoaded: [response: TResponse],
-}>()
+
+const selectedGroup = defineModel<string>()
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const taskWrapper = useTask(props.task)
+const groupsRepo = useRepository<Group>('group', groupsFixtures)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const response = ref<CompletedResponse<TResponse>>()
+const groups = shallowRef<readonly Group[]>([])
+const busy = ref(false)
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-// TODO: change to the other hook
-onMounted(onFetchRequested)
+onMounted(onFetchData)
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-async function onFetchRequested() {
-  const res = await taskWrapper.execute(props.request)
-  response.value = res
-  if (res.status === ResponseCode.Ok) {
-    emit('dataLoaded', res.data)
-  }
+async function onFetchData() {
+  busy.value = true
+  const qb = new QueryBuilder<Group>()
+  groups.value = (await groupsRepo.find(qb.eq('courseId.value', props.courseId))).entities
+  busy.value = false
 }
 </script>

@@ -1,15 +1,14 @@
 <template>
-  <item-details-with-task-page
+  <item-details-page
     :title="title"
-    :task="getCourseDetailsTask"
-    :request="{ id: props.id }"
-    @data-loaded="onDataLoaded"
+    :fetcher="fetcher"
+    :has-padding="false"
   >
     <template #success="{ data }">
-      <img :src="data.item.coverImageUrl">
+      <img :src="data.coverImageUrl">
 
       <p class="ion-padding">
-        {{ data.item.description }}
+        {{ data.summary }}
 
         <ion-button
           expand="block"
@@ -23,16 +22,17 @@
     <template #error>
       Some shit happened
     </template>
-  </item-details-with-task-page>
+  </item-details-page>
 </template>
 
 
 <script setup lang="ts">
 import { IonButton, useIonRouter } from '@ionic/vue'
-import { CachingTask, ItemDetailsWithTaskPage, serviceLocator } from '@/shared'
-import { CoursesCache, GetCourseDetailsFromCacheTask, GetCourseDetailsTask } from '@/education'
-import { GetCourseDetailsResponse } from '@protocol/courses'
+import { ItemDetailsPage, useRepository } from '@/shared'
+import { Course } from '@/education'
 import { ref } from 'vue'
+import { courses } from '@/shared/fixtures'
+import { UuidIdentity } from '@framework/domain'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -48,12 +48,7 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const cache  = serviceLocator.get<CoursesCache>('coursesCache')
-const getCourseDetailsTask = new CachingTask(
-  new GetCourseDetailsTask(),
-  new GetCourseDetailsFromCacheTask(cache),
-  async (res) => { await cache.save([res.item]) }
-)
+const repository = useRepository<Course>('course', courses)
 
 
 /* -------------------------------------------------------------------------- */
@@ -71,8 +66,13 @@ function onEnrollButtonClicked() {
   router.push({ name: 'enroll', params: { 'id': props.id } })
 }
 
-function onDataLoaded(response: GetCourseDetailsResponse) {
-  title.value = response.item.title
+
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+
+async function fetcher() {
+  return await repository.get(new UuidIdentity(props.id))
 }
 </script>
 

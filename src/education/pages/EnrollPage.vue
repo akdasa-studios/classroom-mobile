@@ -1,11 +1,9 @@
 <template>
-  <item-details-with-task-page
+  <page-with-header-layout
     :title="$t('enroll')"
-    :task="getEnrollmentDetailsTask"
-    :request="{ courseId: props.id }"
     :has-padding="true"
   >
-    <template #success="{ data }">
+    <template #content>
       <!-- Select group -->
       <header-and-note
         :header="$t('group')"
@@ -13,7 +11,7 @@
       />
       <group-selector
         v-model="groupId"
-        :groups="data.groups"
+        :course-id="id"
       />
 
       <!-- Select time -->
@@ -47,19 +45,15 @@
         {{ $t("enroll") }}
       </async-button>
     </template>
-
-    <template #error>
-      Some shit happened
-    </template>
-  </item-details-with-task-page>
+  </page-with-header-layout>
 </template>
 
 
 <script setup lang="ts">
 import { IonTextarea, toastController } from '@ionic/vue'
 import { useIonRouter } from '@ionic/vue'
-import { ItemDetailsWithTaskPage, AsyncButton, HeaderAndNote, useTask } from '@/shared'
-import { GetEnrollmentDetailsTask, SubmitEnrolmentFormTask } from '@/education'
+import { PageWithHeaderLayout, AsyncButton, HeaderAndNote, useTask } from '@/shared'
+import { SubmitEnrolmentFormTask } from '@/education'
 import { ref } from 'vue'
 import { GroupSelector, TimeRangeSelector } from '@/education'
 import { ResponseCode } from '@protocol/core'
@@ -79,24 +73,25 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const getEnrollmentDetailsTask = new GetEnrollmentDetailsTask()
 const submitEnrolmentFormTask = useTask(new SubmitEnrolmentFormTask())
 const fluent = useFluent()
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
 const timeRangePresets: TimeRangePreset[] = [
-  { name: 'Выходные до 11 утра', range: { start: [6, 0],  end: [11, 0], days: [6,7] } },
-  { name: 'Будни до 9:00',       range: { start: [6, 0],  end: [9, 0],  days: [1,2,3,4,5] } },
-  { name: 'Будни после 18:00',   range: { start: [18, 0], end: [21, 0], days: [1,2,3,4,5] } },
-  { name: 'Любое время ',        range: { start: [0, 0],  end: [24, 0], days: [1,2,3,4,5,6,7] } },
+  { name: 'Выходные до 11 утра',    range: { start: [6, 0],  end: [11, 0], days: [6,7] } },
+  { name: 'Будние дни до 9:00',     range: { start: [6, 0],  end: [9, 0],  days: [1,2,3,4,5] } },
+  { name: 'Будние дни после 18:00', range: { start: [18, 0], end: [21, 0], days: [1,2,3,4,5] } },
+  { name: 'Любое время ',           range: { start: [0, 0],  end: [24, 0], days: [1,2,3,4,5,6,7] } },
 ]
 
 const groupId = ref('')
 const timeRanges = ref<TimeRange[]>([])
 const comments = ref('')
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */

@@ -14,7 +14,7 @@
         <img :src="group.couratorAvatarUrl">
       </ion-avatar>
 
-      <ion-radio :value="group.id">
+      <ion-radio :value="group.id.value">
         <ion-label>
           <h2>{{ group.name }}</h2>
           <p>
@@ -32,21 +32,14 @@
 
 <script setup lang="ts">
 import { IonItem, IonLabel, IonRadio, IonRadioGroup, IonAvatar, IonText } from '@ionic/vue'
+import { Group } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-export interface Group {
-  id: string
-  name: string,
-  couratorName: string,
-  couratorAvatarUrl: string,
-  startsAt: number
-}
-
 defineProps<{
-  groups: Group[]
+  groups: readonly Group[]
 }>()
 
 

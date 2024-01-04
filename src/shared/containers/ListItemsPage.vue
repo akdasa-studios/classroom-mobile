@@ -3,8 +3,9 @@
     <template #toolbar>
       <ion-toolbar>
         <ion-searchbar
+          v-model="searchQuery"
+          :debounce="250"
           :placeholder="$t('search')"
-          @ion-change="onSearchQueryChanged"
         />
       </ion-toolbar>
     </template>
@@ -41,7 +42,8 @@
       </ion-refresher>
 
       <ion-infinite-scroll
-        :disabled="!infiniteScrollEnabled || items.length === 0"
+        v-if="items.length > 0"
+        :disabled="!infiniteScrollEnabled"
         @ion-infinite="e => onFetchRequested('append', e)"
       >
         <ion-infinite-scroll-content />
@@ -50,7 +52,7 @@
   </page-with-header-layout>
 </template>
 
-<script setup lang="ts" generic="T">
+<script setup lang="ts" generic="TAggregate">
 import {
   IonRefresher, IonRefresherContent,
   IonInfiniteScroll, IonInfiniteScrollContent,
@@ -58,6 +60,7 @@ import {
   IonToolbar, IonSearchbar,
 } from '@ionic/vue'
 import { LoadingSpinner, PageWithHeaderLayout } from '@/shared'
+import { Ref, onMounted, ref, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -65,43 +68,63 @@ import { LoadingSpinner, PageWithHeaderLayout } from '@/shared'
 
 const props = defineProps<{
   title: string,
-  items: T[]
-  infiniteScrollEnabled: boolean
-  isLoading: boolean
+  fetcher: (search: string, offset: number, count: number) => Promise<readonly TAggregate[]>
 }>()
 
-const emit = defineEmits<{
-  fetch: [
-    mode: 'refresh' | 'append',
-    offset: number,
-    complete: () => void
-  ],
-  search: [
-    query: string
-  ]
-}>()
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const items = ref<TAggregate[]>([]) as Ref<TAggregate[]>
+const searchQuery = ref<string>('')
+const infiniteScrollEnabled = ref(true) // TODO: enable if we back online
+const isLoading = ref(false)
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hooks                                   */
+/* -------------------------------------------------------------------------- */
+
+// TODO: change to the other hook
+onMounted(onEntered)
+watch(searchQuery, () => onSearchQueryChanged())
 
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
+async function onEntered() {
+  if (items.value.length === 0) { fetch() }
+}
+
 async function onFetchRequested(
   mode: 'refresh' | 'append',
   event: RefresherCustomEvent | InfiniteScrollCustomEvent
 ) {
-  emit(
-    'fetch',
-    mode,
-    mode == 'refresh' ? 0 : props.items.length,
-    () => { event.target.complete() }
-  )
+  await fetch(mode === 'append' ? items.value.length : 0)
+  await event.target.complete()
 }
 
-function onSearchQueryChanged(
-  query: any
+async function onSearchQueryChanged() {
+  items.value = []
+  await fetch()
+}
+
+async function fetch(
+  offset: number = 0,
+  count: number = 2
 ) {
-  emit('search', query.detail.value)
+  isLoading.value = true
+
+  const result = await props.fetcher(searchQuery.value, offset, count)
+  items.value = offset === 0
+    ? Array.from(result)
+    : items.value.concat(result)
+
+  isLoading.value = false
+  infiniteScrollEnabled.value = result.length == count
 }
 </script>
 
