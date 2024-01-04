@@ -64,5 +64,13 @@ export const groupsFixtures: Group[] = [
     'Радха дд',
     'https://i.pravatar.cc/150?u=a042581f4e29026704d',
     17139772
+  ),
+  new Group(
+    new UuidIdentity(),
+    courses[1].id,
+    'Группа 16108',
+    'Радха дд',
+    'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    17139772
   )
 ]
