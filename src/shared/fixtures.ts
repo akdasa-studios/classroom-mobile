@@ -1,5 +1,5 @@
-import { Course, Group } from '@/education'
 import { UuidIdentity } from '@framework/domain'
+import { Course, Group, EnrollmentRequest, EnrollmentRequestStatus } from '@/education'
 
 export const courses: Course[] = [
   new Course(
@@ -73,4 +73,20 @@ export const groupsFixtures: Group[] = [
     'https://i.pravatar.cc/150?u=a042581f4e29026704d',
     17139772
   )
+]
+
+
+export const enrollmentRequestsFixtures: EnrollmentRequest[] = [
+  new EnrollmentRequest(
+    new UuidIdentity(),
+    'a243727d-57ab-4595-ba17-69f3a0679bf6',
+    groupsFixtures[0].id,
+    EnrollmentRequestStatus.Pending
+  ),
+  new EnrollmentRequest(
+    new UuidIdentity(),
+    '952ae116-1669-49e9-9e39-47a13104e475',
+    groupsFixtures[1].id,
+    EnrollmentRequestStatus.InReview
+  ),
 ]

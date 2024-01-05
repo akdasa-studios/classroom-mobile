@@ -2,23 +2,28 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>My courses</ion-title>
+        <ion-title>{{ $t('my-groups') }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+    <ion-content
+      :fullscreen="true"
+      class="ion-padding"
+    >
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">
-            My courses
+            {{ $t('my-groups') }}
           </ion-title>
         </ion-toolbar>
       </ion-header>
 
-      Here is a list of my courses
+      <my-enrollment-requests-list />
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue'
+import { MyEnrollmentRequestsList } from '@/education'
+
 </script>
