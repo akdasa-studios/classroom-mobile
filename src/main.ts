@@ -29,14 +29,13 @@ import { LocalStorageService, serviceLocator } from './shared'
 /** */
 const localStorage = new LocalStorageService()
 serviceLocator.add('localStorage', localStorage)
-await serviceLocator.init()
-
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
   .use(fluent)
 
-router.isReady().then(() => {
+router.isReady().then(async () => {
+  await serviceLocator.init()
   app.mount('#app')
 })

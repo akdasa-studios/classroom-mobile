@@ -40,7 +40,7 @@ function shoot() {
     origin: { y: .9 }
   }
 
-  function fire(particleRatio: number, opts) {
+  function fire(particleRatio: number, opts: any) {
     confetti.default({
       ...defaults,
       ...opts,

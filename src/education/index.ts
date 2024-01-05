@@ -17,6 +17,5 @@ export { default as GroupsListItemSkeleton } from './components/GroupsListItemSk
 export { default as GroupSelector } from './containers/GroupSelector.vue'
 
 // tasks:
-export * from './tasks/GetCourseDetailsTask'
 export * from './tasks/GetEnrollmentDetailsTask'
 export * from './tasks/SubmitEnrolmentFormTask'

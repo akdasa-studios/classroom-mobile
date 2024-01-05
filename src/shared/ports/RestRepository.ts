@@ -11,7 +11,7 @@ export class RestRepository<
   constructor(data: TAggregate[]) {
     for (const entity of data) { this.repo.save(entity) }
   }
-  private repo = new InMemoryRepository()
+  private repo = new InMemoryRepository<TAggregate>()
 
   async all(
     options?: QueryOptions | undefined

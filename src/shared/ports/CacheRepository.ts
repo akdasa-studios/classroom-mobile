@@ -7,10 +7,10 @@ export class CacheRepository<
 > implements Repository<TAggregate> {
   // TODO: for developing purposes only, implement
   //       real CacheRepository later
-  private repo = new InMemoryRepository()
+  private repo = new InMemoryRepository<TAggregate>()
 
   async all(
-    options?: QueryOptions | undefined
+    options?: QueryOptions,
   ): Promise<ResultSet<TAggregate>> {
     return await this.repo.all(options)
   }
