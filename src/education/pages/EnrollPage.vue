@@ -51,14 +51,13 @@
 
 
 <script setup lang="ts">
-import { IonTextarea, toastController } from '@ionic/vue'
+import { IonTextarea } from '@ionic/vue'
 import { useIonRouter } from '@ionic/vue'
 import { PageWithHeaderLayout, AsyncButton, HeaderAndNote, useTask, useNetworkStatus } from '@/shared'
 import { SubmitEnrolmentFormTask } from '@/education'
 import { ref } from 'vue'
 import { GroupSelector, TimeRangeSelector } from '@/education'
 import { ResponseCode } from '@protocol/core'
-import { useFluent } from 'fluent-vue'
 import { TimeRange, TimeRangePreset } from '../components/TimeRange'
 
 /* -------------------------------------------------------------------------- */
@@ -76,8 +75,6 @@ defineProps<{
 const router = useIonRouter()
 const networkStatus = useNetworkStatus()
 const submitEnrolmentFormTask = useTask(new SubmitEnrolmentFormTask())
-const fluent = useFluent()
-
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
@@ -110,19 +107,9 @@ async function onEnrollButtonClicked() {
       }
     ]
   })
+
   if (result.status === ResponseCode.Ok) {
-    router.navigate({ name: 'courses' }, 'root', 'replace')
-
-    const toast = await toastController.create({
-      message: fluent.$t('enrollment-request-submited'),
-      duration: 1500,
-      position: 'top',
-      translucent: true,
-      animated: true,
-      color: 'success'
-    })
-
-    await toast.present()
+    router.push({ name: 'enroll-completed' })
   }
 }
 </script>

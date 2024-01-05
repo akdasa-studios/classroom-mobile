@@ -32,7 +32,16 @@ export const routes: Array<RouteRecordRaw> = [
         }),
       },
       {
-        path: 'my-courses',
+        name: 'enroll-completed',
+        path: 'courses/:id/enroll/completed',
+        component: () => import('./pages/EnrollCompletedPage.vue'),
+        props: route => ({
+          id: route.params.id,
+        }),
+      },
+      {
+        name: 'my-groups',
+        path: 'my-groups',
         component: () => import('./pages/MyCourses.vue')
       },
     ]

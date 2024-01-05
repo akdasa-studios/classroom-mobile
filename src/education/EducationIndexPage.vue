@@ -16,8 +16,8 @@
         </ion-tab-button>
 
         <ion-tab-button
-          tab="my-courses"
-          href="/education/my-courses"
+          tab="my-groups"
+          href="/education/my-groups"
         >
           <ion-icon
             aria-hidden="true"

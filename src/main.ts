@@ -31,6 +31,7 @@ const localStorage = new LocalStorageService()
 serviceLocator.add('localStorage', localStorage)
 await serviceLocator.init()
 
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
