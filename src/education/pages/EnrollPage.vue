@@ -91,7 +91,6 @@ const groupId = ref('')
 const timeRanges = ref<TimeRange[]>([])
 const comments = ref('')
 
-
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
@@ -109,7 +108,7 @@ async function onEnrollButtonClicked() {
   })
 
   if (result.status === ResponseCode.Ok) {
-    router.push({ name: 'enroll-completed' })
+    router.navigate({ name: 'enroll-completed' }, 'forward', 'pop')
   }
 }
 </script>

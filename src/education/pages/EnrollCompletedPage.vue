@@ -48,7 +48,7 @@ const router = useIonRouter()
 /* -------------------------------------------------------------------------- */
 
 function onGoToMyGroupsClicked() {
-  router.navigate({ name: 'my-groups' }, 'root', 'pop') //, 'root', 'replace')
+  router.navigate({ name: 'my-groups' }, 'root', 'pop')
 }
 </script>
 
