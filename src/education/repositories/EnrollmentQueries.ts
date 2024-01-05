@@ -1,7 +1,7 @@
 import { QueryBuilder } from '@framework/persistence'
-import { EnrollmentRequest } from '@/education'
+import { Enrollment } from '@/education'
 
 
-const qb = new QueryBuilder<EnrollmentRequest>()
+const qb = new QueryBuilder<Enrollment>()
 
 export const OfUser = (userId: string) => qb.eq('userId', userId)

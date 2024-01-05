@@ -1,6 +1,6 @@
 <template>
-  <enrollment-requests-list-item
-    v-for="request in enrollmentRequests"
+  <enrollments-list-item
+    v-for="request in enrollments"
     :id="request.id"
     :key="request.id"
     :group-name="request.groupName"
@@ -13,13 +13,13 @@
 
 
 <script setup lang="ts">
-import { EnrollmentRequestsListItem } from '@/education'
+import { EnrollmentsListItem } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-export interface EnrollmentRequestViewModel {
+export interface EnrollmentViewModel {
   id: string,
   groupName: string,
   leaderName: string,
@@ -29,6 +29,6 @@ export interface EnrollmentRequestViewModel {
 }
 
 defineProps<{
-  enrollmentRequests: EnrollmentRequestViewModel[]
+  enrollments: EnrollmentViewModel[]
 }>()
 </script>

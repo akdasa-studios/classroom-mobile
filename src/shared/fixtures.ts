@@ -1,5 +1,5 @@
 import { UuidIdentity } from '@framework/domain'
-import { Course, Group, EnrollmentRequest, EnrollmentRequestStatus } from '@/education'
+import { Course, Group, Enrollment, EnrollmentStatus } from '@/education'
 
 export const courses: Course[] = [
   new Course(
@@ -76,17 +76,17 @@ export const groupsFixtures: Group[] = [
 ]
 
 
-export const enrollmentRequestsFixtures: EnrollmentRequest[] = [
-  new EnrollmentRequest(
+export const EnrollmentsFixtures: Enrollment[] = [
+  new Enrollment(
     new UuidIdentity(),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     groupsFixtures[0].id,
-    EnrollmentRequestStatus.Pending
+    EnrollmentStatus.Pending
   ),
-  new EnrollmentRequest(
+  new Enrollment(
     new UuidIdentity(),
     '952ae116-1669-49e9-9e39-47a13104e475',
     groupsFixtures[1].id,
-    EnrollmentRequestStatus.InReview
+    EnrollmentStatus.InReview
   ),
 ]

@@ -2,23 +2,23 @@ import { Aggregate, UuidIdentity } from '@framework/domain'
 import { GroupIdentity } from './Group'
 
 
-export type EnrollmentRequestIdentity = UuidIdentity<'EnrollmentRequest'>
+export type EnrollmentIdentity = UuidIdentity<'Enrollment'>
 
-export enum EnrollmentRequestStatus {
+export enum EnrollmentStatus {
   Pending = 'pending',
   InReview = 'in-review',
   Approved = 'approved',
   Declined = 'declined'
 }
 
-export class EnrollmentRequest
-  extends Aggregate<EnrollmentRequestIdentity>
+export class Enrollment
+  extends Aggregate<EnrollmentIdentity>
 {
   constructor(
-    identity: EnrollmentRequestIdentity,
+    identity: EnrollmentIdentity,
     public userId: string,
     public groupId: GroupIdentity,
-    public status: EnrollmentRequestStatus
+    public status: EnrollmentStatus
   ) {
     super(identity)
   }
