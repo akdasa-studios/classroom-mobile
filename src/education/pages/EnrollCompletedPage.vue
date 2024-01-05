@@ -16,7 +16,7 @@
         fill="clear"
         @click="onGoToMyGroupsClicked"
       >
-        Go to my groups
+        {{ $t('go-to-my-groups') }}
       </ion-button>
     </div>
   </ion-page>
@@ -61,6 +61,10 @@ function onGoToMyGroupsClicked() {
 }
 
 .ctnt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin: auto;
 }
 
@@ -74,4 +78,5 @@ function onGoToMyGroupsClicked() {
 congratulations = Congratulations!
 enrollment-request-submited = The enrolment request has been submitted
 wait-for-assignment = Wait for assignment
+go-to-my-groups = Go to my groups
 </fluent>

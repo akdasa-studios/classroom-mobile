@@ -108,7 +108,7 @@ async function onEnrollButtonClicked() {
   })
 
   if (result.status === ResponseCode.Ok) {
-    router.navigate({ name: 'enroll-completed' }, 'forward', 'pop')
+    router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
   }
 }
 </script>
