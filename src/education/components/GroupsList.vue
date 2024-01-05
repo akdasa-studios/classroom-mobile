@@ -2,44 +2,39 @@
   <ion-radio-group
     v-model="model"
   >
-    <ion-item
+    <groups-list-item
       v-for="group in groups"
-      :key="group.name"
-      lines="none"
-    >
-      <ion-avatar
-        slot="start"
-        aria-hidden="true"
-      >
-        <img :src="group.couratorAvatarUrl">
-      </ion-avatar>
-
-      <ion-radio :value="group.id.value">
-        <ion-label>
-          <h2>{{ group.name }}</h2>
-          <p>
-            {{ group.couratorName }}
-            <ion-text color="primary">
-              {{ formatDate(group.startsAt) }}
-            </ion-text>
-          </p>
-        </ion-label>
-      </ion-radio>
-    </ion-item>
+      :id="group.id"
+      :key="group.id"
+      :name="group.name"
+      :leader="group.leader"
+      :info="group.info"
+      :image-url="group.imageUrl"
+      :starts-at="group.startsAt"
+    />
   </ion-radio-group>
 </template>
 
 
 <script setup lang="ts">
-import { IonItem, IonLabel, IonRadio, IonRadioGroup, IonAvatar, IonText } from '@ionic/vue'
-import { Group } from '@/education'
+import { IonRadioGroup } from '@ionic/vue'
+import { GroupsListItem } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
+export interface GroupViewModel {
+  id: string,
+  name: string,
+  leader?: string,
+  info?: string,
+  imageUrl: string,
+  startsAt?: number
+}
+
 defineProps<{
-  groups: readonly Group[]
+  groups: GroupViewModel[]
 }>()
 
 
@@ -48,16 +43,4 @@ defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const model = defineModel<string>()
-
-
-/* -------------------------------------------------------------------------- */
-/*                                   Helpers                                  */
-/* -------------------------------------------------------------------------- */
-
-function formatDate(
-  timestamp: number
-) {
-  return new Date(timestamp * 100000)
-    .toLocaleDateString('ru', {  month:'short', day:'numeric'})
-}
 </script>

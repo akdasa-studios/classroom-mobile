@@ -19,10 +19,18 @@
 
 <script setup lang="ts">
 import { onMounted, ref, shallowRef } from 'vue'
-import { GroupsList, Group, GroupsListItemSkeleton } from '@/education'
+import { GroupsList, Group, GroupsListItemSkeleton, GroupViewModel, GroupsOfCourse } from '@/education'
 import { WithLoader, useRepository } from '@/shared'
 import { groupsFixtures } from '@/shared/fixtures'
-import { QueryBuilder } from '@framework/persistence'
+import { useFluent } from 'fluent-vue'
+
+/* -------------------------------------------------------------------------- */
+/*                                Dependencies                                */
+/* -------------------------------------------------------------------------- */
+
+const groupsRepo = useRepository<Group>('group', groupsFixtures)
+const fluent = useFluent()
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -35,19 +43,14 @@ const props = defineProps<{
 
 const selectedGroup = defineModel<string>()
 
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
-const groupsRepo = useRepository<Group>('group', groupsFixtures)
-
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const groups = shallowRef<readonly Group[]>([])
+const groups = shallowRef<GroupViewModel[]>([])
 const busy = ref(false)
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
@@ -62,8 +65,36 @@ onMounted(onFetchData)
 
 async function onFetchData() {
   busy.value = true
-  const qb = new QueryBuilder<Group>()
-  groups.value = (await groupsRepo.find(qb.eq('courseId.value', props.courseId))).entities
+  const response = await groupsRepo.find(GroupsOfCourse(props.courseId))
+
+  const views = response.entities.map(x => ({
+    id: x.id.value,
+    name: x.name,
+    leader: x.couratorName,
+    imageUrl: x.couratorAvatarUrl,
+    startsAt: x.startsAt
+  } as GroupViewModel))
+
+  groups.value = [
+    ...views,
+    {
+      id: 'unknown',
+      name: fluent.$t('next-group'),
+      info: fluent.$t('next-group-info'),
+      imageUrl: 'https://placekitten.com/400/400'
+    }
+  ]
+
+  if (response.slice.count === 0) {
+    selectedGroup.value = 'unknown'
+  }
+
   busy.value = false
 }
 </script>
+
+
+<fluent locale="en">
+next-group = Next group
+next-group-info = You will be enrolled in the group once we launch it
+</fluent>
