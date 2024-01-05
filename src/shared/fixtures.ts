@@ -42,7 +42,7 @@ export const courses: Course[] = [
 
 export const groupsFixtures: Group[] = [
   new Group(
-    new UuidIdentity(),
+    new UuidIdentity('47d69940-20c5-448a-94f1-1d8e427e47af'),
     courses[0].id,
     'Группа для матаджи',
     'Ямуна дд',
@@ -50,7 +50,7 @@ export const groupsFixtures: Group[] = [
     17039772
   ),
   new Group(
-    new UuidIdentity(),
+    new UuidIdentity('c76e9597-b037-42c8-92d2-10875691b51f'),
     courses[0].id,
     'Группа для прабху',
     'Кришна дас',
@@ -58,7 +58,7 @@ export const groupsFixtures: Group[] = [
     17039772
   ),
   new Group(
-    new UuidIdentity(),
+    new UuidIdentity('f3d5c4a4-ef37-4a96-b9cd-68813c6e29aa'),
     courses[0].id,
     'Группа 108',
     'Радха дд',
@@ -66,7 +66,7 @@ export const groupsFixtures: Group[] = [
     17139772
   ),
   new Group(
-    new UuidIdentity(),
+    new UuidIdentity('1a4ec14b-f3ce-4ff5-8321-abe7ddd59e33'),
     courses[1].id,
     'Группа 16108',
     'Радха дд',
@@ -81,12 +81,28 @@ export const EnrollmentsFixtures: Enrollment[] = [
     new UuidIdentity(),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     groupsFixtures[0].id,
+    courses[0].id,
+    EnrollmentStatus.Pending
+  ),
+  new Enrollment(
+    new UuidIdentity(),
+    'a243727d-57ab-4595-ba17-69f3a0679bf6',
+    groupsFixtures[3].id,
+    courses[0].id,
+    EnrollmentStatus.Approved
+  ),
+  new Enrollment(
+    new UuidIdentity(),
+    'a243727d-57ab-4595-ba17-69f3a0679bf6',
+    undefined,
+    courses[0].id,
     EnrollmentStatus.Pending
   ),
   new Enrollment(
     new UuidIdentity(),
     '952ae116-1669-49e9-9e39-47a13104e475',
     groupsFixtures[1].id,
+    courses[0].id,
     EnrollmentStatus.InReview
   ),
 ]

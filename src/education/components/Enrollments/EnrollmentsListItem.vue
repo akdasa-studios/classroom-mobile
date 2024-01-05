@@ -1,6 +1,8 @@
 <template>
   <ion-item
+    :detail="true"
     lines="none"
+    @click="onClicked"
   >
     <ion-avatar
       slot="start"
@@ -11,18 +13,23 @@
 
     <ion-label>
       <h2>
-        {{ groupName }}
+        {{ courseName }}
       </h2>
       <p class="ion-text-wrap">
-        {{ leaderName }}
+        {{ groupName }}
+
         <ion-text
-          v-if="startsAt"
+          v-if="info"
+          color="medium"
+        >
+          {{ info }}
+        </ion-text>
+
+        <ion-text
+          v-if="showStatus"
           color="primary"
         >
-          {{ formatDate(startsAt) }}
-        </ion-text>
-        <ion-text color="tertiary">
-          ({{ $t(status) }})
+          {{ $t(status) }}
         </ion-text>
       </p>
     </ion-label>
@@ -32,30 +39,39 @@
 
 <script setup lang="ts">
 import { IonItem, IonLabel, IonAvatar, IonText } from '@ionic/vue'
+import { computed } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-defineProps<{
+const props = defineProps<{
   id: string
-  groupName: string,
-  leaderName: string,
+  courseName: string,
+  groupName?: string,
+  info?: string,
   imageUrl: string
-  startsAt: number,
   status: 'pending' | 'in-review' | 'approved' | 'declined'
+}>()
+
+const emit = defineEmits<{
+  click: [],
 }>()
 
 
 /* -------------------------------------------------------------------------- */
-/*                                   Helpers                                  */
+/*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-function formatDate(
-  timestamp: number
-) {
-  return new Date(timestamp * 100000)
-    .toLocaleDateString('ru', {  month:'short', day:'numeric'})
+const showStatus = computed(() => props.status !== 'approved' && props.info === undefined)
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  Handlers                                  */
+/* -------------------------------------------------------------------------- */
+
+function onClicked() {
+  emit('click')
 }
 </script>
 

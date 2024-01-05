@@ -1,13 +1,14 @@
 <template>
   <enrollments-list-item
-    v-for="request in enrollments"
-    :id="request.id"
-    :key="request.id"
-    :group-name="request.groupName"
-    :leader-name="request.leaderName"
-    :image-url="request.imageUrl"
-    :starts-at="request.startsAt"
-    :status="request.status"
+    v-for="enrollment in enrollments"
+    :id="enrollment.id"
+    :key="enrollment.id"
+    :course-name="enrollment.courseName"
+    :group-name="enrollment.groupName"
+    :info="enrollment.info"
+    :image-url="enrollment.imageUrl"
+    :status="enrollment.status"
+    @click="() => onEnrollmentClicked(enrollment.id)"
   />
 </template>
 
@@ -21,14 +22,29 @@ import { EnrollmentsListItem } from '@/education'
 
 export interface EnrollmentViewModel {
   id: string,
-  groupName: string,
-  leaderName: string,
+  groupName?: string,
+  courseName: string,
   imageUrl: string,
-  startsAt: number,
+  info?: string,
   status: 'pending' | 'in-review' | 'approved' | 'declined'
 }
 
 defineProps<{
   enrollments: EnrollmentViewModel[]
 }>()
+
+const emit = defineEmits<{
+  click: [enrollmentId: string]
+}>()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  Handlers                                  */
+/* -------------------------------------------------------------------------- */
+
+function onEnrollmentClicked(
+  enrollmentId: string
+) {
+  emit('click', enrollmentId)
+}
 </script>

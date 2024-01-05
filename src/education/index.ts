@@ -6,6 +6,7 @@ export * from './aggregates/Enrollment'
 // repositories:
 export * from './repositories/GroupQueries'
 export * from './repositories/EnrollmentQueries'
+export * from './repositories/CourseQueries'
 
 // components:
 export { default as CourseCard } from './components/CourseCard.vue'
@@ -20,5 +21,4 @@ export { default as GroupSelector } from './containers/GroupSelector.vue'
 export { default as MyEnrollmentsList } from './containers/MyEnrollmentsList.vue'
 
 // tasks:
-export * from './tasks/GetEnrollmentDetailsTask'
 export * from './tasks/SubmitEnrolmentFormTask'

@@ -16,12 +16,6 @@
           style="width: 60%;"
         />
       </p>
-      <p>
-        <ion-skeleton-text
-          :animated="true"
-          style="width: 30%;"
-        />
-      </p>
     </ion-label>
   </ion-item>
 </template>

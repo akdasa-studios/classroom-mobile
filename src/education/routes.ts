@@ -44,6 +44,11 @@ export const routes: Array<RouteRecordRaw> = [
         path: 'my-groups',
         component: () => import('./pages/MyCourses.vue')
       },
+      {
+        name: 'my-group',
+        path: 'my-group/:id',
+        component: () => import('./pages/MyGroup.vue')
+      },
     ]
   }
 ]
