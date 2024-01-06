@@ -1,4 +1,7 @@
 import { RouteRecordRaw } from 'vue-router'
+import { EnrollmentIdentity } from './aggregates/Enrollment'
+import { UuidIdentity } from '@framework/domain'
+
 import EducationIndexPage from './EducationIndexPage.vue'
 
 export const routes: Array<RouteRecordRaw> = [
@@ -40,14 +43,17 @@ export const routes: Array<RouteRecordRaw> = [
         }),
       },
       {
-        name: 'my-groups',
-        path: 'my-groups',
-        component: () => import('./pages/MyCourses.vue')
+        name: 'my-enrollments',
+        path: 'my-enrollments',
+        component: () => import('./pages/MyEnrollmentsPage.vue')
       },
       {
-        name: 'my-group',
-        path: 'my-group/:id',
-        component: () => import('./pages/MyGroup.vue')
+        name: 'my-enrollment',
+        path: 'my-enrollments/:id',
+        component: () => import('./pages/MyEnrollmentPage.vue'),
+        props: route => ({
+          enrollmentId: new UuidIdentity(route.params.id as string) as EnrollmentIdentity,
+        }),
       },
     ]
   }

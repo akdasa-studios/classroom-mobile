@@ -6,6 +6,7 @@ export * from './composables/useNetworkStatus'
 // layouts
 export { default as PageWithHeaderLayout } from './layouts/PageWithHeaderLayout.vue'
 export { default as ContentAndButtonAtBottomLayout } from './layouts/ContentAndButtonAtBottomLayout.vue'
+export { default as ImageAndButtonLayout } from './layouts/ImageAndButtonLayout.vue'
 
 // containers
 export { default as ListItemsPage } from './containers/ListItemsPage.vue'

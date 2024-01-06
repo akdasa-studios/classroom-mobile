@@ -1,5 +1,5 @@
 courses = Курсы
-my-groups = Мои группы
+my-enrollments = Мои группы
 enroll = Записаться
 group = Группа
 select-group = Выберите группу и куратора, к которым хотите присоединиться
@@ -14,7 +14,7 @@ wait-for-assignment = Ожидайте когда куратор примет з
 next-group = Следующая группа
 next-group-info = Вы будете зачислены в группу, как только мы ее запустим
 
-go-to-my-groups = Перейти в мои группы
+go-to-my-enrollments = Перейти в мои группы
 
 pending = Ожидание
 in-review = На рассмотрении

@@ -29,8 +29,7 @@ import { onMounted, ref, shallowRef } from 'vue'
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const enrollmentsRepo = useRepository<Enrollment>(
-  'enrollment-request', EnrollmentsFixtures)
+const enrollmentsRepo = useRepository<Enrollment>('enrollment', EnrollmentsFixtures)
 const groupsRepo = useRepository<Group>('group', groupsFixtures)
 const coursesRepo = useRepository<Course>('course', courses)
 
@@ -57,7 +56,7 @@ onMounted(onEnter)
 function onEnrollmentClicked(
   id: string
 ) {
-  router.push({name: 'my-group', params: { id } })
+  router.push({name: 'my-enrollment', params: { id } })
 }
 
 async function onEnter() {

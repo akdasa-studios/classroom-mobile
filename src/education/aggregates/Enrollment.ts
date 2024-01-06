@@ -5,6 +5,7 @@ import { CourseIdentity } from './Course'
 
 export type EnrollmentIdentity = UuidIdentity<'Enrollment'>
 
+
 export enum EnrollmentStatus {
   Pending = 'pending',
   InReview = 'in-review',

@@ -16,7 +16,7 @@
         fill="clear"
         @click="onGoToMyGroupsClicked"
       >
-        {{ $t('go-to-my-groups') }}
+        {{ $t('go-to-my-enrollments') }}
       </ion-button>
     </div>
   </ion-page>
@@ -48,7 +48,7 @@ const router = useIonRouter()
 /* -------------------------------------------------------------------------- */
 
 function onGoToMyGroupsClicked() {
-  router.navigate({ name: 'my-groups' }, 'root', 'pop')
+  router.navigate({ name: 'my-enrollments' }, 'root', 'pop')
 }
 </script>
 
@@ -78,5 +78,5 @@ function onGoToMyGroupsClicked() {
 congratulations = Congratulations!
 enrollment-request-submited = The enrolment request has been submitted
 wait-for-assignment = Wait for assignment
-go-to-my-groups = Go to my groups
+go-to-my-enrollments = Go to my groups
 </fluent>

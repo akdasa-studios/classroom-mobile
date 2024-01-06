@@ -1,5 +1,5 @@
 import { UuidIdentity } from '@framework/domain'
-import { Course, Group, Enrollment, EnrollmentStatus } from '@/education'
+import { Course, Group, Enrollment, EnrollmentStatus, Lesson } from '@/education'
 
 export const courses: Course[] = [
   new Course(
@@ -87,6 +87,13 @@ export const EnrollmentsFixtures: Enrollment[] = [
   new Enrollment(
     new UuidIdentity(),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
+    groupsFixtures[0].id,
+    courses[0].id,
+    EnrollmentStatus.Declined
+  ),
+  new Enrollment(
+    new UuidIdentity(),
+    'a243727d-57ab-4595-ba17-69f3a0679bf6',
     groupsFixtures[3].id,
     courses[0].id,
     EnrollmentStatus.Approved
@@ -106,3 +113,35 @@ export const EnrollmentsFixtures: Enrollment[] = [
     EnrollmentStatus.InReview
   ),
 ]
+
+export const lessonsFixtures: Lesson[] = [
+  new Lesson(
+    new UuidIdentity(),
+    courses[0].id,
+    'Lesson 1',
+    'Introduction to the course',
+    'Introduction to the course',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[0].id,
+    'Lesson 2',
+    'Understanding the basics',
+    'Understanding the basics',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Lesson 1',
+    'Introduction to the course',
+    'Introduction to the course',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Lesson 2',
+    'Understanding the advanced concepts',
+    'Understanding the advanced concepts',
+  ),
+]
+

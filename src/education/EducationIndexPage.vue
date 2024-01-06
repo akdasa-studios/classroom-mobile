@@ -16,14 +16,14 @@
         </ion-tab-button>
 
         <ion-tab-button
-          tab="my-groups"
-          href="/education/my-groups"
+          tab="my-enrollments"
+          href="/education/my-enrollments"
         >
           <ion-icon
             aria-hidden="true"
             :icon="bookOutline"
           />
-          <ion-label>{{ $t('my-groups') }}</ion-label>
+          <ion-label>{{ $t('my-enrollments') }}</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
@@ -38,5 +38,5 @@ import { bookOutline, searchOutline } from 'ionicons/icons'
 
 <fluent locale="en">
 courses = Courses
-my-groups = My Groups
+my-enrollments = My Groups
 </fluent>

@@ -24,7 +24,16 @@
         </ion-toolbar>
       </ion-header>
 
-      <slot name="content" />
+      <slot
+        v-if="busy"
+        name="loader"
+      >
+        <loading-spinner />
+      </slot>
+      <slot
+        v-else
+        name="content"
+      />
     </ion-content>
   </ion-page>
 </template>
@@ -34,9 +43,25 @@
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton
 } from '@ionic/vue'
+import { toRefs } from 'vue'
+import { LoadingSpinner } from '@/shared'
 
-defineProps<{
+/* -------------------------------------------------------------------------- */
+/*                                  Interface                                 */
+/* -------------------------------------------------------------------------- */
+
+const props = defineProps<{
   title: string,
   hasPadding?: boolean
+  busy?: boolean
 }>()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const { busy } = toRefs(props)
+
+
 </script>
