@@ -5,10 +5,9 @@
     :busy="busy"
   >
     <template #content>
-      {{ localUrl }}
-
       <video
         v-if="localUrl"
+        poster="https://www.giantfreakinrobot.com/wp-content/uploads/2022/08/rick-astley.jpg"
         controls
         class="video"
       >
