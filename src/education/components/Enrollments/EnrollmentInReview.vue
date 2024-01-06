@@ -2,6 +2,8 @@
   <image-and-button-layout
     image="/wait.webp"
     :action="$t('wait-more')"
+    :danger-action="$t('cancel-enrollment')"
+    :danger-action-alert="$t('cancel-enrollment-alert')"
     @click="emit('click')"
   >
     <h1>{{ $t('wait') }}</h1>
@@ -23,6 +25,8 @@ const emit = defineEmits<{
 wait = Wait
 in-progress = Заявка на рассмотрении
 wait-more = Wait more
+cancel-enrollment = Cancel enrollment
+cancel-enrollment-alert = Your application will be canceled and we will not be able to add you to the group
 </fluent>
 
 
@@ -30,4 +34,6 @@ wait-more = Wait more
 wait = Ожидайте
 in-progress = Заявка на рассмотрении
 wait-more = Подождать еще
+cancel-enrollment = Отменить заявку
+cancel-enrollment-alert = Ваша заявка будет отменена и мы не сможем добавить вас в группу
 </fluent>

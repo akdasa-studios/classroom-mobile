@@ -13,3 +13,6 @@ any-day = Any day
 
 add = Add
 search = Search
+
+yes = Yes
+no = No
