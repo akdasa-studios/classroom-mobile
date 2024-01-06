@@ -8,6 +8,7 @@
       {{ localUrl }}
 
       <video
+        v-if="localUrl"
         controls
         class="video"
       >
@@ -56,7 +57,7 @@ const renderedContent = ref('')
 const busy = ref(false)
 
 const url = 'https://filebin.net/k9svui6oh73vtgmm/x2mate.com-Rick_Astley_-_Never_Gonna_Give_You_Up__Official_Music_Video_-_480p_.mp4'
-const localUrl = ref('')
+const localUrl = ref<string|undefined>(undefined)
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
