@@ -92,7 +92,7 @@ export const EnrollmentsFixtures: Enrollment[] = [
     EnrollmentStatus.Declined
   ),
   new Enrollment(
-    new UuidIdentity(),
+    new UuidIdentity('67a6a91a-4d6d-4d9c-a311-058d8bc0a200'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     groupsFixtures[3].id,
     courses[0].id,
@@ -102,7 +102,7 @@ export const EnrollmentsFixtures: Enrollment[] = [
     new UuidIdentity(),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     undefined,
-    courses[0].id,
+      courses[0].id,
     EnrollmentStatus.Pending
   ),
   new Enrollment(
@@ -114,17 +114,39 @@ export const EnrollmentsFixtures: Enrollment[] = [
   ),
 ]
 
+
+
+export const markdown = `
+*dhṛtarāṣṭraḥ* *uvāca* --- King Dhṛtarāṣṭra said; *dharma*-*kṣetre* --- in the place of pilgrimage; *kuru*-*kṣetre* --- in the place named Kurukṣetra; *samavetāḥ* --- assembled; *yuyutsavaḥ* --- desiring to fight; *māmakāḥ* --- my party (sons); *pāṇḍavāḥ* --- the sons of Pāṇḍu; *ca* --- and; *eva* --- certainly; *kim* --- what; *akurvata* --- did they do; *sañjaya* --- O Sañjaya.
+
+Translation
+-----------
+
+Dhṛtarāṣṭra said: O Sañjaya, after my sons and the sons of Pāṇḍu assembled in the place of pilgrimage at Kurukṣetra, desiring to fight, what did they do?
+
+Purport
+-------
+
+*Bhagavad-gītā* is the widely read theistic science summarized in the *Gītā-māhātmya* (*Glorification of the Gītā*). There it says that one should read *Bhagavad-gītā* very scrutinizingly with the help of a person who is a devotee of Śrī Kṛṣṇa and try to understand it without personally motivated interpretations. The example of clear understanding is there in the *Bhagavad-gītā* itself, in the way the teaching is understood by Arjuna, who heard the *Gītā* directly from the Lord. If someone is fortunate enough to understand the *Bhagavad-gītā* in that line of disciplic succession, without motivated interpretation, then he surpasses all studies of Vedic wisdom, and all scriptures of the world. One will find in the *Bhagavad-gītā* all that is contained in other scriptures, but the reader will also find things which are not to be found elsewhere. That is the specific standard of the *Gītā.* It is the perfect theistic science because it is directly spoken by the Supreme Personality of Godhead, Lord Śrī Kṛṣṇa.
+
+The topics discussed by Dhṛtarāṣṭra and Sañjaya, as described in the *Mahābhārata,* form the basic principle for this great philosophy. It is understood that this philosophy evolved on the Battlefield of Kurukṣetra, which is a sacred place of pilgrimage from the immemorial time of the Vedic age. It was spoken by the Lord when He was present personally on this planet for the guidance of mankind.
+
+The word *dharma-kṣetra* (a place where religious rituals are performed) is significant because, on the Battlefield of Kurukṣetra, the Supreme Personality of Godhead was present on the side of Arjuna. Dhṛtarāṣṭra, the father of the Kurus, was highly doubtful about the possibility of his sons' ultimate victory. In his doubt, he inquired from his secretary Sañjaya, "What did they do?" He was confident that both his sons and the sons of his younger brother Pāṇḍu were assembled in that Field of Kurukṣetra for a determined engagement of the war. Still, his inquiry is significant. He did not want a compromise between the cousins and brothers, and he wanted to be sure of the fate of his sons on the battlefield. Because the battle was arranged to be fought at Kurukṣetra, which is mentioned elsewhere in the *Vedas* as a place of worship -- even for the denizens of heaven -- Dhṛtarāṣṭra became very fearful about the influence of the holy place on the outcome of the battle. He knew very well that this would influence Arjuna and the sons of Pāṇḍu favorably, because by nature they were all virtuous. Sañjaya was a student of Vyāsa, and therefore, by the mercy of Vyāsa, Sañjaya was able to envision the Battlefield of Kurukṣetra even while he was in the room of Dhṛtarāṣṭra. And so, Dhṛtarāṣṭra asked him about the situation on the battlefield.
+
+Both the Pāṇḍavas and the sons of Dhṛtarāṣṭra belong to the same family, but Dhṛtarāṣṭra's mind is disclosed herein. He deliberately claimed only his sons as Kurus, and he separated the sons of Pāṇḍu from the family heritage. One can thus understand the specific position of Dhṛtarāṣṭra in his relationship with his nephews, the sons of Pāṇḍu. As in the paddy field the unnecessary plants are taken out, so it is expected from the very beginning of these topics that in the religious field of Kurukṣetra, where the father of religion, Śrī Kṛṣṇa, was present, the unwanted plants like Dhṛtarāṣṭra's son Duryodhana and others would be wiped out and the thoroughly religious persons, headed by Yudhiṣṭhira, would be established by the Lord. This is the significance of the words *dharma-kṣetre* and *kuru-kṣetre,* apart from their historical and Vedic importance.
+`
+
 export const lessonsFixtures: Lesson[] = [
   new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
+    new UuidIdentity('f3d5c4a4-ef37-4a96-b9cd-68813c6e29aa'),
+    courses[1].id,
     'Lesson 1',
     'Introduction to the course',
-    'Introduction to the course',
+     markdown,
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[0].id,
+    courses[1].id,
     'Lesson 2',
     'Understanding the basics',
     'Understanding the basics',
@@ -132,16 +154,72 @@ export const lessonsFixtures: Lesson[] = [
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
-    'Lesson 1',
-    'Introduction to the course',
-    'Introduction to the course',
+    'Lesson 3',
+    'Advanced topics',
+    'Exploring advanced topics in the course',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
-    'Lesson 2',
-    'Understanding the advanced concepts',
-    'Understanding the advanced concepts',
+    'Lesson 4',
+    'Practical exercises',
+    'Hands-on exercises to apply the concepts learned',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Lesson 5',
+    'Advanced techniques',
+    'Exploring advanced techniques in the course',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Lesson 6',
+    'Mastering the course',
+    'Mastering the concepts learned in the course',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Chapter 1',
+    'Observing the Armies on the Battlefield of Kurukshetra',
+    'In this chapter, Arjuna sees his relatives, friends, and teachers on the battlefield and becomes overwhelmed with compassion and sorrow.',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Chapter 2',
+    'Contents of the Gita Summarized',
+    'Krishna imparts spiritual wisdom to Arjuna, explaining the nature of the soul, the importance of duty, and the concept of selfless action.',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Chapter 3',
+    'Path of Selfless Service',
+    'Krishna explains the importance of performing one\'s duty without attachment to the results and the benefits of selfless service.',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Chapter 4',
+    'Approaching the Ultimate Truth',
+    'Krishna reveals the eternal knowledge of the Bhagavad Gita and explains the cycle of birth and death.',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Chapter 5',
+    'Path of Renunciation',
+    'Krishna explains the difference between the path of selfless action and the path of renunciation, and the importance of controlling the mind and senses.',
+  ),
+  new Lesson(
+    new UuidIdentity(),
+    courses[1].id,
+    'Chapter 6',
+    'Path of Meditation',
+    'Krishna teaches the practice of meditation and the importance of controlling the mind and senses to attain spiritual enlightenment.',
   ),
 ]
 

@@ -23,7 +23,7 @@ const emit = defineEmits<{
 
 <fluent locale="en">
 wait = Wait
-in-progress = Заявка на рассмотрении
+in-progress = Application pending
 wait-more = Wait more
 cancel-enrollment = Cancel enrollment
 cancel-enrollment-alert = Your application will be canceled and we will not be able to add you to the group

@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router'
-import { EnrollmentIdentity } from './aggregates/Enrollment'
+import { EnrollmentIdentity, LessonIdentity } from '@/education'
 import { UuidIdentity } from '@framework/domain'
 
 import EducationIndexPage from './EducationIndexPage.vue'
@@ -53,6 +53,14 @@ export const routes: Array<RouteRecordRaw> = [
         component: () => import('./pages/MyEnrollmentPage.vue'),
         props: route => ({
           enrollmentId: new UuidIdentity(route.params.id as string) as EnrollmentIdentity,
+        }),
+      },
+      {
+        name: 'lesson',
+        path: 'lesson/:id',
+        component: () => import('./pages/Lessons/LessonPage.vue'),
+        props: route => ({
+          lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
         }),
       },
     ]

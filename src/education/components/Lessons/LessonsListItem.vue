@@ -1,7 +1,6 @@
 <template>
   <ion-item
     :detail="true"
-    lines="none"
     @click="onClicked"
   >
     <ion-label>
