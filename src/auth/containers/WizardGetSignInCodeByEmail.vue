@@ -7,8 +7,8 @@
   <email-input v-model="email" />
 
   <async-button
-    :busy="getSignInCodeTask.isInProgress.value"
-    :error-code="getSignInCodeTask.lastError.value"
+    :busy="busy"
+    :error-code="undefined"
     :disabled="email.length === 0"
     @click="onSignInClicked()"
   >
@@ -18,9 +18,8 @@
 
 
 <script lang="ts" setup>
-import { EmailInput, GetSignInCodeByEmailTask, HelpMessage } from '@/auth'
-import { AsyncButton, useTask } from '@/shared'
-import { ResponseCode } from '@protocol/core'
+import { EmailInput, HelpMessage, useAuthService } from '@/auth'
+import { AsyncButton } from '@/shared'
 import { ref } from 'vue'
 
 /* -------------------------------------------------------------------------- */
@@ -36,7 +35,7 @@ const emit = defineEmits<{
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const getSignInCodeTask = useTask(new GetSignInCodeByEmailTask())
+const authService = useAuthService()
 
 
 /* -------------------------------------------------------------------------- */
@@ -44,6 +43,7 @@ const getSignInCodeTask = useTask(new GetSignInCodeByEmailTask())
 /* -------------------------------------------------------------------------- */
 
 const email = ref('')
+const busy = ref(false)
 
 
 /* -------------------------------------------------------------------------- */
@@ -51,8 +51,11 @@ const email = ref('')
 /* -------------------------------------------------------------------------- */
 
 async function onSignInClicked() {
-  const result = await getSignInCodeTask.execute({ email: email.value })
-  if (result.status === ResponseCode.Ok) { emit('complete') }
+  // TODO: Handle errors and exceptions
+  busy.value = true
+  await authService.getSignInCode(email.value)
+  emit('complete')
+  busy.value = false
 }
 </script>
 

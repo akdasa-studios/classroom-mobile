@@ -1,6 +1,3 @@
-// layouts
-export { default as LogoAndControlsLayout } from './layouts/LogoAndControlsLayout.vue'
-
 // components
 export { default as HelpMessage } from './components/HelpMessage.vue'
 export { default as EmailInput } from './components/EmailInput.vue'
@@ -12,7 +9,12 @@ export { default as SchoolOfDevotionLogo } from './components/SchoolOfDevotionLo
 export { default as WizardGetSignInCodeByEmail } from './containers/WizardGetSignInCodeByEmail.vue'
 export { default as WizardSignInWithCode } from './containers/WizardSignInWithCode.vue'
 
-// tasks
-export * from './tasks/GetSignInCodeByEmailTask'
-export * from './tasks/SignInWithCodeTask'
-export * from './tasks/UpdateAccountTask'
+// composables:
+export * from './composables/useAuthService'
+export * from './composables/useAccountService'
+
+
+// services:
+export * from './services/AuthService'
+export * from './services/AccountService'
+

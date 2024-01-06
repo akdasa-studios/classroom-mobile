@@ -40,7 +40,7 @@
       <async-button
         :disabled="!networkStatus.connected.value"
         expand="block"
-        :busy="submitEnrolmentFormTask.isInProgress.value"
+        :busy="busy"
         @click="onEnrollButtonClicked"
       >
         {{ $t("enroll") }}
@@ -53,11 +53,10 @@
 <script setup lang="ts">
 import { IonTextarea } from '@ionic/vue'
 import { useIonRouter } from '@ionic/vue'
-import { PageWithHeaderLayout, AsyncButton, HeaderAndNote, useTask, useNetworkStatus } from '@/shared'
-import { SubmitEnrolmentFormTask } from '@/education'
+import { PageWithHeaderLayout, AsyncButton, HeaderAndNote, useNetworkStatus } from '@/shared'
+import { useEnrollmentService } from '@/education'
 import { ref } from 'vue'
 import { GroupSelector, TimeRangeSelector } from '@/education'
-import { ResponseCode } from '@protocol/core'
 import { TimeRange, TimeRangePreset } from '../components/TimeRange'
 
 /* -------------------------------------------------------------------------- */
@@ -74,7 +73,7 @@ defineProps<{
 
 const router = useIonRouter()
 const networkStatus = useNetworkStatus()
-const submitEnrolmentFormTask = useTask(new SubmitEnrolmentFormTask())
+const enrollmentService = useEnrollmentService()
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
@@ -90,13 +89,16 @@ const timeRangePresets: TimeRangePreset[] = [
 const groupId = ref('')
 const timeRanges = ref<TimeRange[]>([])
 const comments = ref('')
+const busy = ref(false)
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
 async function onEnrollButtonClicked() {
-  const result = await submitEnrolmentFormTask.execute({
+  busy.value = true
+  // TODO: handle errors and exceptions
+  await enrollmentService.submit({
     groupId: groupId.value,
     comments: comments.value,
     timeBlocks: [
@@ -106,10 +108,8 @@ async function onEnrollButtonClicked() {
       }
     ]
   })
-
-  if (result.status === ResponseCode.Ok) {
-    router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
-  }
+  router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
+  busy.value = false
 }
 </script>
 

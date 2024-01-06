@@ -1,5 +1,4 @@
 // composables
-export * from './composables/useTask'
 export * from './composables/useRepository'
 export * from './composables/useNetworkStatus'
 export * from './composables/useDownloader'

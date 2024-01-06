@@ -46,8 +46,8 @@
     <async-button
       expand="block"
       :disabled="!isSugnUpButtonEmabled"
-      :busy="signUpTask.isInProgress.value"
-      :error-code="signUpTask.lastError.value"
+      :busy="busy"
+      :error-code="undefined"
       @click="onSignUpButtonClicked"
     >
       {{ $t('sign-up') }}
@@ -59,9 +59,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { IonPage, IonInput, IonList, IonCheckbox, useIonRouter } from '@ionic/vue'
-import { AsyncButton, useTask } from '@/shared'
-import { ResponseCode } from '@protocol/core'
-import { UpdateAccountTask } from '@/auth'
+import { AsyncButton } from '@/shared'
+import { useAccountService } from '../composables/useAccountService'
 
 
 /* -------------------------------------------------------------------------- */
@@ -69,7 +68,7 @@ import { UpdateAccountTask } from '@/auth'
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const signUpTask = useTask(new UpdateAccountTask())
+const accountService = useAccountService()
 
 
 /* -------------------------------------------------------------------------- */
@@ -80,6 +79,7 @@ const name = ref()
 const location = ref()
 const phoneNumber = ref()
 const conditionsAccepted = ref(false)
+const busy = ref(false)
 const isSugnUpButtonEmabled = computed(
   () => true || name.value && phoneNumber.value && conditionsAccepted.value && location.value
 )
@@ -90,12 +90,13 @@ const isSugnUpButtonEmabled = computed(
 /* -------------------------------------------------------------------------- */
 
 async function onSignUpButtonClicked() {
-  const result = await signUpTask.execute({
+  busy.value = true
+  // TODO: handle eerors and exceptions
+  accountService.updateAccount({
     name: name.value, phoneNumber: phoneNumber.value
   })
-  if (result.status === ResponseCode.Ok) {
-    router.navigate({name: 'courses'}, 'root', 'replace')
-  }
+  router.navigate({name: 'courses'}, 'root', 'replace')
+  busy.value = false
 }
 </script>
 

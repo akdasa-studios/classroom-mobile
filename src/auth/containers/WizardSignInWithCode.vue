@@ -9,8 +9,8 @@
   />
 
   <async-button
-    :busy="getSignInCodeTask.isInProgress.value"
-    :error-code="getSignInCodeTask.lastError.value"
+    :busy="busy"
+    :error-code="undefined"
     :disabled="code.length === 0"
     expand="block"
     @click="onValidateCodeClicked()"
@@ -21,9 +21,8 @@
 
 
 <script lang="ts" setup>
-import { CodeInput, HelpMessage, SignInWithCodeTask } from '@/auth'
-import { AsyncButton, useTask } from '@/shared'
-import { ResponseCode } from '@protocol/core'
+import { CodeInput, HelpMessage, useAuthService } from '@/auth'
+import { AsyncButton } from '@/shared'
 import { ref } from 'vue'
 
 /* -------------------------------------------------------------------------- */
@@ -40,7 +39,7 @@ const emit = defineEmits<{
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const getSignInCodeTask = useTask(new SignInWithCodeTask())
+const authService = useAuthService()
 
 
 /* -------------------------------------------------------------------------- */
@@ -48,6 +47,7 @@ const getSignInCodeTask = useTask(new SignInWithCodeTask())
 /* -------------------------------------------------------------------------- */
 
 const code = ref('')
+const busy = ref(false)
 
 
 /* -------------------------------------------------------------------------- */
@@ -55,9 +55,11 @@ const code = ref('')
 /* -------------------------------------------------------------------------- */
 
 async function onValidateCodeClicked() {
-  const result = await getSignInCodeTask.execute({ code: code.value })
-  if (result.status === ResponseCode.Error) { return }
-  emit('complete', result.data.registrationRequired)
+  // TODO: handler errors and exceptions
+  busy.value = true
+  const result = await authService.signInWithCode(code.value)
+  emit('complete', result.registrationRequired)
+  busy.value = false
 }
 
 function onBackButtonClicked() {

@@ -23,5 +23,9 @@ export { default as GroupSelector } from './containers/GroupSelector.vue'
 export { default as MyEnrollmentsList } from './containers/MyEnrollmentsList.vue'
 export { default as MyLessonsInGroup } from './containers/MyLessonsInGroup.vue'
 
-// tasks:
-export * from './tasks/SubmitEnrolmentFormTask'
+// services:
+export * from './services/EnrolmentService'
+
+// composables:
+export * from './composables/useEnrollmentService'
+

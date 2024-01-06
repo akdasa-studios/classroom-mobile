@@ -1,33 +1,29 @@
 <template>
-  <ion-page class="ion-padding">
-    <logo-and-controls-layout>
-      <template #logo>
-        <school-of-devotion-logo />
-      </template>
+  <ion-page class="ion-padding page">
+    <div class="logo">
+      <school-of-devotion-logo />
+    </div>
 
-      <template #controls>
-        <steps-wizard :current-step="authenticationStep">
-          <template #item0>
-            <wizard-get-sign-in-code-by-email
-              @complete="onWizardGetSignInCodeByEmailCompleted"
-            />
-          </template>
-          <template #item1>
-            <wizard-sign-in-with-code
-              @complete="onWizardSignInWithCodeCompleted"
-              @go-back="onWizardGoBack"
-            />
-          </template>
-        </steps-wizard>
+    <steps-wizard :current-step="authenticationStep">
+      <template #item0>
+        <wizard-get-sign-in-code-by-email
+          @complete="onWizardGetSignInCodeByEmailCompleted"
+        />
       </template>
-    </logo-and-controls-layout>
+      <template #item1>
+        <wizard-sign-in-with-code
+          @complete="onWizardSignInWithCodeCompleted"
+          @go-back="onWizardGoBack"
+        />
+      </template>
+    </steps-wizard>
   </ion-page>
 </template>
 
 
 <script lang="ts" setup>
 import { IonPage, useIonRouter } from '@ionic/vue'
-import { WizardGetSignInCodeByEmail, WizardSignInWithCode, SchoolOfDevotionLogo, LogoAndControlsLayout } from '@/auth'
+import { WizardGetSignInCodeByEmail, WizardSignInWithCode, SchoolOfDevotionLogo } from '@/auth'
 import { StepsWizard } from '@/shared'
 import { ref } from 'vue'
 
@@ -67,3 +63,21 @@ function onWizardSignInWithCodeCompleted(
   }
 }
 </script>
+
+
+<style scoped>
+.logo {
+  width: 75%;
+  max-width: 320px;
+  max-height: 320px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 35%;
+  left: 50%;
+  z-index: -1;
+}
+
+.page {
+  justify-content: flex-end;
+}
+</style>
