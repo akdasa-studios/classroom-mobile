@@ -32,7 +32,7 @@ import { LessonSection, QuizSectionBlock, VideoSectionBlock, TextSectionBlock, S
 
 const props = defineProps<{
   section: LessonSection
-  homework: StudentHomework
+  homework?: StudentHomework
 }>()
 
 const state = []
@@ -42,7 +42,6 @@ function onStateChange(
   value: any
 ) {
   state[blockId] = value
-  console.log(state)
 }
 
 /* -------------------------------------------------------------------------- */
