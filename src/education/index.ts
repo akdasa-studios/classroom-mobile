@@ -4,6 +4,7 @@ export * from './aggregates/Group'
 export * from './aggregates/Enrollment'
 export * from './aggregates/Lesson'
 export * from './aggregates/LessonSection'
+export * from './aggregates/LessonSectionBlock'
 export * from './aggregates/StudentHomework'
 
 // repositories:

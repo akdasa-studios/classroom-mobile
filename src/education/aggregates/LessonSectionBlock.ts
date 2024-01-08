@@ -10,13 +10,19 @@ interface LessonSectionBlockBase {
   type: string
 }
 
+export interface Timestamp {
+  time: number,
+  title: string
+}
+
 
 export interface LessonSectionVideoBlock
   extends LessonSectionBlockBase
 {
   type: 'video'
   videoUrl: string
-  posterUrl: string
+  posterUrl: string,
+  timestamps: Timestamp[]
 }
 
 export interface LessonSectionAudioBlock

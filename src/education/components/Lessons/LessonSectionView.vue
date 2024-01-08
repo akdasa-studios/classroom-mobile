@@ -3,17 +3,18 @@
     v-for="block, idx in section.blocks"
     :key="`${section.id.value} + ${block.type}` + idx"
   >
-    <VideoSectionBlock
-      v-if="block.type==='video'"
+    <video-section-block
+      v-if="block.type === 'video'"
       :video-url="block.videoUrl"
       :poster-url="block.posterUrl"
+      :timestamps="block.timestamps"
     />
-    <TextSectionBlock
-      v-else-if="block.type==='text'"
+    <text-section-block
+      v-else-if="block.type === 'text'"
       :content="block.content"
     />
-    <QuizSectionBlock
-      v-else-if="block.type==='quiz'"
+    <quiz-section-block
+      v-else-if="block.type === 'quiz'"
       :question="block.question"
       :answers="block.answers"
       :right-answer="block.rightAnswer"
@@ -26,8 +27,7 @@
 
 
 <script setup lang="ts">
-import { LessonSection, QuizSectionBlock } from '@/education'
-import { VideoSectionBlock, TextSectionBlock } from '@/education'
+import { LessonSection, QuizSectionBlock, VideoSectionBlock, TextSectionBlock } from '@/education'
 
 defineProps<{
   section: LessonSection
