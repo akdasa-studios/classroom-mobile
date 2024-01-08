@@ -1,8 +1,9 @@
 import { QueryBuilder } from '@framework/persistence'
-import { LessonIdentity } from '@/education'
-import { LessonSection } from '../aggregates/LessonSection'
+import { LessonIdentity, LessonSectionIdentity, LessonSection } from '@/education'
 
 
 const qb = new QueryBuilder<LessonSection>()
 
-export const OfLesson = (lessonId: LessonIdentity) => qb.eq('lessonId', lessonId)
+
+export const LessonSectionsById = (ids: LessonSectionIdentity[]) => qb.in('id', ids)
+export const OfLesson           = (lessonId: LessonIdentity)     => qb.eq('lessonId', lessonId)

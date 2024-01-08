@@ -16,7 +16,7 @@
     >
       <ion-radio :value="idx">
         <ion-label class="ion-text-wrap">
-          {{ idx }} - {{ answer }}
+          {{ answer }}
         </ion-label>
       </ion-radio>
     </ion-item>

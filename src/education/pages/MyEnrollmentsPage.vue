@@ -8,13 +8,14 @@
       <my-enrollments-list />
 
       <h1>{{ $t('homework') }}</h1>
+      <my-student-homework-list />
     </template>
   </PageWithHeaderLayout>
 </template>
 
 
 <script setup lang="ts">
-import { MyEnrollmentsList } from '@/education'
+import { MyEnrollmentsList, MyStudentHomeworkList } from '@/education'
 import { PageWithHeaderLayout } from '@/shared'
 </script>
 

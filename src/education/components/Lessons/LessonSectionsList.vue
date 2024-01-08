@@ -1,16 +1,18 @@
 <template>
-  <ion-chip
-    v-for="section, idx in sections"
-    :key="section.id.value"
-    :color="getColor(idx)"
-    @click="emit('click', idx)"
-  >
-    <ion-icon
-      :icon="attachOutline"
+  <div v-bind="$attrs">
+    <ion-chip
+      v-for="section, idx in sections"
+      :key="section.id.value"
       :color="getColor(idx)"
-    />
-    <ion-label>{{ section.title }}</ion-label>
-  </ion-chip>
+      @click="emit('click', idx)"
+    >
+      <ion-icon
+        :icon="attachOutline"
+        :color="getColor(idx)"
+      />
+      <ion-label>{{ section.title }}</ion-label>
+    </ion-chip>
+  </div>
 </template>
 
 

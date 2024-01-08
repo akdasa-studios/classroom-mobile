@@ -1,6 +1,6 @@
 import { LessonSection } from './../education/aggregates/LessonSection'
 import { UuidIdentity } from '@framework/domain'
-import { Course, Group, Enrollment, EnrollmentStatus, Lesson } from '@/education'
+import { Course, Group, Enrollment, EnrollmentStatus, Lesson, StudentHomework, StudentHomeworkState } from '@/education'
 
 export const courses: Course[] = [
   new Course(
@@ -217,7 +217,7 @@ export const lessonSectionFixtures = [
   new LessonSection(
     new UuidIdentity('bafd8919-6a33-445d-b5a5-d10e57f60e72'),
     lessonsFixtures[0].id,
-    'Video',
+    'Видео',
     [
       {
         type: 'video',
@@ -233,7 +233,7 @@ export const lessonSectionFixtures = [
   new LessonSection(
     new UuidIdentity('2ea76f2e-4308-4d5f-bd9a-3503f7d76ec7'),
     lessonsFixtures[0].id,
-    'Purport',
+    'Комментарий',
     [
       {
         type: 'text',
@@ -244,28 +244,47 @@ export const lessonSectionFixtures = [
   new LessonSection(
     new UuidIdentity('2ea76f2e-4308-4d5f-bd9a-3503f7d76ec8'),
     lessonsFixtures[0].id,
-    'Quizes',
+    'Тест',
     [
       {
-        type: 'text',
-        content: 'Here is some content'
-      },
-      {
         type: 'quiz',
-        question: 'Ololo?',
+        question: 'Сколько лет Богу?',
         answers: [
-          'yes', 'no'
+          'Бог существует вне времени. Это другой мир, вечный там нет времени. Это как вселенная бесконечная. Мы жители планеты земля живём под властью времени. Рождение, жизнь и смерть.',
+          'Я в своем познании настолько преисполнился, что я как будто бы уже сто триллионов миллиардов лет проживаю на триллионах и триллионах таких же планет, как эта Земля, мне этот мир абсолютно понятен',
+          'Абсурдным является вопрос: «Сколько Богу лет?», точно так же, как если бы мы спросили: «Сколько метров бесконечность?»'
         ],
         rightAnswer: 1
       },
       {
         type: 'quiz',
-        question: 'One more?',
+        question: 'В чем смысл жизни?',
         answers: [
-          'y yes yesy yes yesy yes yesyyes yesy yes yesyyes yesy es yesy', 'no', 'maybe'
+          'Смысл — получать удовольствие от каждого дня.',
+          'Смысл жизни — прожить ее так, чтобы тебя знала Википедия, но не знал «Ютуб».',
+          'Глобально — смысл в достижении единства с Богом.',
+          'Смысл в том, чтобы под конец жизни была куча интересных историй, которые с тобой случались. Чтобы было что рассказывать окружающим, чтобы они слушали, смеялись и удивлялись, а потом пересказывали их своим знакомым :)',
         ],
         rightAnswer: 2
       }
     ]
+  ),
+]
+
+
+export const studentHomeworks = [
+  new StudentHomework(
+    new UuidIdentity('17a6a91a-4d6d-4d9c-a311-058d8bc0a200'),
+    'a243727d-57ab-4595-ba17-69f3a0679bf6',
+    lessonSectionFixtures[0].id,
+    StudentHomeworkState.Open,
+    'Посмотреть видео'
+  ),
+  new StudentHomework(
+    new UuidIdentity('17a6a91a-4d6d-4d9c-a311-058d8bc0a201'),
+    'a243727d-57ab-4595-ba17-69f3a0679bf6',
+    lessonSectionFixtures[2].id,
+    StudentHomeworkState.Open,
+    'Завершить тест'
   ),
 ]
