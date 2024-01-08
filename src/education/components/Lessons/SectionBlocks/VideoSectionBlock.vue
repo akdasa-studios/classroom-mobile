@@ -1,37 +1,32 @@
 <template>
-  <PageWithHeaderLayout
-    :title="lesson?.title || 'Lesson'"
-    :has-padding="true"
+  <with-loader
     :busy="busy"
   >
     <template #content>
-      <lesson-sections-list
-        :sections="sections"
-        :active="activeSectionIdx"
-        @click="onLessonSectionClicked"
-      />
-
-      <lesson-section-view
-        v-if="sections[activeSectionIdx]"
-        :section="sections[activeSectionIdx]"
-      />
+      <video
+        :poster="localPosterUrl"
+        controls
+        class="video"
+      >
+        <source
+          :src="localVideoUrl"
+          type="video/mp4"
+        >
+      </video>
     </template>
-  </PageWithHeaderLayout>
+  </with-loader>
 </template>
 
 
 <script lang="ts" setup>
-import { PageWithHeaderLayout, useRepository } from '@/shared'
-import { Lesson, LessonIdentity, LessonSection, LessonSectionsList, LessonSectionView, OfLesson } from '@/education'
-import { lessonsFixtures, lessonSectionFixtures } from '@/shared/fixtures'
-import { onMounted, ref, shallowRef } from 'vue'
+import { onMounted, ref } from 'vue'
+import { WithLoader, useDownloader } from '@/shared'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const lessonsRepo = useRepository<Lesson>('lesson', lessonsFixtures)
-const lessonSectionsRepo = useRepository<LessonSection>('lesson-fixture', lessonSectionFixtures)
+const downloader = useDownloader()
 
 
 /* -------------------------------------------------------------------------- */
@@ -39,7 +34,8 @@ const lessonSectionsRepo = useRepository<LessonSection>('lesson-fixture', lesson
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  lessonId: LessonIdentity
+  videoUrl: string
+  posterUrl: string
 }>()
 
 
@@ -47,10 +43,9 @@ const props = defineProps<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const lesson = shallowRef<Lesson>()
-const sections = shallowRef<readonly LessonSection[]>([])
-const activeSectionIdx = ref(0)
 const busy = ref(false)
+const localVideoUrl = ref<string>()
+const localPosterUrl = ref<string>()
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
@@ -58,19 +53,21 @@ const busy = ref(false)
 
 onMounted(onEnter)
 
-
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
 async function onEnter() {
   busy.value = true
-  lesson.value = await lessonsRepo.get(props.lessonId)
-  sections.value = (await lessonSectionsRepo.find(OfLesson(props.lessonId))).entities
+  localVideoUrl.value = await downloader.download(props.videoUrl)
+  localPosterUrl.value = await downloader.download(props.posterUrl)
   busy.value = false
 }
-
-async function onLessonSectionClicked(index: number) {
-  activeSectionIdx.value = index
-}
 </script>
+
+
+<style scoped>
+.video {
+  width: 100%;
+}
+</style>

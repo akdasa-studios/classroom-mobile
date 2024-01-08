@@ -1,3 +1,4 @@
+import { LessonSection } from './../education/aggregates/LessonSection'
 import { UuidIdentity } from '@framework/domain'
 import { Course, Group, Enrollment, EnrollmentStatus, Lesson } from '@/education'
 
@@ -102,7 +103,7 @@ export const EnrollmentsFixtures: Enrollment[] = [
     new UuidIdentity(),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     undefined,
-      courses[0].id,
+    courses[0].id,
     EnrollmentStatus.Pending
   ),
   new Enrollment(
@@ -142,13 +143,11 @@ export const lessonsFixtures: Lesson[] = [
     courses[1].id,
     'Lesson 1',
     'Introduction to the course',
-     markdown,
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Lesson 2',
-    'Understanding the basics',
     'Understanding the basics',
   ),
   new Lesson(
@@ -156,70 +155,117 @@ export const lessonsFixtures: Lesson[] = [
     courses[1].id,
     'Lesson 3',
     'Advanced topics',
-    'Exploring advanced topics in the course',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Lesson 4',
     'Practical exercises',
-    'Hands-on exercises to apply the concepts learned',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Lesson 5',
     'Advanced techniques',
-    'Exploring advanced techniques in the course',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Lesson 6',
     'Mastering the course',
-    'Mastering the concepts learned in the course',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Chapter 1',
     'Observing the Armies on the Battlefield of Kurukshetra',
-    'In this chapter, Arjuna sees his relatives, friends, and teachers on the battlefield and becomes overwhelmed with compassion and sorrow.',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Chapter 2',
     'Contents of the Gita Summarized',
-    'Krishna imparts spiritual wisdom to Arjuna, explaining the nature of the soul, the importance of duty, and the concept of selfless action.',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Chapter 3',
     'Path of Selfless Service',
-    'Krishna explains the importance of performing one\'s duty without attachment to the results and the benefits of selfless service.',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Chapter 4',
     'Approaching the Ultimate Truth',
-    'Krishna reveals the eternal knowledge of the Bhagavad Gita and explains the cycle of birth and death.',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Chapter 5',
     'Path of Renunciation',
-    'Krishna explains the difference between the path of selfless action and the path of renunciation, and the importance of controlling the mind and senses.',
   ),
   new Lesson(
     new UuidIdentity(),
     courses[1].id,
     'Chapter 6',
     'Path of Meditation',
-    'Krishna teaches the practice of meditation and the importance of controlling the mind and senses to attain spiritual enlightenment.',
   ),
 ]
 
+
+export const lessonSectionFixtures = [
+  new LessonSection(
+    new UuidIdentity('bafd8919-6a33-445d-b5a5-d10e57f60e72'),
+    lessonsFixtures[0].id,
+    'Video',
+    [
+      {
+        type: 'video',
+        videoUrl: 'https://filebin.net/k9svui6oh73vtgmm/x2mate.com-Rick_Astley_-_Never_Gonna_Give_You_Up__Official_Music_Video_-_480p_.mp4',
+        posterUrl: 'https://previews.123rf.com/images/kruwt/kruwt1509/kruwt150900004/44680386-beautiful-white-lighthouse-of-urk-dutch-fishing-village.jpg'
+      },
+      {
+        type: 'text',
+        content: 'Here is some content'
+      }
+    ]
+  ),
+  new LessonSection(
+    new UuidIdentity('2ea76f2e-4308-4d5f-bd9a-3503f7d76ec7'),
+    lessonsFixtures[0].id,
+    'Purport',
+    [
+      {
+        type: 'text',
+        content: markdown
+      }
+    ]
+  ),
+  new LessonSection(
+    new UuidIdentity('2ea76f2e-4308-4d5f-bd9a-3503f7d76ec8'),
+    lessonsFixtures[0].id,
+    'Quizes',
+    [
+      {
+        type: 'text',
+        content: 'Here is some content'
+      },
+      {
+        type: 'quiz',
+        question: 'Ololo?',
+        answers: [
+          'yes', 'no'
+        ],
+        rightAnswer: 1
+      },
+      {
+        type: 'quiz',
+        question: 'One more?',
+        answers: [
+          'yes', 'no', 'maybe'
+        ],
+        rightAnswer: 2
+      }
+    ]
+  ),
+]

@@ -12,7 +12,6 @@ export class Lesson
     public readonly courseId: CourseIdentity,
     public readonly title: string,
     public readonly summary: string,
-    public readonly content: string
   ) {
     super(identity)
   }
