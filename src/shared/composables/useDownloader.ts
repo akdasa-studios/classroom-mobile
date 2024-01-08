@@ -22,45 +22,46 @@ export function useDownloader() {
   async function download(url: string): Promise<string> {
     // We don't need to download the file if we're on the web
     // because we can just use the URL directly.
-    if (Capacitor.getPlatform() === 'web' && true) { return url }
+    return url
+    // if (Capacitor.getPlatform() === 'web') { return url }
 
-    // Check if the file already downloaded
-    const pathName = new URL(url).pathname.split('/')
-    const fileName = pathName.pop()
-    const filePath = pathName.join('/') + '/' + fileName
-    try {
-      const stat = await Filesystem.stat({
-        path: `content/${filePath}`, directory: Directory.Data
-      })
-      return Capacitor.convertFileSrc(stat.uri)
-    } catch (e) {
-      // File not found, continue to download
-    }
+    // // Check if the file already downloaded
+    // const pathName = new URL(url).pathname.split('/')
+    // const fileName = pathName.pop()
+    // const filePath = pathName.join('/') + '/' + fileName
+    // try {
+    //   const stat = await Filesystem.stat({
+    //     path: `content/${filePath}`, directory: Directory.Data
+    //   })
+    //   return Capacitor.convertFileSrc(stat.uri)
+    // } catch (e) {
+    //   // File not found, continue to download
+    // }
 
-    // We need to download the file if we're on a mobile device
-    // because users should be able to play the audio file even
-    // if they're offline.
-    isDownloading.value = true
-    const res = await fetch(url, {
-      method: 'GET', mode: 'cors', headers: {}
-    })
+    // // We need to download the file if we're on a mobile device
+    // // because users should be able to play the audio file even
+    // // if they're offline.
+    // isDownloading.value = true
+    // const res = await fetch(url, {
+    //   method: 'GET', mode: 'cors', headers: {}
+    // })
 
-    // Write file to the filesystem
-    await write_blob({
-      path: `content/${filePath}`,
-      directory: Directory.Data,
-      blob: await res.blob(),
-      recursive: true,
-      fast_mode: true,
-    })
+    // // Write file to the filesystem
+    // await write_blob({
+    //   path: `content/${filePath}`,
+    //   directory: Directory.Data,
+    //   blob: await res.blob(),
+    //   recursive: true,
+    //   fast_mode: true,
+    // })
 
-    // Get the URI of the file
-    const uri = await Filesystem.getUri({
-      path: `content/${filePath}`,
-      directory: Directory.Data
-    })
-    isDownloading.value = false
-    return Capacitor.convertFileSrc(uri.uri)
+    // // Get the URI of the file
+    // const uri = await Filesystem.getUri({
+    //   path: `content/${filePath}`,
+    //   directory: Directory.Data
+    // })
+    // isDownloading.value = false
+    // return Capacitor.convertFileSrc(uri.uri)
   }
 
   /**
