@@ -74,10 +74,14 @@ onMounted(onEnter)
 /* -------------------------------------------------------------------------- */
 
 async function onEnter() {
-  busy.value = true
-  localVideoUrl.value = await downloader.download(props.videoUrl)
-  localPosterUrl.value = await downloader.download(props.posterUrl)
-  busy.value = false
+  // busy.value = true
+  try {
+    localVideoUrl.value = await downloader.download(props.videoUrl)
+    localPosterUrl.value = await downloader.download(props.posterUrl)
+  } catch (ex) {
+    alert(ex)
+  }
+  // busy.value = false
 }
 
 function onTimestampClicked(time: number) {

@@ -221,7 +221,7 @@ export const lessonSectionFixtures = [
     [
       {
         type: 'video',
-        videoUrl: 'https://download.samplelib.com/mp4/sample-15s.mp4',
+        videoUrl: 'https://s3.filebin.net/filebin/1a8eaf703f16a3beea49898ffef4780b78db3510601119784d2537e8eab132e0/7c21daf34250f03768c83ecb939b6c1ab2e8248d2b3a0d681c8efdbfc38f1677?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=7pMj6hGeoKewqmMQILjm%2F20240108%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240108T191050Z&X-Amz-Expires=30&X-Amz-SignedHeaders=host&response-cache-control=max-age%3D30&response-content-disposition=filename%3D%22x2mate.com-Rick_Astley_-_Never_Gonna_Give_You_Up__Official_Music_Video_-_480p_.mp4%22&response-content-type=video%2Fmp4&X-Amz-Signature=5e0008b2d859bd8ab743636f73a6c2c9d55a75ed12d19b6e012abd981fddd1c3',
         posterUrl: 'https://previews.123rf.com/images/kruwt/kruwt1509/kruwt150900004/44680386-beautiful-white-lighthouse-of-urk-dutch-fishing-village.jpg',
         timestamps: [
           {
