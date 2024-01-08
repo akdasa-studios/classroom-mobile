@@ -22,7 +22,7 @@ export function useDownloader() {
   async function download(url: string): Promise<string> {
     // We don't need to download the file if we're on the web
     // because we can just use the URL directly.
-    if (Capacitor.getPlatform() === 'web' || Capacitor.getPlatform() === 'abdroid') { return url }
+    if (Capacitor.getPlatform() === 'web' || Capacitor.getPlatform() === 'android') { return url }
 
     // Check if the file already downloaded
     const pathName = new URL(url).pathname.split('/')
