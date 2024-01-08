@@ -8,6 +8,7 @@
       <lesson-sections-list
         class="sectionsList"
         :sections="sections"
+        :homeworks="homeworks"
         :active="activeSectionIdx"
         @click="onLessonSectionClicked"
       />
@@ -15,6 +16,7 @@
       <lesson-section-view
         v-if="sections[activeSectionIdx]"
         :section="sections[activeSectionIdx]"
+        :homework="getHomework(sections[activeSectionIdx].id)"
       />
     </template>
   </PageWithHeaderLayout>
@@ -22,17 +24,10 @@
 
 
 <script lang="ts" setup>
-import { PageWithHeaderLayout, useRepository } from '@/shared'
-import { Lesson, LessonIdentity, LessonSectionIdentity, LessonSection, LessonSectionsList, LessonSectionView, OfLesson } from '@/education'
-import { lessonsFixtures, lessonSectionFixtures } from '@/shared/fixtures'
+import { PageWithHeaderLayout } from '@/shared'
+import { Lesson, LessonIdentity, LessonSectionIdentity, LessonSection, LessonSectionsList, LessonSectionView, OfLesson, StudentHomework, OfStudent, OfStudentAndLessonSections } from '@/education'
 import { onMounted, ref, shallowRef } from 'vue'
-
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
-const lessonsRepo = useRepository<Lesson>('lesson', lessonsFixtures)
-const lessonSectionsRepo = useRepository<LessonSection>('lesson-section', lessonSectionFixtures)
+import { LessonsDal } from '../../repositories/LessonsDal'
 
 
 /* -------------------------------------------------------------------------- */
@@ -49,10 +44,12 @@ const props = defineProps<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const lesson = shallowRef<Lesson>()
-const sections = shallowRef<readonly LessonSection[]>([])
+const busy      = ref(false)
+const lesson    = shallowRef<Lesson>()
+const sections  = shallowRef<readonly LessonSection[]>([])
+const homeworks = shallowRef<readonly StudentHomework[]>([])
 const activeSectionIdx = ref(0)
-const busy = ref(false)
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
@@ -66,9 +63,11 @@ onMounted(onEnter)
 /* -------------------------------------------------------------------------- */
 
 async function onEnter() {
-  busy.value = true
-  lesson.value = await lessonsRepo.get(props.lessonId)
-  sections.value = (await lessonSectionsRepo.find(OfLesson(props.lessonId))).entities
+  busy.value      = true
+  lesson.value    = await LessonsDal.getLesson(props.lessonId)
+  sections.value  = await LessonsDal.getLessonSections(lesson.value.id)
+  homeworks.value = await LessonsDal.getHomework(lesson.value.id)
+
   if (props.sectionId) {
     const idx = sections.value.findIndex(x => x.id.equals(props.sectionId!))
     if (idx != -1) { activeSectionIdx.value = idx }
@@ -78,6 +77,17 @@ async function onEnter() {
 
 async function onLessonSectionClicked(index: number) {
   activeSectionIdx.value = index
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+
+function getHomework(
+  lessonSectionId: LessonSectionIdentity
+) {
+  return homeworks.value.find(x => x.lessonSectionId.equals(lessonSectionId))
 }
 </script>
 

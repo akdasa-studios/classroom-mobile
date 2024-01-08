@@ -319,7 +319,7 @@ export const studentHomeworks = [
     new UuidIdentity('17a6a91a-4d6d-4d9c-a311-058d8bc0a201'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     lessonSectionFixtures[2].id,
-    StudentHomeworkState.Open,
+    StudentHomeworkState.InReview,
     'Завершить тест'
   ),
 ]
