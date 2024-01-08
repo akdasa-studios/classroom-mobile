@@ -221,7 +221,7 @@ export const lessonSectionFixtures = [
     [
       {
         type: 'video',
-        videoUrl: 'https://www.shutterstock.com/shutterstock/videos/26096090/preview/stock-footage-tel-aviv-april-happy-people-dance-during-hare-krishna-celebration-in-tel-aviv-israel.webm',
+        videoUrl: 'https://download.samplelib.com/mp4/sample-15s.mp4',
         posterUrl: 'https://previews.123rf.com/images/kruwt/kruwt1509/kruwt150900004/44680386-beautiful-white-lighthouse-of-urk-dutch-fishing-village.jpg',
         timestamps: [
           {

@@ -11,6 +11,7 @@
       >
         <source
           :src="localVideoUrl"
+          type="video/mp4"
         >
       </video>
 
