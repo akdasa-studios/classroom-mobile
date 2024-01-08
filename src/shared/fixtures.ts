@@ -262,7 +262,7 @@ export const lessonSectionFixtures = [
         type: 'quiz',
         question: 'One more?',
         answers: [
-          'yes', 'no', 'maybe'
+          'y yes yesy yes yesy yes yesyyes yesy yes yesyyes yesy es yesy', 'no', 'maybe'
         ],
         rightAnswer: 2
       }

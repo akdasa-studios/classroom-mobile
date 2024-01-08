@@ -5,6 +5,7 @@
   >
     <h3>{{ question }}</h3>
   </ion-item>
+
   <ion-radio-group
     v-model="value"
   >
@@ -14,7 +15,7 @@
       lines="none"
     >
       <ion-radio :value="idx">
-        <ion-label>
+        <ion-label class="ion-text-wrap">
           {{ idx }} - {{ answer }}
         </ion-label>
       </ion-radio>
