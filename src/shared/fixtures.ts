@@ -11,28 +11,28 @@ export const courses: Course[] = [
     'https://sun9-80.userapi.com/impf/c840438/v840438487/1b36/0KaFwO7dpco.jpg?size=604x380&quality=96&sign=17a0e7c4e5233288c66b5c9172801240&type=album'
   ),
   new Course(
-    new UuidIdentity(),
+    new UuidIdentity('5d924c3c-9e91-4e46-9655-2e68e4d5a919'),
     'Первое посвящение',
     '',
     'First Initiation',
     'https://back2godhead.com/wp-content/uploads/2012/11/099_1975_10-02-27.jpg'
   ),
   new Course(
-    new UuidIdentity(),
+    new UuidIdentity('b723092d-9944-4574-8533-c8ce71de4416'),
     'Второе посвящение',
     '',
     'Second initiation',
     'https://girirajswami.com/blog/wp-content/uploads/2012/07/SP_init.jpg'
   ),
   new Course(
-    new UuidIdentity(),
+    new UuidIdentity('5df94725-ae8b-40d2-885b-09da0c06b57f'),
     'Поклонение Божествам',
     '',
     'Archana',
     'https://sastracaksu.nlitn.in/wp-content/uploads/2018/02/Srila-Prabhupada-Praying-to-Radha-Krishna-Deities.jpg'
   ),
   new Course(
-    new UuidIdentity(),
+    new UuidIdentity('eb7c0bc3-0862-4579-85ae-e8bd45020da1'),
     'Бхактивайбхава',
     '',
     'Bhakti-vaibhava',
@@ -69,8 +69,8 @@ export const groupsFixtures: Group[] = [
   new Group(
     new UuidIdentity('1a4ec14b-f3ce-4ff5-8321-abe7ddd59e33'),
     courses[1].id,
-    'Группа 16108',
-    'Радха дд',
+    'Группа 98765',
+    'Ivan Pronin',
     'https://i.pravatar.cc/150?u=a042581f4e29026704d',
     17139772
   )
@@ -79,11 +79,11 @@ export const groupsFixtures: Group[] = [
 
 export const EnrollmentsFixtures: Enrollment[] = [
   new Enrollment(
-    new UuidIdentity(),
+    new UuidIdentity('655ce3dd-048a-40c4-881b-4130f50a4a99'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     groupsFixtures[0].id,
     courses[0].id,
-    EnrollmentStatus.Pending
+    EnrollmentStatus.Approved
   ),
   new Enrollment(
     new UuidIdentity(),
@@ -96,7 +96,7 @@ export const EnrollmentsFixtures: Enrollment[] = [
     new UuidIdentity('67a6a91a-4d6d-4d9c-a311-058d8bc0a200'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     groupsFixtures[3].id,
-    courses[0].id,
+    courses[1].id,
     EnrollmentStatus.Approved
   ),
   new Enrollment(
@@ -140,73 +140,73 @@ Both the Pāṇḍavas and the sons of Dhṛtarāṣṭra belong to the same fam
 export const lessonsFixtures: Lesson[] = [
   new Lesson(
     new UuidIdentity('f3d5c4a4-ef37-4a96-b9cd-68813c6e29aa'),
-    courses[1].id,
+    courses[0].id,
     'Lesson 1',
     'Introduction to the course',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Lesson 2',
     'Understanding the basics',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Lesson 3',
     'Advanced topics',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Lesson 4',
     'Practical exercises',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Lesson 5',
     'Advanced techniques',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Lesson 6',
     'Mastering the course',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Chapter 1',
     'Observing the Armies on the Battlefield of Kurukshetra',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Chapter 2',
     'Contents of the Gita Summarized',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Chapter 3',
     'Path of Selfless Service',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Chapter 4',
     'Approaching the Ultimate Truth',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Chapter 5',
     'Path of Renunciation',
   ),
   new Lesson(
     new UuidIdentity(),
-    courses[1].id,
+    courses[0].id,
     'Chapter 6',
     'Path of Meditation',
   ),

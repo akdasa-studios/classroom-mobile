@@ -1,37 +1,49 @@
 <template>
   <with-loader :busy="busy">
     <template #loader>
-      <homework-list-item-skeleton />
-      <homework-list-item-skeleton />
+      <with-list-header :title="$t('homework')">
+        <homework-list-item-skeleton />
+        <homework-list-item-skeleton />
+      </with-list-header>
     </template>
 
     <template #content>
-      <homework-list
-        v-model="homework"
-        @click="onStudentHomeworkClicked"
-      />
+      <with-list-header :title="$t('homework')">
+        <homework-list
+          v-model="homework"
+          @click="onStudentHomeworkClicked"
+        />
+      </with-list-header>
     </template>
   </with-loader>
 </template>
 
 <script lang="ts" setup>
 import {
-  StudentHomework, OfStudent, HomeworkList, HomeworkListItemSkeleton,
-  LessonSection, Lesson, LessonsById, LessonSectionsById, LessonSectionIdentity, LessonIdentity, HomeworkViewModel, StudentHomeworkIdentity
+  Cache, OfStudent, HomeworkList, HomeworkListItemSkeleton,
+  LessonSectionIdentity, LessonIdentity, HomeworkViewModel, StudentHomeworkIdentity
 } from '@/education'
-import { WithLoader, useRepository } from '@/shared'
-import { lessonSectionFixtures, lessonsFixtures, studentHomeworks } from '@/shared/fixtures'
+import { WithLoader, WithListHeader } from '@/shared'
 import { useIonRouter } from '@ionic/vue'
-import { onMounted, ref, shallowRef } from 'vue'
+import { shallowRef } from 'vue'
+
+/* -------------------------------------------------------------------------- */
+/*                                  Interface                                 */
+/* -------------------------------------------------------------------------- */
+
+defineProps<{
+  busy: boolean
+}>()
+
+defineExpose({
+  sync: fetchData
+})
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const studentHomeworksRepo = useRepository<StudentHomework>('student-homework', studentHomeworks)
-const lessonSectionsRepo   = useRepository<LessonSection>('lesson-section', lessonSectionFixtures)
-const lessonsRepo          = useRepository<Lesson>('lesson', lessonsFixtures)
 
 
 /* -------------------------------------------------------------------------- */
@@ -39,14 +51,6 @@ const lessonsRepo          = useRepository<Lesson>('lesson', lessonsFixtures)
 /* -------------------------------------------------------------------------- */
 
 const homework = shallowRef<readonly HomeworkViewModel[]>([])
-const busy = ref(false)
-
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-onMounted(onEnter)
 
 
 /* -------------------------------------------------------------------------- */
@@ -68,29 +72,31 @@ function onStudentHomeworkClicked(
 }
 
 
-async function onEnter() {
-  busy.value = true
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
 
-  const userId            = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
+async function fetchData() {
+  const userId           = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
+  const studentHomeworks = await Cache.StudentHomeworks.find(OfStudent(userId))
 
-  const studentHomeworks = await studentHomeworksRepo.find(OfStudent(userId))
-  const lessonSections   = await lessonSectionsRepo.find(LessonSectionsById(studentHomeworks.entities.map(x => x.lessonSectionId)))
-  const lessons          = await lessonsRepo.find(LessonsById(lessonSections.entities.map(x => x.lessonId)))
-
-  const getLessonSection = (lessonSectionId: LessonSectionIdentity) => lessonSections.entities.find(x => x.id.equals(lessonSectionId))
-  const getLesson        = (lessonId: LessonIdentity)               => lessons.entities.find(x => x.id.equals(lessonId))
-
-  const viewModels: HomeworkViewModel[] = []
-  for (const studentHomework of studentHomeworks.entities) {
-    const lessonSection = getLessonSection(studentHomework.lessonSectionId)!
-    const lesson        = getLesson(lessonSection!.lessonId)!
-    viewModels.push({ studentHomework, lesson, lessonSection })
-  }
-  homework.value = viewModels
-
-  console.log(viewModels)
-
-  busy.value = false
+  homework.value = await Promise.all(
+    studentHomeworks.entities.map(async x => ({
+      studentHomework: x,
+      lessonSection:   await Cache.LessonSections.get(x.lessonSectionId),
+      lesson:          await Cache.Lessons.get(
+        (await Cache.LessonSections.get(x.lessonSectionId)).lessonId // TODO
+      )
+    } as HomeworkViewModel))
+  )
 }
 </script>
 
+
+<fluent locale="en">
+homework    = Homework
+</fluent>
+
+<fluent locale="ru">
+homework    = Домашняя работа
+</fluent>

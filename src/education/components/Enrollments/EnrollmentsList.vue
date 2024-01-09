@@ -1,40 +1,31 @@
 <template>
   <enrollments-list-item
-    v-for="enrollment in enrollments"
-    :id="enrollment.id"
-    :key="enrollment.id"
-    :course-name="enrollment.courseName"
-    :group-name="enrollment.groupName"
-    :info="enrollment.info"
-    :image-url="enrollment.imageUrl"
-    :status="enrollment.status"
-    @click="() => onEnrollmentClicked(enrollment.id)"
+    v-for="i in enrollments"
+    :id="i.enrollment.id.value"
+    :key="i.enrollment.id.value"
+    :course-name="i.course.title"
+    :group-name="i.group?.name"
+    :image-url="i.group?.couratorAvatarUrl || 'https://placekitten.com/400/400'"
+    :status="i.enrollment.status"
+    @click="() => onEnrollmentClicked(i.enrollment.id)"
   />
 </template>
 
 
 <script setup lang="ts">
-import { EnrollmentsListItem } from '@/education'
+import { EnrollmentIdentity, EnrollmentsListItem } from '@/education'
+import { EnrollmentViewModel } from './EnrollmentViewModel'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
-
-export interface EnrollmentViewModel {
-  id: string,
-  groupName?: string,
-  courseName: string,
-  imageUrl: string,
-  info?: string,
-  status: 'pending' | 'in-review' | 'approved' | 'declined'
-}
 
 defineProps<{
   enrollments: EnrollmentViewModel[]
 }>()
 
 const emit = defineEmits<{
-  click: [enrollmentId: string]
+  click: [enrollmentId: EnrollmentIdentity]
 }>()
 
 
@@ -43,7 +34,7 @@ const emit = defineEmits<{
 /* -------------------------------------------------------------------------- */
 
 function onEnrollmentClicked(
-  enrollmentId: string
+  enrollmentId: EnrollmentIdentity
 ) {
   emit('click', enrollmentId)
 }

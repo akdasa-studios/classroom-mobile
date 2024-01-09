@@ -14,6 +14,7 @@ export * from './repositories/CourseQueries'
 export * from './repositories/LessonQueries'
 export * from './repositories/LessonSectionQueries'
 export * from './repositories/StudentHomeworkQueries'
+export * from './repositories'
 
 // components:
 export { default as CourseCard } from './components/CourseCard.vue'
@@ -36,4 +37,5 @@ export * from './services/EnrolmentService'
 
 // composables:
 export * from './composables/useEnrollmentService'
+export * from './composables/useSyncTask'
 

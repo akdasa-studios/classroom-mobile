@@ -25,9 +25,15 @@
 
 <script lang="ts" setup>
 import { PageWithHeaderLayout } from '@/shared'
-import { Lesson, LessonIdentity, LessonSectionIdentity, LessonSection, LessonSectionsList, LessonSectionView, OfLesson, StudentHomework, OfStudent, OfStudentAndLessonSections } from '@/education'
-import { onMounted, ref, shallowRef } from 'vue'
+import { Lesson, LessonIdentity, LessonSectionIdentity, LessonSection, LessonSectionsList, LessonSectionView, StudentHomework, useSyncTask } from '@/education'
+import { computed, onMounted, ref, shallowRef, watch } from 'vue'
 import { LessonsDal } from '../../repositories/LessonsDal'
+
+/* -------------------------------------------------------------------------- */
+/*                                Dependencies                                */
+/* -------------------------------------------------------------------------- */
+
+const syncTask = useSyncTask()
 
 
 /* -------------------------------------------------------------------------- */
@@ -44,7 +50,7 @@ const props = defineProps<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const busy      = ref(false)
+const busy      = computed(() => syncTask.busy.value && !lesson.value)
 const lesson    = shallowRef<Lesson>()
 const sections  = shallowRef<readonly LessonSection[]>([])
 const homeworks = shallowRef<readonly StudentHomework[]>([])
@@ -55,15 +61,15 @@ const activeSectionIdx = ref(0)
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-onMounted(onEnter)
+onMounted(onFetchData)
+watch(syncTask.completedAt, onFetchData)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-async function onEnter() {
-  busy.value      = true
+async function onFetchData() {
   lesson.value    = await LessonsDal.getLesson(props.lessonId)
   sections.value  = await LessonsDal.getLessonSections(lesson.value.id)
   homeworks.value = await LessonsDal.getHomework(lesson.value.id)
@@ -72,7 +78,6 @@ async function onEnter() {
     const idx = sections.value.findIndex(x => x.id.equals(props.sectionId!))
     if (idx != -1) { activeSectionIdx.value = idx }
   }
-  busy.value = false
 }
 
 async function onLessonSectionClicked(index: number) {

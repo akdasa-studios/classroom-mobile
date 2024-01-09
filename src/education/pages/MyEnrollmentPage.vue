@@ -1,7 +1,7 @@
 
 <template>
   <PageWithHeaderLayout
-    :title="$t('group')"
+    :title="isApproved ? $t('group') : ''"
     :busy="busy"
   >
     <template #content>
@@ -16,7 +16,9 @@
       />
 
       <my-lessons-in-group
-        v-if="showLessonsList && enrollment?.groupId"
+        v-if="isApproved && enrollment?.groupId"
+        ref="lessonsList"
+        :busy="syncTask.busy.value"
         :group-id="enrollment.groupId"
       />
     </template>
@@ -25,18 +27,20 @@
 
 
 <script lang="ts" setup>
-import { PageWithHeaderLayout, useRepository } from '@/shared'
-import { MyLessonsInGroup, Enrollment, EnrollmentIdentity, EnrollmentStatus, EnrollmentInReview, EnrollmentDeclined } from '@/education'
-import { EnrollmentsFixtures } from '@/shared/fixtures'
-import { computed, onMounted, ref, shallowRef } from 'vue'
-import { useIonRouter } from '@ionic/vue'
+import { PageWithHeaderLayout } from '@/shared'
+import {
+  MyLessonsInGroup, Enrollment, EnrollmentIdentity, EnrollmentStatus,
+  EnrollmentInReview, EnrollmentDeclined, Cache, useSyncTask
+} from '@/education'
+import { computed, ref, shallowRef, watch } from 'vue'
+import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const enrollmentsRepo = useRepository<Enrollment>('enrollment', EnrollmentsFixtures)
+const syncTask = useSyncTask()
 
 
 /* -------------------------------------------------------------------------- */
@@ -52,31 +56,37 @@ const props = defineProps<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const enrollment = shallowRef<Enrollment>()
-const showLessonsList = computed(() => enrollment.value?.groupId && enrollment.value.status === EnrollmentStatus.Approved)
-const isInReview = computed(() => enrollment.value && [EnrollmentStatus.InReview, EnrollmentStatus.Pending].includes(enrollment.value?.status))
-const isDeclined = computed(() => enrollment.value && [EnrollmentStatus.Declined].includes(enrollment.value?.status))
-const busy = ref(false)
+const enrollment  = shallowRef<Enrollment>()
+const isApproved  = computed(() => enrollment.value && enrollment.value.status === EnrollmentStatus.Approved)
+const isInReview  = computed(() => enrollment.value && [EnrollmentStatus.InReview, EnrollmentStatus.Pending].includes(enrollment.value.status))
+const isDeclined  = computed(() => enrollment.value && [EnrollmentStatus.Declined].includes(enrollment.value.status))
+const busy        = computed(() => syncTask.busy.value && enrollment.value === undefined)
+const lessonsList = ref()
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-onMounted(onEnter)
-
+onIonViewWillEnter(fetchData)
+watch(syncTask.completedAt, fetchData)
+watch(lessonsList, () => { lessonsList.value.sync() })
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-async function onEnter() {
-  busy.value = true
-  enrollment.value = await enrollmentsRepo.get(props.enrollmentId)
-  busy.value = false
-}
-
 function onGoBackButtonClicked() {
   router.back()
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+
+async function fetchData() {
+  enrollment.value = await Cache.Enrollments.get(props.enrollmentId)
+  lessonsList.value?.sync()
 }
 </script>
 

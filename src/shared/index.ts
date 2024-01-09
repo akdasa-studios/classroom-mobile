@@ -21,6 +21,7 @@ export { default as LoadingSpinner } from './components/LoadingSpinner.vue'
 export { default as HeaderAndNote } from './components/HeaderAndNote.vue'
 export { default as TimePicker } from './components/TimePicker.vue'
 export { default as CongratsConfetti } from './components/CongratsConfetti.vue'
+export { default as WithListHeader } from './components/WithListHeader.vue'
 
 // services:
 export * from './services/IService'

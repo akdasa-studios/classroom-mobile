@@ -1,33 +1,67 @@
 <template>
   <PageWithHeaderLayout
-    :title="$t('education')"
+    :title="$t('lessons')"
     :has-padding="true"
   >
     <template #content>
-      <h1>{{ $t('enrollments') }}</h1>
-      <my-enrollments-list />
+      <my-enrollments-list
+        ref="enrollmentsList"
+        :busy="syncTask.busy.value"
+      />
 
-      <h1>{{ $t('homework') }}</h1>
-      <my-student-homework-list />
+      <my-student-homework-list
+        ref="homeworksList"
+        :busy="syncTask.busy.value"
+      />
     </template>
   </PageWithHeaderLayout>
 </template>
 
 
 <script setup lang="ts">
-import { MyEnrollmentsList, MyStudentHomeworkList } from '@/education'
+import { MyEnrollmentsList, MyStudentHomeworkList, useSyncTask } from '@/education'
 import { PageWithHeaderLayout } from '@/shared'
+import { onIonViewDidEnter } from '@ionic/vue'
+import { ref, watch } from 'vue'
+
+/* -------------------------------------------------------------------------- */
+/*                                Dependencies                                */
+/* -------------------------------------------------------------------------- */
+
+const syncTask = useSyncTask()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const enrollmentsList = ref()
+const homeworksList = ref()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hooks                                   */
+/* -------------------------------------------------------------------------- */
+
+onIonViewDidEnter(onFetchData)
+watch(syncTask.completedAt, onFetchData)
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  Handlers                                  */
+/* -------------------------------------------------------------------------- */
+
+function onFetchData() {
+  enrollmentsList.value.sync()
+  homeworksList.value.sync()
+}
 </script>
 
 
 <fluent locale="en">
-education   = My Lessons
-enrollments = Groups
-homework    = Homework
+lessons = Lessons
 </fluent>
 
 <fluent locale="ru">
-education   = Мои уроки
-enrollments = Группы
-homework    = Домашняя работа
+lessons = Уроки
 </fluent>

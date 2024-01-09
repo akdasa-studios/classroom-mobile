@@ -15,11 +15,24 @@
 </template>
 
 <script lang="ts" setup>
-import { WithLoader, useRepository } from '@/shared'
-import { groupsFixtures, lessonsFixtures } from '@/shared/fixtures'
+import { WithLoader } from '@/shared'
 import { useIonRouter } from '@ionic/vue'
-import { onMounted, ref, shallowRef } from 'vue'
-import { Lesson, OfCourse, LessonsList, LessonsListItemSkeleton, Group, GroupIdentity } from '@/education'
+import { computed, shallowRef } from 'vue'
+import { Lesson, OfCourse, LessonsList, LessonsListItemSkeleton, GroupIdentity, Cache } from '@/education'
+
+/* -------------------------------------------------------------------------- */
+/*                                  Interface                                 */
+/* -------------------------------------------------------------------------- */
+
+const props = defineProps<{
+  busy: boolean,
+  groupId: GroupIdentity
+}>()
+
+
+defineExpose({
+  sync: fetchData
+})
 
 
 /* -------------------------------------------------------------------------- */
@@ -27,31 +40,15 @@ import { Lesson, OfCourse, LessonsList, LessonsListItemSkeleton, Group, GroupIde
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const lessonsRepo = useRepository<Lesson>('lesson', lessonsFixtures)
-const groupsRepo  = useRepository<Group>('group', groupsFixtures)
 
-
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
-const props = defineProps<{
-  groupId: GroupIdentity
-}>()
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
 const lessons = shallowRef<readonly Lesson[]>([])
-const busy = ref(false)
+const busy    = computed(() => props.busy && lessons.value.length === 0)
 
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-onMounted(onEnter)
 
 
 /* -------------------------------------------------------------------------- */
@@ -64,15 +61,15 @@ function onLessonClicked(
   router.push({name: 'lesson', params: { id } })
 }
 
-async function onEnter() {
-  busy.value = true
 
-  const groupAggregate    = await groupsRepo.get(props.groupId)
-  const lessonsAggregates = await lessonsRepo.find(OfCourse(groupAggregate.courseId.value))
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
 
-  lessons.value = lessonsAggregates.entities
-
-  busy.value = false
+async function fetchData() {
+  const group    = await Cache.Groups.get(props.groupId)
+  const _lessons = await Cache.Lessons.find(OfCourse(group.courseId.value))
+  lessons.value = _lessons.entities
 }
 </script>
 

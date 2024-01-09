@@ -6,4 +6,4 @@ export { default as EnrollmentInReview } from './EnrollmentInReview.vue'
 export { default as EnrollmentDeclined } from './EnrollmentDeclined.vue'
 
 // types:
-export { type EnrollmentViewModel } from './EnrollmentsList.vue'
+export * from './EnrollmentViewModel'

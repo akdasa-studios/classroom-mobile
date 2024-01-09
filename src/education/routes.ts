@@ -60,8 +60,7 @@ export const routes: Array<RouteRecordRaw> = [
         path: 'lesson/:id',
         component: () => import('./pages/Lessons/LessonPage.vue'),
         props: (route) => ({
-            lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
-            sectionId: route.query.sectionId ? new UuidIdentity(route.query.sectionId as string) : undefined
+          lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
         }),
       },
       {
@@ -69,8 +68,8 @@ export const routes: Array<RouteRecordRaw> = [
         path: 'lesson/:id/:sectionId',
         component: () => import('./pages/Lessons/LessonPage.vue'),
         props: (route) => ({
-            lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
-            sectionId: new UuidIdentity(route.params.sectionId as string)
+          lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
+          sectionId: new UuidIdentity(route.params.sectionId as string)
         }),
       },
     ]
