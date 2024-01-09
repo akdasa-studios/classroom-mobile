@@ -4,6 +4,7 @@ import { LessonSectionIdentity } from './LessonSection'
 export enum StudentHomeworkState {
   Open,
   InReview,
+  Returned,
   Accepted
 }
 

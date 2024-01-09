@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { LessonSection, LessonSectionIdentity, StudentHomework, StudentHomeworkState } from '@/education'
 import { IonChip, IonIcon, IonLabel } from '@ionic/vue'
-import { attachOutline, checkmarkOutline, checkmarkDone } from 'ionicons/icons'
+import { attachOutline, checkmarkOutline, syncOutline, checkmarkDoneOutline } from 'ionicons/icons'
 
 
 /* -------------------------------------------------------------------------- */
@@ -51,7 +51,8 @@ function getSectionIcon(
   if (!homework) { return attachOutline }
   if (homework.state === StudentHomeworkState.Open)     { return attachOutline }
   if (homework.state === StudentHomeworkState.InReview) { return checkmarkOutline }
-  if (homework.state === StudentHomeworkState.Accepted) { return checkmarkDone }
+  if (homework.state === StudentHomeworkState.Returned) { return syncOutline }
+  if (homework.state === StudentHomeworkState.Accepted) { return checkmarkDoneOutline }
   return attachOutline
 }
 </script>
