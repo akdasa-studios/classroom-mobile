@@ -1,4 +1,5 @@
 <template>
+  {{ cachedUrl }}
   <img
     v-if="!downloader.isDownloading.value"
     :src="cachedUrl"
