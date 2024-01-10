@@ -35,7 +35,7 @@ const downloader = useDownloader()
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const cachedUrl = ref<string>(undefined)
+const cachedUrl = ref<string|undefined>(undefined)
 const cached = ref(false)
 
 
