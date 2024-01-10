@@ -53,7 +53,7 @@ const busy = ref(false)
 async function onSignInClicked() {
   // TODO: Handle errors and exceptions
   busy.value = true
-  await authService.getSignInCode(email.value)
+  // await authService.getSignInCode(email.value)
   emit('complete')
   busy.value = false
 }

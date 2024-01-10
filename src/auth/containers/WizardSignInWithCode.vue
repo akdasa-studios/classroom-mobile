@@ -57,8 +57,8 @@ const busy = ref(false)
 async function onValidateCodeClicked() {
   // TODO: handler errors and exceptions
   busy.value = true
-  const result = await authService.signInWithCode(code.value)
-  emit('complete', result.registrationRequired)
+  // const result = await authService.signInWithCode(code.value)
+  emit('complete', false) //result.registrationRequired)
   busy.value = false
 }
 
