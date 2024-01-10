@@ -7,7 +7,6 @@
       <IonToolbar>
         <IonSearchbar
           v-model="searchQuery"
-          :debounce="250"
           :placeholder="$t('search')"
         />
       </IonToolbar>
