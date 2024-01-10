@@ -27,10 +27,10 @@ export function useDownloader() {
     // Check if the file already downloaded
     const pathName = new URL(url).pathname.split('/')
     const fileName = pathName.pop()
-    const filePath = fileName //pathName.join('/') + '/' + fileName
+    const filePath = pathName.join('/') + '/' + fileName
     try {
       const stat = await Filesystem.stat({
-        path: `${filePath}`, directory: Directory.Data
+        path: `content/${filePath}`, directory: Directory.Data
       })
       return Capacitor.convertFileSrc(stat.uri)
     } catch (e) {
@@ -48,7 +48,7 @@ export function useDownloader() {
 
       // Write file to the filesystem
       await write_blob({
-        path: `${filePath}`,
+        path: `content/${filePath}`,
         directory: Directory.Data,
         blob: await res.blob(),
         recursive: true,
@@ -57,7 +57,7 @@ export function useDownloader() {
 
       // Get the URI of the file
       const uri = await Filesystem.getUri({
-        path: `${filePath}`,
+        path: `content/${filePath}`,
         directory: Directory.Data
       })
       return Capacitor.convertFileSrc(uri.uri)
