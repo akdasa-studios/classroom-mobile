@@ -1,21 +1,14 @@
 <template>
   {{ cachedUrl }}
   <img
-    v-if="!downloader.isDownloading.value"
     :src="cachedUrl"
     :class="{'cached' : cached}"
   >
-  <ion-skeleton-text
-    v-else
-    :animated="true"
-    class="img"
-  />
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useDownloader } from '@/shared'
-import { IonSkeletonText } from '@ionic/vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -36,7 +29,7 @@ const downloader = useDownloader()
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const cachedUrl = ref<string|undefined>(undefined)
+const cachedUrl = ref<string>('https://placehold.co/600x400/EEE/31343C')
 const cached = ref(false)
 
 
