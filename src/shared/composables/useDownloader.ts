@@ -27,7 +27,7 @@ export function useDownloader() {
     // Check if the file already downloaded
     const pathName = new URL(url).pathname.split('/')
     const fileName = pathName.pop()
-    const filePath = pathName.join('/') + '/' + fileName
+    const filePath = fileName //pathName.join('/') + '/' + fileName
     try {
       const stat = await Filesystem.stat({
         path: `${filePath}`, directory: Directory.Data
