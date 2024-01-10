@@ -30,7 +30,7 @@ export function useDownloader() {
     const filePath = pathName.join('/') + '/' + fileName
     try {
       const stat = await Filesystem.stat({
-        path: `content/${filePath}`, directory: Directory.Data
+        path: `${filePath}`, directory: Directory.Data
       })
       return Capacitor.convertFileSrc(stat.uri)
     } catch (e) {

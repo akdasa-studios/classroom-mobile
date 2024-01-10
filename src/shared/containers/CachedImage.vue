@@ -54,8 +54,9 @@ async function onDownload() {
   try {
     cachedUrl.value = await downloader.download(props.url)
     cached.value = true
-  } catch {
+  } catch (err) {
     cachedUrl.value = props.url
+    alert(err)
   }
 }
 </script>
