@@ -28,11 +28,10 @@
 
 
 <script setup lang="ts">
-import { LessonSection, QuizSectionBlock, VideoSectionBlock, TextSectionBlock, StudentHomework } from '@/education'
+import { LessonSectionViewModel, QuizSectionBlock, VideoSectionBlock, TextSectionBlock } from '@/education'
 
 const props = defineProps<{
-  section: LessonSection
-  homework?: StudentHomework
+  section: LessonSectionViewModel
 }>()
 
 const state = []
@@ -49,6 +48,6 @@ function onStateChange(
 /* -------------------------------------------------------------------------- */
 
 function getBlockId(blockIndex: number) {
-  return `${props.section.id.value}::${blockIndex}`
+  return `${props.section.id}::${blockIndex}`
 }
 </script>

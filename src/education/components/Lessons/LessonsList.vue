@@ -1,8 +1,8 @@
 <template>
-  <lessons-list-item
-    v-for="(lesson, idx) in model"
+  <LessonsListItem
+    v-for="(lesson, idx) in items"
     :key="lesson.id.value"
-    v-model="model[idx]"
+    :item="items[idx]"
     @click="() => onLessonClicked(lesson.id.value)"
   />
 </template>
@@ -15,11 +15,13 @@ import { Lesson, LessonsListItem } from '@/education'
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
+defineProps<{
+  items: Lesson[]
+}>()
+
 const emit = defineEmits<{
   click: [lessonId: string]
 }>()
-
-const model = defineModel<readonly Lesson[]>({ required: true })
 
 
 /* -------------------------------------------------------------------------- */

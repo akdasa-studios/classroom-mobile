@@ -1,13 +1,13 @@
 <template>
   <div v-bind="$attrs">
     <ion-chip
-      v-for="section, idx in sections"
-      :key="section.id.value"
+      v-for="section, idx in items"
+      :key="idx"
       :color="getColor(idx)"
       @click="emit('click', idx)"
     >
       <ion-icon
-        :icon="getSectionIcon(section.id)"
+        :icon="getSectionIcon(section.state)"
         :color="getColor(idx)"
       />
       <ion-label>{{ section.title }}</ion-label>
@@ -17,24 +17,23 @@
 
 
 <script setup lang="ts">
-import { LessonSection, LessonSectionIdentity, StudentHomework, StudentHomeworkState } from '@/education'
+import { LessonSectionStateViewModel } from '@/education'
 import { IonChip, IonIcon, IonLabel } from '@ionic/vue'
 import { attachOutline, checkmarkOutline, syncOutline, checkmarkDoneOutline } from 'ionicons/icons'
-
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  sections: readonly LessonSection[]
-  homeworks: readonly StudentHomework[]
+  items: LessonSectionStateViewModel[]
   active: number
 }>()
 
 const emit = defineEmits<{
   click: [index: number]
 }>()
+
 
 /* -------------------------------------------------------------------------- */
 /*                                   Helpers                                  */
@@ -45,14 +44,12 @@ function getColor(idx: number) {
 }
 
 function getSectionIcon(
-  lessonSectionId: LessonSectionIdentity
+  state: string
 ) {
-  const homework = props.homeworks.find(x => x.lessonSectionId.equals(lessonSectionId))
-  if (!homework) { return attachOutline }
-  if (homework.state === StudentHomeworkState.Open)     { return attachOutline }
-  if (homework.state === StudentHomeworkState.InReview) { return checkmarkOutline }
-  if (homework.state === StudentHomeworkState.Returned) { return syncOutline }
-  if (homework.state === StudentHomeworkState.Accepted) { return checkmarkDoneOutline }
+  if (state === 'open')      { return attachOutline }
+  if (state === 'in-review') { return checkmarkOutline }
+  if (state === 'returned')  { return syncOutline }
+  if (state === 'accepted')  { return checkmarkDoneOutline }
   return attachOutline
 }
 </script>

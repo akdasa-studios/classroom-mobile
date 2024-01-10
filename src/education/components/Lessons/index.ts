@@ -5,3 +5,4 @@ export { default as LessonsListItemSkeleton } from './LessonsListItemSkeleton.vu
 export { default as LessonSectionsList } from './LessonSectionsList.vue'
 export { default as LessonSectionView } from './LessonSectionView.vue'
 export * from './SectionBlocks'
+export * from './LessonSectionViewModel'

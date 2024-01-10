@@ -3,40 +3,47 @@
     :title="$t('lessons')"
     :has-padding="true"
   >
-    <template #content>
-      <my-enrollments-list
-        ref="enrollmentsList"
-        :busy="syncTask.busy.value"
+    <WithListHeader :title="$t('my-enrollments')">
+      <EnrollmentsList
+        :items="enrollments"
+        @click="onEnrollmentClicked"
       />
+    </WithListHeader>
 
-      <my-student-homework-list
-        ref="homeworksList"
-        :busy="syncTask.busy.value"
+    <WithListHeader :title="$t('homework')">
+      <StudentHomeworkList
+        :items="homeworks"
+        @click="onStudentHomeworkClicked"
       />
-    </template>
+    </WithListHeader>
   </PageWithHeaderLayout>
 </template>
 
 
 <script setup lang="ts">
-import { MyEnrollmentsList, MyStudentHomeworkList, useSyncTask } from '@/education'
-import { PageWithHeaderLayout } from '@/shared'
-import { onIonViewDidEnter } from '@ionic/vue'
-import { ref, watch } from 'vue'
+import {
+  EnrollmentIdentity, EnrollmentViewModel, FetchHomeworkOfUser, HomeworkViewModel, StudentHomeworkList,
+  EnrollmentsList, useSyncTask, StudentHomeworkIdentity, LessonIdentity, LessonSectionIdentity
+} from '@/education'
+import { PageWithHeaderLayout, WithListHeader } from '@/shared'
+import { onIonViewDidEnter, useIonRouter } from '@ionic/vue'
+import { shallowRef, watch } from 'vue'
+import { FetchEnrollmentsOfUser } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const syncTask = useSyncTask()
+const router = useIonRouter()
 
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const enrollmentsList = ref()
-const homeworksList = ref()
+const enrollments = shallowRef<EnrollmentViewModel[]>([])
+const homeworks = shallowRef<HomeworkViewModel[]>([])
 
 
 /* -------------------------------------------------------------------------- */
@@ -51,17 +58,41 @@ watch(syncTask.completedAt, onFetchData)
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-function onFetchData() {
-  enrollmentsList.value.sync()
-  homeworksList.value.sync()
+async function onFetchData() {
+  enrollments.value = await FetchEnrollmentsOfUser('a243727d-57ab-4595-ba17-69f3a0679bf6')
+  homeworks.value = await FetchHomeworkOfUser('a243727d-57ab-4595-ba17-69f3a0679bf6')
+}
+
+function onEnrollmentClicked(
+  id: EnrollmentIdentity
+) {
+  router.push({name: 'my-enrollment', params: { id: id.value } })
+}
+
+function onStudentHomeworkClicked(
+  homeworkId: StudentHomeworkIdentity,
+  lessonId: LessonIdentity,
+  lessonSectionId: LessonSectionIdentity,
+) {
+  router.push({
+    name: 'lesson-section',
+    params: {
+      id: lessonId.value,
+      sectionId: lessonSectionId.value
+    }
+  })
 }
 </script>
 
 
 <fluent locale="en">
 lessons = Lessons
+my-enrollments = My Groups
+homework = Homework
 </fluent>
 
 <fluent locale="ru">
 lessons = Уроки
+my-enrollments = Мои группы
+homework = Домашняя работа
 </fluent>

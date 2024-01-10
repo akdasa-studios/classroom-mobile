@@ -1,33 +1,62 @@
 <template>
-  <list-items-page
-    v-slot="{ item }"
+  <PageWithHeaderLayout
     :title="$t('courses')"
-    :fetcher="fetcher"
+    :busy="syncTask.busy.value && !hasData"
   >
-    <course-card
+    <template #toolbar>
+      <IonToolbar>
+        <IonSearchbar
+          v-model="searchQuery"
+          :debounce="250"
+          :placeholder="$t('search')"
+        />
+      </IonToolbar>
+    </template>
+
+    <CourseCard
+      v-for="item in courses"
+      :key="item.id.value"
       :title="item.title"
       :subtitle="item.subtitle"
       :summary="item.summary"
       :cover-image-url="item.coverImageUrl"
       @click="() => onCourseCardClicked(item.id)"
     />
-  </list-items-page>
+  </PageWithHeaderLayout>
 </template>
 
 
 <script setup lang="ts">
-import { useIonRouter } from '@ionic/vue'
-import { ListItemsPage, useRepository } from '@/shared'
-import { Course, CourseCard, CourseIdentity } from '@/education'
+import { onIonViewDidEnter, useIonRouter, IonSearchbar, IonToolbar } from '@ionic/vue'
+import { Cache, Course, CourseCard, CourseIdentity, useSyncTask } from '@/education'
+import { PageWithHeaderLayout } from '@/shared'
 import { QueryBuilder } from '@framework/persistence'
-import { courses } from '@/shared/fixtures'
+import { computed, ref, shallowRef, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const router     = useIonRouter()
-const repository = useRepository<Course>('course', courses)
+const router = useIonRouter()
+const syncTask = useSyncTask()
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const searchQuery = ref<string>('')
+const courses = shallowRef<readonly Course[]>([])
+const hasData = computed(() => courses.value.length !== 0)
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hooks                                   */
+/* -------------------------------------------------------------------------- */
+
+watch(syncTask.completedAt, onFetchData)
+watch(searchQuery, onFetchData)
+onIonViewDidEnter(onFetchData)
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
@@ -39,21 +68,21 @@ function onCourseCardClicked(
   router.push({ name: 'course', params: { 'id': id.value } })
 }
 
-
-/* -------------------------------------------------------------------------- */
-/*                                   Helpers                                  */
-/* -------------------------------------------------------------------------- */
-
-async function fetcher(searchQuery: string, offset: number, count: number) {
+async function onFetchData() {
   const qb = new QueryBuilder<Course>()
-  const result = await repository.find(
-    qb.contains('title', searchQuery
-  ), { skip: offset, limit: count })
-  return result.entities
+  courses.value = (await Cache.Courses.find(
+    qb.contains('title', searchQuery.value
+  ))).entities
 }
 </script>
 
 
 <fluent locale="en">
 courses = Courses
+search = Search
+</fluent>
+
+<fluent locale="ru">
+courses = Курсы
+search = Поиск
 </fluent>

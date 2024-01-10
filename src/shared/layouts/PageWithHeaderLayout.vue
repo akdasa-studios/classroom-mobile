@@ -24,16 +24,8 @@
         </ion-toolbar>
       </ion-header>
 
-      <slot
-        v-if="busy"
-        name="loader"
-      >
-        <loading-spinner />
-      </slot>
-      <slot
-        v-else
-        name="content"
-      />
+      <loading-spinner v-if="busy" />
+      <slot v-else />
     </ion-content>
   </ion-page>
 </template>

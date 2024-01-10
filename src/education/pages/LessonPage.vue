@@ -4,30 +4,29 @@
     :has-padding="true"
     :busy="busy"
   >
-    <template #content>
-      <lesson-sections-list
-        class="sectionsList"
-        :sections="sections"
-        :homeworks="homeworks"
-        :active="activeSectionIdx"
-        @click="onLessonSectionClicked"
-      />
+    <LessonSectionsList
+      class="sectionsList"
+      :items="sections"
+      :active="activeSectionIdx"
+      @click="onLessonSectionClicked"
+    />
 
-      <lesson-section-view
-        v-if="sections[activeSectionIdx]"
-        :section="sections[activeSectionIdx]"
-        :homework="getHomework(sections[activeSectionIdx].id)"
-      />
-    </template>
+    <LessonSectionView
+      v-if="sections[activeSectionIdx]"
+      :section="sections[activeSectionIdx]"
+    />
   </PageWithHeaderLayout>
 </template>
 
 
 <script lang="ts" setup>
 import { PageWithHeaderLayout } from '@/shared'
-import { Lesson, LessonIdentity, LessonSectionIdentity, LessonSection, LessonSectionsList, LessonSectionView, StudentHomework, useSyncTask } from '@/education'
+import {
+  Lesson, LessonIdentity, LessonSectionIdentity, LessonSectionsList,
+  LessonSectionView, useSyncTask, LessonSectionViewModel,
+} from '@/education'
 import { computed, onMounted, ref, shallowRef, watch } from 'vue'
-import { LessonsDal } from '../../repositories/LessonsDal'
+import { LessonsDal } from '../repositories/LessonsDal'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
@@ -50,11 +49,10 @@ const props = defineProps<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const busy      = computed(() => syncTask.busy.value && !lesson.value)
-const lesson    = shallowRef<Lesson>()
-const sections  = shallowRef<readonly LessonSection[]>([])
-const homeworks = shallowRef<readonly StudentHomework[]>([])
+const busy = computed(() => syncTask.busy.value && !lesson.value)
+const lesson = shallowRef<Lesson>()
 const activeSectionIdx = ref(0)
+const sections = shallowRef<LessonSectionViewModel[]>([])
 
 
 /* -------------------------------------------------------------------------- */
@@ -70,29 +68,26 @@ watch(syncTask.completedAt, onFetchData)
 /* -------------------------------------------------------------------------- */
 
 async function onFetchData() {
-  lesson.value    = await LessonsDal.getLesson(props.lessonId)
-  sections.value  = await LessonsDal.getLessonSections(lesson.value.id)
-  homeworks.value = await LessonsDal.getHomework(lesson.value.id)
+  lesson.value = await LessonsDal.getLesson(props.lessonId)
+  const result = await LessonsDal.getLessonSections(lesson.value.id)
+
+  sections.value = await Promise.all(
+    result.map(async (x) => ({
+      id: x.id.value,
+      title: x.title,
+      state: (await LessonsDal.getHomeworkOfSection(x.id))?.state || 'unknown',
+      blocks: x.blocks
+    } as LessonSectionViewModel))
+  )
 
   if (props.sectionId) {
-    const idx = sections.value.findIndex(x => x.id.equals(props.sectionId!))
+    const idx = sections.value.findIndex(x => x.id === props.sectionId?.value)
     if (idx != -1) { activeSectionIdx.value = idx }
   }
 }
 
 async function onLessonSectionClicked(index: number) {
   activeSectionIdx.value = index
-}
-
-
-/* -------------------------------------------------------------------------- */
-/*                                   Helpers                                  */
-/* -------------------------------------------------------------------------- */
-
-function getHomework(
-  lessonSectionId: LessonSectionIdentity
-) {
-  return homeworks.value.find(x => x.lessonSectionId.equals(lessonSectionId))
 }
 </script>
 

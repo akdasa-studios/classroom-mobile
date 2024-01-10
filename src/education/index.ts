@@ -23,14 +23,11 @@ export { default as TimeRangeItem } from './components/TimeRangeItem.vue'
 export * from './components/Groups'
 export * from './components/Enrollments'
 export * from './components/Lessons'
-export * from './components/Homework'
+export * from './components/StudentHomework'
 
 
 // containers:
 export { default as GroupSelector } from './containers/GroupSelector.vue'
-export { default as MyEnrollmentsList } from './containers/MyEnrollmentsList.vue'
-export { default as MyLessonsInGroup } from './containers/MyLessonsInGroup.vue'
-export { default as MyStudentHomeworkList } from './containers/MyStudentHomeworkList.vue'
 
 // services:
 export * from './services/EnrolmentService'

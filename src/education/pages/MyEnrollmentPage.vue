@@ -4,24 +4,21 @@
     :title="isApproved ? $t('group') : ''"
     :busy="busy"
   >
-    <template #content>
-      <enrollment-in-review
-        v-if="isInReview"
-        @click="onGoBackButtonClicked"
-      />
+    <EnrollmentInReview
+      v-if="isInReview"
+      @click="onGoBackButtonClicked"
+    />
 
-      <enrollment-declined
-        v-else-if="isDeclined"
-        @click="onGoBackButtonClicked"
-      />
+    <EnrollmentDeclined
+      v-else-if="isDeclined"
+      @click="onGoBackButtonClicked"
+    />
 
-      <my-lessons-in-group
-        v-if="isApproved && enrollment?.groupId"
-        ref="lessonsList"
-        :busy="syncTask.busy.value"
-        :group-id="enrollment.groupId"
-      />
-    </template>
+    <LessonsList
+      v-if="isApproved && enrollment?.groupId"
+      :items="lessons"
+      @click="onLessonClicked"
+    />
   </PageWithHeaderLayout>
 </template>
 
@@ -29,10 +26,10 @@
 <script lang="ts" setup>
 import { PageWithHeaderLayout } from '@/shared'
 import {
-  MyLessonsInGroup, Enrollment, EnrollmentIdentity, EnrollmentStatus,
-  EnrollmentInReview, EnrollmentDeclined, Cache, useSyncTask
+  LessonsList, Enrollment, EnrollmentIdentity, EnrollmentStatus,
+  EnrollmentInReview, EnrollmentDeclined, Cache, useSyncTask, OfCourse, Lesson
 } from '@/education'
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, shallowRef, watch } from 'vue'
 import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
 
 /* -------------------------------------------------------------------------- */
@@ -57,11 +54,11 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const enrollment  = shallowRef<Enrollment>()
+const lessons     = shallowRef<Lesson[]>([])
 const isApproved  = computed(() => enrollment.value && enrollment.value.status === EnrollmentStatus.Approved)
 const isInReview  = computed(() => enrollment.value && [EnrollmentStatus.InReview, EnrollmentStatus.Pending].includes(enrollment.value.status))
 const isDeclined  = computed(() => enrollment.value && [EnrollmentStatus.Declined].includes(enrollment.value.status))
 const busy        = computed(() => syncTask.busy.value && enrollment.value === undefined)
-const lessonsList = ref()
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
@@ -69,7 +66,7 @@ const lessonsList = ref()
 
 onIonViewWillEnter(fetchData)
 watch(syncTask.completedAt, fetchData)
-watch(lessonsList, () => { lessonsList.value.sync() })
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
@@ -79,6 +76,10 @@ function onGoBackButtonClicked() {
   router.back()
 }
 
+function onLessonClicked(lessonId: string) {
+  router.push({name: 'lesson', params: { id: lessonId } })
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*                                   Helpers                                  */
@@ -86,7 +87,10 @@ function onGoBackButtonClicked() {
 
 async function fetchData() {
   enrollment.value = await Cache.Enrollments.get(props.enrollmentId)
-  lessonsList.value?.sync()
+
+  const group    = await Cache.Groups.get(enrollment.value.groupId!)
+  const _lessons = await Cache.Lessons.find(OfCourse(group.courseId.value))
+  lessons.value = Array.from(_lessons.entities)
 }
 </script>
 

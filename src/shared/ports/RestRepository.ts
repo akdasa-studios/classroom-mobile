@@ -2,7 +2,7 @@ import { Aggregate, AnyIdentity } from '@framework/domain'
 import { InMemoryRepository, Query, QueryOptions, Repository, ResultSet } from '@framework/persistence'
 import { sleep } from '@protocol/core'
 
-const RESPONSE_DELAY = 1000
+const RESPONSE_DELAY = 100
 
 export class RestRepository<
   TAggregate extends Aggregate<AnyIdentity>

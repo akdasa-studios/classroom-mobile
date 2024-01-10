@@ -1,45 +1,36 @@
 <template>
-  <item-details-page
-    :title="title"
-    :fetcher="fetcher"
-    :has-padding="false"
+  <PageWithHeaderLayout
+    :title="course?.title || ''"
+    :busy="syncTask.busy.value && !course"
   >
-    <template #success="{ data }">
-      <img :src="data.coverImageUrl">
+    <img :src="course?.coverImageUrl">
 
-      <p class="ion-padding">
-        {{ data.summary }}
+    <p class="ion-padding">
+      {{ course?.summary }}
 
-        <ion-button
-          expand="block"
-          @click="onEnrollButtonClicked"
-        >
-          {{ $t('enroll') }}
-        </ion-button>
-      </p>
-    </template>
-
-    <template #error>
-      Some shit happened
-    </template>
-  </item-details-page>
+      <ion-button
+        expand="block"
+        @click="onEnrollButtonClicked"
+      >
+        {{ $t('enroll') }}
+      </ion-button>
+    </p>
+  </PageWithHeaderLayout>
 </template>
 
 
 <script setup lang="ts">
-import { IonButton, useIonRouter } from '@ionic/vue'
-import { ItemDetailsPage, useRepository } from '@/shared'
-import { Course } from '@/education'
-import { ref } from 'vue'
-import { courses } from '@/shared/fixtures'
-import { UuidIdentity } from '@framework/domain'
+import { IonButton, onIonViewWillEnter, useIonRouter } from '@ionic/vue'
+import { Cache, Course, CourseIdentity, useSyncTask } from '@/education'
+import { PageWithHeaderLayout } from '@/shared'
+import { shallowRef, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  id: string
+  id: CourseIdentity
 }>()
 
 
@@ -48,14 +39,22 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const repository = useRepository<Course>('course', courses)
+const syncTask = useSyncTask()
 
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const title = ref('')
+const course = shallowRef<Course>()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hooks                                   */
+/* -------------------------------------------------------------------------- */
+
+watch(syncTask.completedAt, onFetchData)
+onIonViewWillEnter(onFetchData)
 
 
 /* -------------------------------------------------------------------------- */
@@ -63,16 +62,11 @@ const title = ref('')
 /* -------------------------------------------------------------------------- */
 
 function onEnrollButtonClicked() {
-  router.push({ name: 'enroll', params: { 'id': props.id } })
+  router.push({ name: 'enroll', params: { 'id': props.id.value } })
 }
 
-
-/* -------------------------------------------------------------------------- */
-/*                                   Helpers                                  */
-/* -------------------------------------------------------------------------- */
-
-async function fetcher() {
-  return await repository.get(new UuidIdentity(props.id))
+async function onFetchData() {
+  course.value = await Cache.Courses.get(props.id)
 }
 </script>
 

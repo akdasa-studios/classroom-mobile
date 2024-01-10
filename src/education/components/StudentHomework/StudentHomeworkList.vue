@@ -1,6 +1,6 @@
 <template>
-  <homework-list-item
-    v-for="m in model"
+  <StudentHomeworkListItem
+    v-for="m in items"
     :key="m.studentHomework.id.value"
     :homework="m.studentHomework"
     :lesson="m.lesson"
@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import {
-  HomeworkViewModel, HomeworkListItem, StudentHomeworkIdentity,
+  HomeworkViewModel, StudentHomeworkListItem, StudentHomeworkIdentity,
   LessonIdentity, LessonSectionIdentity
 } from '@/education'
 
@@ -28,7 +28,9 @@ const emit = defineEmits<{
   ],
 }>()
 
-const model = defineModel<readonly HomeworkViewModel[]>({ required: true })
+defineProps<{
+  items: HomeworkViewModel[]
+}>()
 
 
 /* -------------------------------------------------------------------------- */

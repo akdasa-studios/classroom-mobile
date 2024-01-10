@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router'
-import { EnrollmentIdentity, LessonIdentity } from '@/education'
+import { CourseIdentity, EnrollmentIdentity, LessonIdentity } from '@/education'
 import { UuidIdentity } from '@framework/domain'
 
 import EducationIndexPage from './EducationIndexPage.vue'
@@ -23,7 +23,7 @@ export const routes: Array<RouteRecordRaw> = [
         path: 'courses/:id',
         component: () => import('./pages/CourseDetailsPage.vue'),
         props: route => ({
-          id: route.params.id,
+          id: new UuidIdentity(route.params.id as string) as CourseIdentity,
         }),
       },
       {
@@ -31,7 +31,7 @@ export const routes: Array<RouteRecordRaw> = [
         path: 'courses/:id/enroll',
         component: () => import('./pages/EnrollPage.vue'),
         props: route => ({
-          id: route.params.id,
+          courseId: new UuidIdentity(route.params.id as string) as CourseIdentity,
         }),
       },
       {
@@ -58,7 +58,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         name: 'lesson',
         path: 'lesson/:id',
-        component: () => import('./pages/Lessons/LessonPage.vue'),
+        component: () => import('./pages/LessonPage.vue'),
         props: (route) => ({
           lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
         }),
@@ -66,7 +66,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         name: 'lesson-section',
         path: 'lesson/:id/:sectionId',
-        component: () => import('./pages/Lessons/LessonPage.vue'),
+        component: () => import('./pages/LessonPage.vue'),
         props: (route) => ({
           lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
           sectionId: new UuidIdentity(route.params.sectionId as string)

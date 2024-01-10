@@ -1,6 +1,6 @@
 <template>
   <enrollments-list-item
-    v-for="i in enrollments"
+    v-for="i in items"
     :id="i.enrollment.id.value"
     :key="i.enrollment.id.value"
     :course-name="i.course.title"
@@ -21,7 +21,7 @@ import { EnrollmentViewModel } from './EnrollmentViewModel'
 /* -------------------------------------------------------------------------- */
 
 defineProps<{
-  enrollments: EnrollmentViewModel[]
+  items: EnrollmentViewModel[]
 }>()
 
 const emit = defineEmits<{

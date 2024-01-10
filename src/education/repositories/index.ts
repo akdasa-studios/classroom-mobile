@@ -4,6 +4,8 @@ import { RemoteCoursesRepository, CacheCoursesRepository }  from './Courses/Cour
 import { RemoteLessonsRepository, CacheLessonsRepository, CacheLessonSectionsRepository, RemoteLessonSectionssRepository }  from './Lessons/LessonsRepository'
 import { CacheStudentHomeworksRepository, RemoteStudentHomeworksRepository } from './StudentHomeworks/StudentHomeworksRepository'
 
+export * from './Queries'
+
 export const Cache = {
   Enrollments: CacheEnrollmentsRepository,
   Groups: CacheGroupsRepository,

@@ -1,34 +1,20 @@
 <template>
-  <with-loader
-    :busy="busy"
-  >
-    <template #loader>
-      <groups-list-item-skeleton />
-      <groups-list-item-skeleton />
-    </template>
-
-    <template #content>
-      <groups-list
-        v-model="selectedGroup"
-        :groups="groups"
-      />
-    </template>
-  </with-loader>
+  <groups-list
+    v-model="selectedGroup"
+    :groups="groupsToShow"
+  />
 </template>
 
 
 <script setup lang="ts">
-import { onMounted, ref, shallowRef } from 'vue'
-import { GroupsList, Group, GroupsListItemSkeleton, GroupViewModel, GroupsOfCourse } from '@/education'
-import { WithLoader, useRepository } from '@/shared'
-import { groupsFixtures } from '@/shared/fixtures'
+import { onMounted, shallowRef, toRefs, watch } from 'vue'
+import { GroupsList, Group, GroupViewModel } from '@/education'
 import { useFluent } from 'fluent-vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const groupsRepo = useRepository<Group>('group', groupsFixtures)
 const fluent = useFluent()
 
 
@@ -37,7 +23,7 @@ const fluent = useFluent()
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  courseId: string
+  groups: readonly Group[]
 }>()
 
 
@@ -48,8 +34,8 @@ const selectedGroup = defineModel<string>()
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const groups = shallowRef<GroupViewModel[]>([])
-const busy = ref(false)
+const { groups } = toRefs(props)
+const groupsToShow = shallowRef<GroupViewModel[]>([])
 
 
 /* -------------------------------------------------------------------------- */
@@ -57,6 +43,7 @@ const busy = ref(false)
 /* -------------------------------------------------------------------------- */
 
 onMounted(onFetchData)
+watch(groups, onFetchData)
 
 
 /* -------------------------------------------------------------------------- */
@@ -64,10 +51,7 @@ onMounted(onFetchData)
 /* -------------------------------------------------------------------------- */
 
 async function onFetchData() {
-  busy.value = true
-  const response = await groupsRepo.find(GroupsOfCourse(props.courseId))
-
-  const views = response.entities.map(x => ({
+  const views = props.groups.map(x => ({
     id: x.id.value,
     name: x.name,
     leader: x.couratorName,
@@ -75,7 +59,7 @@ async function onFetchData() {
     startsAt: x.startsAt
   } as GroupViewModel))
 
-  groups.value = [
+  groupsToShow.value = [
     ...views,
     {
       id: 'unknown',
@@ -85,11 +69,11 @@ async function onFetchData() {
     }
   ]
 
-  if (response.slice.count === 0) {
+  if (groups.value.length === 0) {
     selectedGroup.value = 'unknown'
+  } else {
+    selectedGroup.value = undefined
   }
-
-  busy.value = false
 }
 </script>
 

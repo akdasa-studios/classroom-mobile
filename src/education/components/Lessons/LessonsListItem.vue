@@ -5,10 +5,10 @@
   >
     <ion-label>
       <h2>
-        {{ model.title }}
+        {{ item.title }}
       </h2>
       <p class="ion-text-wrap">
-        {{ model.summary }}
+        {{ item.summary }}
       </p>
     </ion-label>
   </ion-item>
@@ -23,7 +23,9 @@ import { Lesson } from '@/education'
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-const model = defineModel<Lesson>({ required: true })
+defineProps<{
+  item: Lesson
+}>()
 
 const emit = defineEmits<{
   click: [],

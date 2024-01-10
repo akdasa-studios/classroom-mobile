@@ -14,3 +14,5 @@ export function useSyncTask() {
 
   return { start, busy, completedAt }
 }
+
+window.sync = useSyncTask()

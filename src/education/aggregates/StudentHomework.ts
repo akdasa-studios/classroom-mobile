@@ -2,10 +2,10 @@ import { Aggregate, UuidIdentity } from '@framework/domain'
 import { LessonSectionIdentity } from './LessonSection'
 
 export enum StudentHomeworkState {
-  Open,
-  InReview,
-  Returned,
-  Accepted
+  Open = 'open',
+  InReview = 'in-review',
+  Returned = 'returned',
+  Accepted = 'accepted'
 }
 
 export type StudentHomeworkIdentity = UuidIdentity<'StudentHomework'>

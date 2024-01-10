@@ -1,4 +1,4 @@
-import { Cache, Lesson, OfLesson, OfStudentAndLessonSections, LessonSection, StudentHomework, LessonIdentity } from '@/education'
+import { Cache, Lesson, OfLesson, OfStudentAndLessonSections, LessonSection, StudentHomework, LessonIdentity, LessonSectionIdentity } from '@/education'
 
 export class MyLessonViewModel {
   private userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
@@ -25,6 +25,15 @@ export class MyLessonViewModel {
       OfStudentAndLessonSections(this.userId, sectionIds)
     )
     return result.entities
+  }
+
+  async getHomeworkOfSection(
+    lessonSectionId: LessonSectionIdentity
+  ): Promise<StudentHomework | undefined> {
+    const result = await Cache.StudentHomeworks.find(
+      OfStudentAndLessonSections(this.userId, [lessonSectionId])
+    )
+    return result.entities ? result.entities[0] : undefined
   }
 }
 

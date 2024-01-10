@@ -1,5 +1,4 @@
 // composables
-export * from './composables/useRepository'
 export * from './composables/useNetworkStatus'
 export * from './composables/useDownloader'
 
@@ -9,8 +8,6 @@ export { default as ContentAndButtonAtBottomLayout } from './layouts/ContentAndB
 export { default as ImageAndButtonLayout } from './layouts/ImageAndButtonLayout.vue'
 
 // containers
-export { default as ListItemsPage } from './containers/ListItemsPage.vue'
-export { default as ItemDetailsPage } from './containers/ItemsDetailsPage.vue'
 export { default as WithLoader } from './containers/WithLoader.vue'
 
 // components
@@ -31,4 +28,3 @@ export * from './services/ServiceLocator'
 // ports:
 export * from './ports/CacheRepository'
 export * from './ports/RestRepository'
-export * from './ports/OfflineRepository'
