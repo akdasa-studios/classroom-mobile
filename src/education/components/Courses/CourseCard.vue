@@ -2,10 +2,9 @@
   <ion-card
     v-bind="$attrs"
   >
-    <img
-      :alt="props.title"
-      :src="props.coverImageUrl"
-    >
+    <CachedImage
+      :url="props.coverImageUrl"
+    />
 
     <ion-card-header>
       <ion-card-title>{{ props.title }}</ion-card-title>
@@ -20,7 +19,12 @@
 
 
 <script setup lang="ts">
+import { CachedImage } from '@/shared'
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
+
+/* -------------------------------------------------------------------------- */
+/*                                  Interface                                 */
+/* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
   title: string,
@@ -28,4 +32,6 @@ const props = defineProps<{
   summary: string,
   coverImageUrl: string
 }>()
+
+
 </script>

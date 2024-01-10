@@ -9,6 +9,7 @@ export { default as ImageAndButtonLayout } from './layouts/ImageAndButtonLayout.
 
 // containers
 export { default as WithLoader } from './containers/WithLoader.vue'
+export { default as CachedImage } from './containers/CachedImage.vue'
 
 // components
 export { default as AsyncButton } from './components/AsyncButton.vue'
