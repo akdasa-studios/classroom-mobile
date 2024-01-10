@@ -27,10 +27,10 @@ export function useDownloader() {
     // Check if the file already downloaded
     const pathName = new URL(url).pathname.split('/')
     const fileName = pathName.pop()
-    const filePath = pathName.join('/') + '/' + fileName
+    const filePath = fileName // pathName.join('/') + '/' + fileName
     try {
       const stat = await Filesystem.stat({
-        path: `content/${filePath}`, directory: Directory.Data
+        path: `${filePath}`, directory: Directory.Data
       })
       return Capacitor.convertFileSrc(stat.uri)
     } catch (e) {
@@ -40,30 +40,27 @@ export function useDownloader() {
     // We need to download the file if we're on a mobile device
     // because users should be able to play the audio file even
     // if they're offline.
-    try {
-      isDownloading.value = true
-      const res = await fetch(url, {
-        method: 'GET', mode: 'no-cors', headers: {}
-      })
+    isDownloading.value = true
+    const res = await fetch(url, {
+      method: 'GET', mode: 'no-cors', headers: {}
+    })
 
-      // Write file to the filesystem
-      await write_blob({
-        path: `content/${filePath}`,
-        directory: Directory.Data,
-        blob: await res.blob(),
-        recursive: true,
-        fast_mode: true,
-      })
+    // Write file to the filesystem
+    await write_blob({
+      path: `${filePath}`,
+      directory: Directory.Data,
+      blob: await res.blob(),
+      recursive: true,
+      fast_mode: true,
+    })
 
-      // Get the URI of the file
-      const uri = await Filesystem.getUri({
-        path: `content/${filePath}`,
-        directory: Directory.Data
-      })
-      return Capacitor.convertFileSrc(uri.uri)
-    } finally {
-      isDownloading.value = false
-    }
+    // Get the URI of the file
+    const uri = await Filesystem.getUri({
+      path: `${filePath}`,
+      directory: Directory.Data
+    })
+    isDownloading.value = false
+    return Capacitor.convertFileSrc(uri.uri)
   }
 
   /**
@@ -79,7 +76,7 @@ export function useDownloader() {
     const filePath = pathName.join('/') + '/' + fileName
     try {
       await Filesystem.stat({
-        path: `content/${filePath}`, directory: Directory.Data
+        path: `${filePath}`, directory: Directory.Data
       })
       return true
     } catch (e) {
