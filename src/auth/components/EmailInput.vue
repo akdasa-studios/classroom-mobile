@@ -1,6 +1,6 @@
 <template>
-  <with-borders>
-    <ion-input
+  <WithBorders>
+    <IonInput
       v-bind="$attrs"
       type="email"
       :placeholder="$t('email')"
@@ -8,7 +8,7 @@
       inputmode="email"
       pattern="email"
     />
-  </with-borders>
+  </WithBorders>
 </template>
 
 

@@ -1,13 +1,13 @@
 <template>
-  <ion-item
+  <IonItem
     v-if="props.errorCode !== KnownErrorCode.NoError"
     color="danger"
     lines="none"
   >
-    <ion-label>
+    <IonLabel>
       {{ props.errorCode }}
-    </ion-label>
-  </ion-item>
+    </IonLabel>
+  </IonItem>
 </template>
 
 

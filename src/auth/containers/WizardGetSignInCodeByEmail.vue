@@ -1,19 +1,19 @@
 <template>
-  <help-message>
+  <HelpMessage>
     {{ $t("welcome") }}
     {{ $t("enter-your-email") }}
-  </help-message>
+  </HelpMessage>
 
-  <email-input v-model="email" />
+  <EmailInput v-model="email" />
 
-  <async-button
+  <AsyncButton
     :busy="busy"
     :error-code="undefined"
     :disabled="email.length === 0"
     @click="onSignInClicked()"
   >
     {{ $t('request-signin-code') }}
-  </async-button>
+  </AsyncButton>
 </template>
 
 

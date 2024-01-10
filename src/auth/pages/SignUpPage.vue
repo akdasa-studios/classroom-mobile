@@ -1,12 +1,12 @@
 <template>
   <ion-page class="ion-padding">
-    <ion-list>
+    <IonList>
       <h1>{{ $t('sign-up') }}</h1>
       {{ $t('need-some-information') }}
       <br>
       <br>
 
-      <ion-input
+      <IonInput
         v-model="name"
         :label="$t('name')"
         label-placement="stacked"
@@ -15,7 +15,7 @@
       />
       <br>
 
-      <ion-input
+      <IonInput
         v-model="phoneNumber"
         :label="$t('phone-number')"
         label-placement="stacked"
@@ -25,7 +25,7 @@
       />
       <br>
 
-      <ion-input
+      <IonInput
         v-model="location"
         :label="$t('location')"
         label-placement="stacked"
@@ -34,16 +34,16 @@
       />
       <br>
 
-      <ion-checkbox
+      <IonCheckbox
         v-model="conditionsAccepted"
         label-placement="end"
         justify="start"
       >
         {{ $t('i-agree-to-the-terms') }}
-      </ion-checkbox>
-    </ion-list>
+      </IonCheckbox>
+    </IonList>
 
-    <async-button
+    <AsyncButton
       expand="block"
       :disabled="!isSugnUpButtonEmabled"
       :busy="busy"
@@ -51,7 +51,7 @@
       @click="onSignUpButtonClicked"
     >
       {{ $t('sign-up') }}
-    </async-button>
+    </AsyncButton>
   </ion-page>
 </template>
 

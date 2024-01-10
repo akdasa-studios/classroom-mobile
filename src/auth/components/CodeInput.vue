@@ -1,17 +1,17 @@
 <template>
-  <with-borders>
-    <ion-icon
+  <WithBorders>
+    <IonIcon
       slot="end"
       :icon="arrowBackOutline"
       aria-hidden="true"
       @click="onBackClicked"
     />
-    <ion-input
+    <IonInput
       v-bind="$attrs"
       type="number"
       :placeholder="$t('code')"
     />
-  </with-borders>
+  </WithBorders>
 </template>
 
 

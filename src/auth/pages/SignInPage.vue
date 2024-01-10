@@ -1,22 +1,22 @@
 <template>
   <ion-page class="ion-padding page">
     <div class="logo">
-      <school-of-devotion-logo />
+      <SchoolOfDevotionLogo />
     </div>
 
-    <steps-wizard :current-step="authenticationStep">
+    <StepsWizard :current-step="authenticationStep">
       <template #item0>
-        <wizard-get-sign-in-code-by-email
+        <WizardGetSignInCodeByEmail
           @complete="onWizardGetSignInCodeByEmailCompleted"
         />
       </template>
       <template #item1>
-        <wizard-sign-in-with-code
+        <WizardSignInWithCode
           @complete="onWizardSignInWithCodeCompleted"
           @go-back="onWizardGoBack"
         />
       </template>
-    </steps-wizard>
+    </StepsWizard>
   </ion-page>
 </template>
 

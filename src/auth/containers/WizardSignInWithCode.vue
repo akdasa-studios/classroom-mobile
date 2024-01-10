@@ -1,14 +1,14 @@
 <template>
-  <help-message>
+  <HelpMessage>
     {{ $t('enter-code') }}
-  </help-message>
+  </HelpMessage>
 
-  <code-input
+  <CodeInput
     v-model="code"
     @back-button-click="onBackButtonClicked"
   />
 
-  <async-button
+  <AsyncButton
     :busy="busy"
     :error-code="undefined"
     :disabled="code.length === 0"
@@ -16,7 +16,7 @@
     @click="onValidateCodeClicked()"
   >
     {{ $t('sign-in') }}
-  </async-button>
+  </AsyncButton>
 </template>
 
 
