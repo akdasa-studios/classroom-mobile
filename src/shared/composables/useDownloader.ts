@@ -43,7 +43,7 @@ export function useDownloader() {
     try {
       isDownloading.value = true
       const res = await fetch(url, {
-        method: 'GET', mode: 'cors', headers: {}
+        method: 'GET', mode: 'no-cors', headers: {}
       })
 
       // Write file to the filesystem
