@@ -17,7 +17,7 @@
 
 
 <script setup lang="ts">
-import { LessonSectionStateViewModel } from '@/education'
+import { LessonSectionViewModel } from '@/education'
 import { IonChip, IonIcon, IonLabel } from '@ionic/vue'
 import { attachOutline, checkmarkOutline, syncOutline, checkmarkDoneOutline } from 'ionicons/icons'
 
@@ -26,7 +26,7 @@ import { attachOutline, checkmarkOutline, syncOutline, checkmarkDoneOutline } fr
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  items: LessonSectionStateViewModel[]
+  items: LessonSectionViewModel[]
   active: number
 }>()
 
