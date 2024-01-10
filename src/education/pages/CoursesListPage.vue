@@ -26,11 +26,10 @@
 
 
 <script setup lang="ts">
-import { onIonViewDidEnter, useIonRouter, IonSearchbar, IonToolbar } from '@ionic/vue'
-import { Cache, Course, CourseCard, CourseIdentity, useSyncTask } from '@/education'
+import { useIonRouter, IonSearchbar, IonToolbar, onIonViewWillEnter } from '@ionic/vue'
+import { Course, CourseCard, CourseIdentity, FetchCourses, useSyncTask } from '@/education'
 import { PageWithHeaderLayout } from '@/shared'
-import { QueryBuilder } from '@framework/persistence'
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, onMounted, ref, shallowRef, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
@@ -38,6 +37,7 @@ import { computed, ref, shallowRef, watch } from 'vue'
 
 const router = useIonRouter()
 const syncTask = useSyncTask()
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
@@ -54,7 +54,8 @@ const hasData = computed(() => courses.value.length !== 0)
 
 watch(syncTask.completedAt, onFetchData)
 watch(searchQuery, onFetchData)
-onIonViewDidEnter(onFetchData)
+onIonViewWillEnter(onFetchData)
+onMounted(onFetchData)
 
 
 /* -------------------------------------------------------------------------- */
@@ -68,10 +69,7 @@ function onCourseCardClicked(
 }
 
 async function onFetchData() {
-  const qb = new QueryBuilder<Course>()
-  courses.value = (await Cache.Courses.find(
-    qb.contains('title', searchQuery.value
-  ))).entities
+  courses.value = await FetchCourses(searchQuery.value)
 }
 </script>
 
