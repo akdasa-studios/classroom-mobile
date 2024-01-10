@@ -12,14 +12,9 @@
       </IonToolbar>
     </template>
 
-    <CourseCard
-      v-for="item in courses"
-      :key="item.id.value"
-      :title="item.title"
-      :subtitle="item.subtitle"
-      :summary="item.summary"
-      :cover-image-url="item.coverImageUrl"
-      @click="() => onCourseCardClicked(item.id)"
+    <CoursesList
+      :items="courses"
+      @click="onCourseCardClicked"
     />
   </PageWithHeaderLayout>
 </template>
@@ -27,7 +22,7 @@
 
 <script setup lang="ts">
 import { useIonRouter, IonSearchbar, IonToolbar, onIonViewWillEnter } from '@ionic/vue'
-import { Course, CourseCard, CourseIdentity, FetchCourses, useSyncTask } from '@/education'
+import { Course, CourseIdentity, FetchCourses, useSyncTask, CoursesList } from '@/education'
 import { PageWithHeaderLayout } from '@/shared'
 import { computed, onMounted, ref, shallowRef, watch } from 'vue'
 

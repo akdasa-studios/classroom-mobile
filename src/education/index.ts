@@ -17,9 +17,9 @@ export * from './repositories/StudentHomeworkQueries'
 export * from './repositories'
 
 // components:
-export { default as CourseCard } from './components/CourseCard.vue'
 export { default as TimeRangeSelector } from './components/TimeRangeSelector.vue'
 export { default as TimeRangeItem } from './components/TimeRangeItem.vue'
+export * from './components/Courses'
 export * from './components/Groups'
 export * from './components/Enrollments'
 export * from './components/Lessons'
