@@ -37,6 +37,7 @@ export async function SyncWithRemoteServer(
 
   console.log('files')
   groups.entities.forEach(x => Downloader.addToQueue({ url: x.couratorAvatarUrl }))
+  courses.entities.forEach(x => Downloader.addToQueue({ url: x.coverImageUrl }))
   lessonSections.entities.forEach(function (x) {
     const sections = x.blocks.filter(x => x.type === 'video') as LessonSectionVideoBlock[]
     sections.forEach(x => Downloader.addToQueue({ url: x.videoUrl }))

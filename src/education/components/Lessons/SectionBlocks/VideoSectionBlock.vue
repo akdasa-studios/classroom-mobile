@@ -10,6 +10,7 @@
         class="video"
       >
         <source
+          v-if="localVideoUrl"
           :src="localVideoUrl"
           type="video/mp4"
         >
