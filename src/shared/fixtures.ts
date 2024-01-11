@@ -47,7 +47,7 @@ export const groupsFixtures: Group[] = [
     courses[0].id,
     'Группа для матаджи',
     'Ямуна дд',
-    'https://i.pravatar.cc/150?img=5',
+    'https://img.freepik.com/free-photo/3d-illustration-cute-cartoon-girl-blue-jacket-glasses_1142-41044.jpg',
     17039772
   ),
   new Group(
@@ -55,7 +55,7 @@ export const groupsFixtures: Group[] = [
     courses[0].id,
     'Группа для прабху',
     'Кришна дас',
-    'https://i.pravatar.cc/150?img=7',
+    'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg',
     17039772
   ),
   new Group(
@@ -63,7 +63,7 @@ export const groupsFixtures: Group[] = [
     courses[0].id,
     'Группа 108',
     'Радха дд',
-    'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    'https://img.freepik.com/free-photo/portrait-young-woman-wearing-glasses-3d-rendering_1142-43632.jpg',
     17139772
   ),
   new Group(
@@ -221,7 +221,7 @@ export const lessonSectionFixtures = [
     [
       {
         type: 'video',
-        videoUrl: 'https://download.samplelib.com/mp4/sample-10s.mp4',
+        videoUrl: 'https://sampletestfile.com/wp-content/uploads/2023/07/15MB-MP4.mp4',
         posterUrl: 'https://previews.123rf.com/images/kruwt/kruwt1509/kruwt150900004/44680386-beautiful-white-lighthouse-of-urk-dutch-fishing-village.jpg',
         timestamps: [
           {

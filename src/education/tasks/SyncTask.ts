@@ -1,6 +1,10 @@
+import { LessonSectionVideoBlock } from './../aggregates/LessonSectionBlock'
 import {
   Repositories, OfUser, OfCourses, OfLessons, OfStudent
 } from '@/education'
+import { Downloader } from '@/shared'
+
+
 
 export async function SyncWithRemoteServer(
   userId: string = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
@@ -30,4 +34,14 @@ export async function SyncWithRemoteServer(
   console.log('student homeworks')
   const studentHomeworks = await Repositories.Remote.StudentHomeworks.find(OfStudent(userId))
   studentHomeworks.entities.forEach(x => Repositories.Cache.StudentHomeworks.save(x))
+
+  console.log('files')
+  groups.entities.forEach(x => Downloader.addToQueue({ url: x.couratorAvatarUrl }))
+  lessonSections.entities.forEach(function (x) {
+    const sections = x.blocks.filter(x => x.type === 'video') as LessonSectionVideoBlock[]
+    sections.forEach(x => Downloader.addToQueue({ url: x.videoUrl }))
+    sections.forEach(x => Downloader.addToQueue({ url: x.posterUrl }))
+  })
+
+  console.log('done')
 }

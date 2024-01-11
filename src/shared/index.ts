@@ -24,6 +24,7 @@ export { default as WithListHeader } from './components/WithListHeader.vue'
 export * from './services/IService'
 export * from './services/LocalStorageService'
 export * from './services/ServiceLocator'
+export * from './services/DownloaderService'
 
 // ports:
 export * from './ports/CacheRepository'
