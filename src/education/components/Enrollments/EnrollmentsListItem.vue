@@ -1,45 +1,46 @@
 <template>
-  <ion-item
+  <IonItem
     :detail="true"
     lines="none"
     @click="onClicked"
   >
-    <ion-avatar
+    <IonAvatar
       slot="start"
       aria-hidden="true"
     >
-      <img :src="imageUrl">
-    </ion-avatar>
+      <CachedImage :url="imageUrl" />
+    </IonAvatar>
 
-    <ion-label>
+    <IonLabel>
       <h2>
         {{ courseName }}
       </h2>
       <p class="ion-text-wrap">
         {{ groupName }}
 
-        <ion-text
+        <IonText
           v-if="info"
           color="medium"
         >
           {{ info }}
-        </ion-text>
+        </IonText>
 
-        <ion-text
+        <IonText
           v-if="showStatus"
           color="primary"
         >
           {{ $t(status) }}
-        </ion-text>
+        </IonText>
       </p>
-    </ion-label>
-  </ion-item>
+    </IonLabel>
+  </IonItem>
 </template>
 
 
 <script setup lang="ts">
-import { IonItem, IonLabel, IonAvatar, IonText } from '@ionic/vue'
 import { computed } from 'vue'
+import { IonItem, IonLabel, IonAvatar, IonText } from '@ionic/vue'
+import { CachedImage } from '@/shared'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */

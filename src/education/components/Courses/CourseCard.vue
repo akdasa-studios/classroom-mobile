@@ -1,20 +1,21 @@
 <template>
-  <ion-card
+  <IonCard
     v-bind="$attrs"
   >
     <CachedImage
       :url="props.coverImageUrl"
+      loading-height="200px"
     />
 
-    <ion-card-header>
-      <ion-card-title>{{ props.title }}</ion-card-title>
-      <ion-card-subtitle>{{ props.subtitle }}</ion-card-subtitle>
-    </ion-card-header>
+    <IonCardHeader>
+      <IonCardTitle>{{ props.title }}</IonCardTitle>
+      <IonCardSubtitle>{{ props.subtitle }}</IonCardSubtitle>
+    </IonCardHeader>
 
-    <ion-card-content>
+    <IonCardContent>
       {{ props.summary }}
-    </ion-card-content>
-  </ion-card>
+    </IonCardContent>
+  </IonCard>
 </template>
 
 
@@ -32,6 +33,4 @@ const props = defineProps<{
   summary: string,
   coverImageUrl: string
 }>()
-
-
 </script>

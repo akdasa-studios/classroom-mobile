@@ -5,6 +5,7 @@
   >
     <CachedImage
       :url="course?.coverImageUrl"
+      loading-height="200px"
     />
 
     <p class="ion-padding">

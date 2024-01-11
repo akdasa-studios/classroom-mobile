@@ -42,15 +42,12 @@ export function useDownloader() {
     // We need to download the file if we're on a mobile device
     try {
       isDownloading.value = true
-      console.log('!!!!', filePath)
-      console.log('!!!', url)
       const res = await Filesystem.downloadFile({
         url: url,
         directory: Directory.Data,
         path: filePath,
         recursive: true
       })
-      console.log('===', res)
 
       if (!res.path) {
         throw 'Unable to download file'

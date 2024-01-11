@@ -1,7 +1,8 @@
 <template>
   <IonSkeletonText
-    v-if="downloader.isDownloading.value && !cachedUrl"
+    v-if="downloader.isDownloading.value || !cachedUrl"
     :animated="true"
+    :style="{ height: loadingHeight }"
     class="img"
   />
   <img
@@ -21,6 +22,7 @@ import { IonSkeletonText } from '@ionic/vue'
 
 const props = defineProps<{
   url?: string
+  loadingHeight?: string
 }>()
 
 /* -------------------------------------------------------------------------- */
@@ -55,7 +57,6 @@ async function onDownload() {
     cachedUrl.value = await downloader.download(url.value)
   } catch (err) {
     cachedUrl.value = props.url
-    alert(err)
   }
 }
 </script>
@@ -63,7 +64,6 @@ async function onDownload() {
 
 <style scoped>
 .img {
-  height: 128px;
   margin: 0px;
 }
 </style>

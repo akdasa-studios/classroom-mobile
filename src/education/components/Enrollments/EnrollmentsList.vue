@@ -1,5 +1,5 @@
 <template>
-  <enrollments-list-item
+  <EnrollmentsListItem
     v-for="i in items"
     :id="i.enrollment.id.value"
     :key="i.enrollment.id.value"
