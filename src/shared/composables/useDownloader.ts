@@ -1,6 +1,5 @@
 import { Capacitor } from '@capacitor/core'
 import { Directory, Filesystem } from '@capacitor/filesystem'
-import write_blob from 'capacitor-blob-writer'
 import { ref } from 'vue'
 
 /**
@@ -19,15 +18,18 @@ export function useDownloader() {
    * @param url Url of the file to download.
    * @returns The URI of the downloaded file.
    */
-  async function download(url: string): Promise<string> {
+  async function download(
+    url: string,
+    path?: string
+  ): Promise<string> {
     // We don't need to download the file if we're on the web
     // because we can just use the URL directly.
     if (Capacitor.getPlatform() === 'web') { return url }
 
     // Check if the file already downloaded
     const pathName = new URL(url).pathname.split('/')
-    const fileName = pathName.pop()
-    const filePath = fileName // pathName.join('/') + '/' + fileName
+    const fileName = pathName.pop()!
+    const filePath = path ? `${path}/${fileName}` : fileName
     try {
       const stat = await Filesystem.stat({
         path: `${filePath}`, directory: Directory.Data
@@ -38,29 +40,26 @@ export function useDownloader() {
     }
 
     // We need to download the file if we're on a mobile device
-    // because users should be able to play the audio file even
-    // if they're offline.
-    isDownloading.value = true
-    const res = await fetch(url, {
-      method: 'GET', mode: 'no-cors', headers: {}
-    })
+    try {
+      isDownloading.value = true
+      console.log('!!!!', filePath)
+      console.log('!!!', url)
+      const res = await Filesystem.downloadFile({
+        url: url,
+        directory: Directory.Data,
+        path: filePath,
+        recursive: true
+      })
+      console.log('===', res)
 
-    // Write file to the filesystem
-    await write_blob({
-      path: `${filePath}`,
-      directory: Directory.Data,
-      blob: await res.blob(),
-      recursive: true,
-      fast_mode: true,
-    })
+      if (!res.path) {
+        throw 'Unable to download file'
+      }
 
-    // Get the URI of the file
-    const uri = await Filesystem.getUri({
-      path: `${filePath}`,
-      directory: Directory.Data
-    })
-    isDownloading.value = false
-    return Capacitor.convertFileSrc(uri.uri)
+      return Capacitor.convertFileSrc(res.path)
+    } finally {
+      isDownloading.value = false
+    }
   }
 
   /**
