@@ -3,17 +3,19 @@
     :title="course?.title || ''"
     :busy="syncTask.busy.value && !course"
   >
-    <img :src="course?.coverImageUrl">
+    <CachedImage
+      :url="course?.coverImageUrl"
+    />
 
     <p class="ion-padding">
       {{ course?.summary }}
 
-      <ion-button
+      <IonButton
         expand="block"
         @click="onEnrollButtonClicked"
       >
         {{ $t('enroll') }}
-      </ion-button>
+      </IonButton>
     </p>
   </PageWithHeaderLayout>
 </template>
@@ -22,7 +24,7 @@
 <script setup lang="ts">
 import { IonButton, onIonViewWillEnter, useIonRouter } from '@ionic/vue'
 import { Cache, Course, CourseIdentity, useSyncTask } from '@/education'
-import { PageWithHeaderLayout } from '@/shared'
+import { CachedImage, PageWithHeaderLayout } from '@/shared'
 import { shallowRef, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */

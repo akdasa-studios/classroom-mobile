@@ -1,8 +1,8 @@
 <template>
-  <ion-radio-group
+  <IonRadioGroup
     v-model="model"
   >
-    <groups-list-item
+    <GroupsListItem
       v-for="group in groups"
       :id="group.id"
       :key="group.id"
@@ -12,7 +12,7 @@
       :image-url="group.imageUrl"
       :starts-at="group.startsAt"
     />
-  </ion-radio-group>
+  </IonRadioGroup>
 </template>
 
 

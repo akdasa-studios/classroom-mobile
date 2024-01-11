@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, toRefs, watch } from 'vue'
 import { useDownloader } from '@/shared'
 import { IonSkeletonText } from '@ionic/vue'
 
@@ -20,7 +20,7 @@ import { IonSkeletonText } from '@ionic/vue'
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  url: string
+  url?: string
 }>()
 
 /* -------------------------------------------------------------------------- */
@@ -34,6 +34,7 @@ const downloader = useDownloader()
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
+const { url } = toRefs(props)
 const cachedUrl = ref<string>()
 
 
@@ -42,15 +43,16 @@ const cachedUrl = ref<string>()
 /* -------------------------------------------------------------------------- */
 
 onMounted(onDownload)
-
+watch(url, onDownload)
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
 async function onDownload() {
+  if (!url.value) { return }
   try {
-    cachedUrl.value = await downloader.download(props.url)
+    cachedUrl.value = await downloader.download(url.value)
   } catch (err) {
     cachedUrl.value = props.url
     alert(err)

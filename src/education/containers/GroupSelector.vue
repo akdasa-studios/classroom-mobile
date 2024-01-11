@@ -1,5 +1,5 @@
 <template>
-  <groups-list
+  <GroupsList
     v-model="selectedGroup"
     :groups="groupsToShow"
   />

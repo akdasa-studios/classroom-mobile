@@ -1,35 +1,36 @@
 <template>
-  <ion-item
+  <IonItem
     lines="none"
   >
-    <ion-avatar
+    <IonAvatar
       slot="start"
       aria-hidden="true"
     >
-      <img :src="imageUrl">
-    </ion-avatar>
+      <CachedImage :url="imageUrl" />
+    </IonAvatar>
 
-    <ion-radio :value="id">
-      <ion-label>
+    <IonRadio :value="id">
+      <IonLabel>
         <h2>{{ name }}</h2>
         <p class="ion-text-wrap">
           {{ leader }}
           {{ info }}
-          <ion-text
+          <IonText
             v-if="startsAt"
             color="primary"
           >
             {{ formatDate(startsAt) }}
-          </ion-text>
+          </IonText>
         </p>
-      </ion-label>
-    </ion-radio>
-  </ion-item>
+      </IonLabel>
+    </IonRadio>
+  </IonItem>
 </template>
 
 
 <script setup lang="ts">
 import { IonItem, IonLabel, IonRadio, IonAvatar, IonText } from '@ionic/vue'
+import { CachedImage } from '@/shared'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
