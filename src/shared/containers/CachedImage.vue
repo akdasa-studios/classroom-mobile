@@ -1,5 +1,4 @@
 <template>
-  {{ cachedUrl }}
   <img
     :src="cachedUrl"
     :class="{'cached' : cached}"
