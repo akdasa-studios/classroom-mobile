@@ -6,6 +6,17 @@
         <ion-buttons slot="start">
           <ion-back-button />
         </ion-buttons>
+        <ion-buttons slot="secondary">
+          <ion-button
+            v-if="downloaderQueue.isDownloading.value"
+          >
+            <ion-icon
+              slot="icon-only"
+              color="primary"
+              :icon="cloudDownloadOutline"
+            />
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
       <slot name="toolbar" />
     </ion-header>
@@ -33,10 +44,12 @@
 
 <script setup lang="ts">
 import {
-  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton
+  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonIcon,
+  IonButton,
 } from '@ionic/vue'
 import { toRefs } from 'vue'
-import { LoadingSpinner } from '@/shared'
+import { LoadingSpinner, useDownloaderQueue } from '@/shared'
+import { cloudDownloadOutline } from 'ionicons/icons'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -48,6 +61,11 @@ const props = defineProps<{
   busy?: boolean
 }>()
 
+/* -------------------------------------------------------------------------- */
+/*                                Dependencies                                */
+/* -------------------------------------------------------------------------- */
+
+const downloaderQueue = useDownloaderQueue()
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */

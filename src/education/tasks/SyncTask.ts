@@ -1,9 +1,10 @@
+import { useDownloaderQueue } from '@/shared'
 import { LessonSectionVideoBlock } from './../aggregates/LessonSectionBlock'
 import {
   Repositories, OfUser, OfCourses, OfLessons, OfStudent
 } from '@/education'
-import { Downloader } from '@/shared'
 
+const Downloader = useDownloaderQueue()
 
 
 export async function SyncWithRemoteServer(
@@ -36,12 +37,12 @@ export async function SyncWithRemoteServer(
   studentHomeworks.entities.forEach(x => Repositories.Cache.StudentHomeworks.save(x))
 
   console.log('files')
-  groups.entities.forEach(x => Downloader.addToQueue({ url: x.couratorAvatarUrl }))
-  courses.entities.forEach(x => Downloader.addToQueue({ url: x.coverImageUrl }))
+  groups.entities.forEach(x => Downloader.addToQueue(x.couratorAvatarUrl))
+  courses.entities.forEach(x => Downloader.addToQueue(x.coverImageUrl))
   lessonSections.entities.forEach(function (x) {
     const sections = x.blocks.filter(x => x.type === 'video') as LessonSectionVideoBlock[]
-    sections.forEach(x => Downloader.addToQueue({ url: x.videoUrl }))
-    sections.forEach(x => Downloader.addToQueue({ url: x.posterUrl }))
+    sections.forEach(x => Downloader.addToQueue(x.videoUrl))
+    sections.forEach(x => Downloader.addToQueue(x.posterUrl))
   })
 
   console.log('done')

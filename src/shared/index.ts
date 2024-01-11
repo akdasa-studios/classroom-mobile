@@ -1,6 +1,7 @@
 // composables
 export * from './composables/useNetworkStatus'
 export * from './composables/useDownloader'
+export * from './composables/useDownloaderQueue'
 
 // layouts
 export { default as PageWithHeaderLayout } from './layouts/PageWithHeaderLayout.vue'

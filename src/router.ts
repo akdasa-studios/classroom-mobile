@@ -7,7 +7,7 @@ import { routes as educationRoutes } from './education/routes'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/auth/signin',
+    redirect: '/education/courses',
   },
   ...authRoutes,
   ...educationRoutes

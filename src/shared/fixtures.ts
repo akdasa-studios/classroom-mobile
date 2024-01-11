@@ -221,7 +221,7 @@ export const lessonSectionFixtures = [
     [
       {
         type: 'video',
-        videoUrl: 'https://sampletestfile.com/wp-content/uploads/2023/07/15MB-MP4.mp4',
+        videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
         posterUrl: 'https://previews.123rf.com/images/kruwt/kruwt1509/kruwt150900004/44680386-beautiful-white-lighthouse-of-urk-dutch-fishing-village.jpg',
         timestamps: [
           {

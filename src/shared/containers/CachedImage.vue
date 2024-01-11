@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, toRefs, watch } from 'vue'
-import { useDownloader } from '@/shared'
+import { useDownloader } from '@/shared/composables/useDownloader'
 import { IonSkeletonText } from '@ionic/vue'
 
 /* -------------------------------------------------------------------------- */
