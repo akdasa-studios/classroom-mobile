@@ -1,10 +1,10 @@
-import { sleep } from './../../../submodules/protocol/core/Utils'
 import { Capacitor } from '@capacitor/core'
 import { Directory, Filesystem } from '@capacitor/filesystem'
 
-interface DownloadTask {
+export interface DownloadTask {
   url: string,
   folder?: string
+  title?: string
 }
 
 export class DownloaderService {
@@ -12,8 +12,6 @@ export class DownloaderService {
   async download(
     task: DownloadTask
   ): Promise<string> {
-    console.log('downloading:', task.url)
-    await sleep(1000)
     if (Capacitor.getPlatform() === 'web') {
       return task.url
     }

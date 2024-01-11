@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { DownloaderService } from '../services/DownloaderService'
+import { DownloadTask, DownloaderService } from '../services/DownloaderService'
 
 /**
  * Downloads and caches a file on the device.
@@ -11,18 +11,19 @@ export function useDownloaderQueue() {
   /* -------------------------------------------------------------------------- */
 
   function addToQueue(
-    url: string
+    url: string,
+    title?: string
   ) {
-    queue.value.push(url)
+    queue.value.push({ url, title })
   }
 
   async function downloadAll() {
     try {
       isDownloading.value = true
       while (queue.value.length !== 0) {
-        const url = queue.value.pop()
-        if (!url) { return }
-        await downloader.download({ url })
+        const task = queue.value.pop()
+        if (!task) { return }
+        await downloader.download({ url: task.url, title: task.title })
       }
     } finally {
       isDownloading.value = false
@@ -33,7 +34,7 @@ export function useDownloaderQueue() {
   /*                                  Interface                                 */
   /* -------------------------------------------------------------------------- */
 
-  return { addToQueue, isDownloading, downloadAll }
+  return { addToQueue, isDownloading, downloadAll, queue }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -48,5 +49,5 @@ const downloader = new DownloaderService()
 /* -------------------------------------------------------------------------- */
 
 const isDownloading = ref(false)
-const queue = ref<string[]>([])
+const queue = ref<DownloadTask[]>([])
 

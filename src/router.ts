@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router'
 
 import { routes as authRoutes } from './auth/routes'
 import { routes as educationRoutes } from './education/routes'
+import { routes as settingsRoutes } from './settings/routes'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -10,7 +11,8 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/education/courses',
   },
   ...authRoutes,
-  ...educationRoutes
+  ...educationRoutes,
+  ...settingsRoutes
 ]
 
 const router = createRouter({

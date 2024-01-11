@@ -9,6 +9,7 @@
         <ion-buttons slot="secondary">
           <ion-button
             v-if="downloaderQueue.isDownloading.value"
+            @click="onDownloadingIndicatorCkicked"
           >
             <ion-icon
               slot="icon-only"
@@ -46,6 +47,7 @@
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonIcon,
   IonButton,
+useIonRouter,
 } from '@ionic/vue'
 import { toRefs } from 'vue'
 import { LoadingSpinner, useDownloaderQueue } from '@/shared'
@@ -66,6 +68,8 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const downloaderQueue = useDownloaderQueue()
+const router = useIonRouter()
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    State                                   */
@@ -74,4 +78,11 @@ const downloaderQueue = useDownloaderQueue()
 const { busy } = toRefs(props)
 
 
+/* -------------------------------------------------------------------------- */
+/*                                  Handlers                                  */
+/* -------------------------------------------------------------------------- */
+
+function onDownloadingIndicatorCkicked() {
+  router.push({ name: 'downloads' })
+}
 </script>

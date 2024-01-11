@@ -37,12 +37,14 @@ export async function SyncWithRemoteServer(
   studentHomeworks.entities.forEach(x => Repositories.Cache.StudentHomeworks.save(x))
 
   console.log('files')
-  groups.entities.forEach(x => Downloader.addToQueue(x.couratorAvatarUrl))
-  courses.entities.forEach(x => Downloader.addToQueue(x.coverImageUrl))
+  groups.entities.forEach(x => Downloader.addToQueue(x.couratorAvatarUrl, `Avatar of ${x.couratorName}`))
+  courses.entities.forEach(x => Downloader.addToQueue(x.coverImageUrl, `Cover image of ${x.title}`))
   lessonSections.entities.forEach(function (x) {
+    const lesson = lessons.entities.find(l => x.lessonId.equals(l.id))
+
     const sections = x.blocks.filter(x => x.type === 'video') as LessonSectionVideoBlock[]
-    sections.forEach(x => Downloader.addToQueue(x.videoUrl))
-    sections.forEach(x => Downloader.addToQueue(x.posterUrl))
+    sections.forEach(x => Downloader.addToQueue(x.videoUrl, `Lesson video ${lesson?.title}`))
+    sections.forEach(x => Downloader.addToQueue(x.posterUrl, `Lesson poster ${lesson?.title}`))
   })
 
   console.log('done')
