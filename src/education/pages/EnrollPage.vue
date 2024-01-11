@@ -4,36 +4,50 @@
     :has-padding="true"
   >
     <!-- Select group -->
-    <HeaderAndNote
-      :header="$t('group')"
-      :note="$t('select-group')"
-    />
-    <GroupSelector
-      v-model="groupId"
-      :groups="groups"
-    />
+    <IonList>
+      <IonItem lines="none">
+        <IonLabel>
+          <h2>{{ $t('group') }}</h2>
+          <p>{{ $t('select-group') }}</p>
+        </IonLabel>
+      </IonItem>
+      <GroupSelector
+        v-model="groupId"
+        :groups="groups"
+      />
+    </IonList>
 
     <!-- Select time -->
-    <HeaderAndNote
-      :header="$t('time')"
-      :note="$t('select-time')"
-    />
-    <TimeRangeSelector
-      v-model="timeRanges"
-      :presets="timeRangePresets"
-      custom-preset-text="Свой вариант"
-      add-range-text="Добавить"
-    />
+    <IonList>
+      <IonItem lines="none">
+        <IonLabel>
+          <h2>{{ $t('time') }}</h2>
+          <p>{{ $t('select-time') }}</p>
+        </IonLabel>
+      </IonItem>
+      <TimeRangeSelector
+        v-model="timeRanges"
+        :presets="timeRangePresets"
+        custom-preset-text="Свой вариант"
+        add-range-text="Добавить"
+      />
+    </IonList>
 
     <!-- Comments -->
-    <HeaderAndNote
-      :header="$t('comments')"
-      :note="$t('comments-to-join')"
-    />
-    <IonTextarea
-      v-model="comments"
-      aria-label="Comments"
-    />
+    <IonList>
+      <IonItem lines="none">
+        <IonLabel>
+          <h2>{{ $t('comments') }}</h2>
+          <p>{{ $t('comments-to-join') }}</p>
+        </IonLabel>
+      </IonItem>
+      <IonItem lines="none">
+        <IonTextarea
+          v-model="comments"
+          aria-label="Comments"
+        />
+      </IonItem>
+    </IonList>
 
     <!-- Enroll -->
     <AsyncButton
@@ -49,9 +63,9 @@
 
 
 <script setup lang="ts">
-import { IonTextarea, onIonViewWillEnter } from '@ionic/vue'
+import { IonTextarea, IonItem, IonLabel, onIonViewWillEnter, IonList } from '@ionic/vue'
 import { useIonRouter } from '@ionic/vue'
-import { PageWithHeaderLayout, AsyncButton, HeaderAndNote, useNetworkStatus } from '@/shared'
+import { PageWithHeaderLayout, AsyncButton, useNetworkStatus } from '@/shared'
 import { Group, useEnrollmentService, useSyncTask, FetchActiveGroupsOfCourse, CourseIdentity } from '@/education'
 import { ref, shallowRef, watch } from 'vue'
 import { GroupSelector, TimeRangeSelector } from '@/education'
