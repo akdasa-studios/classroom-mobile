@@ -26,7 +26,6 @@
     "@ionic/vue-router": "^7.0.0",
     "@ts-stack/markdown": "^1.5.0",
     "canvas-confetti": "^1.9.2",
-    "capacitor-blob-writer": "^1.1.14",
     "fluent-vue": "^3.5.0",
     "ionicons": "^7.0.0",
     "uuid": "^9.0.1",

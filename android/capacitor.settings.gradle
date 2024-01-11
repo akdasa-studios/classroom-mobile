@@ -19,6 +19,3 @@ project(':capacitor-network').projectDir = new File('../node_modules/@capacitor/
 
 include ':capacitor-status-bar'
 project(':capacitor-status-bar').projectDir = new File('../node_modules/@capacitor/status-bar/android')
-
-include ':capacitor-blob-writer'
-project(':capacitor-blob-writer').projectDir = new File('../node_modules/capacitor-blob-writer/android')
