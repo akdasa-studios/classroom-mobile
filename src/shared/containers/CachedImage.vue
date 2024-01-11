@@ -1,6 +1,6 @@
 <template>
   <IonSkeletonText
-    v-if="downloader.isDownloading.value"
+    v-if="downloader.isDownloading.value && !cachedUrl"
     :animated="true"
     class="img"
   />
@@ -34,7 +34,7 @@ const downloader = useDownloader()
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const cachedUrl = ref<string>('')
+const cachedUrl = ref<string>()
 
 
 /* -------------------------------------------------------------------------- */
