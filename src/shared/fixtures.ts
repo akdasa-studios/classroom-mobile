@@ -59,7 +59,7 @@ export const groupsFixtures: Group[] = [
     17039772
   ),
   new Group(
-    new UuidIdentity('f3d5c4a4-ef37-4a96-b9cd-68813c6e29aa'),
+    new UuidIdentity('f3d5c4a4-ef37-4a96-b9cd-68813c6e29a1'),
     courses[0].id,
     'Группа 108',
     'Радха дд',
@@ -86,7 +86,7 @@ export const EnrollmentsFixtures: Enrollment[] = [
     EnrollmentStatus.Approved
   ),
   new Enrollment(
-    new UuidIdentity(),
+    new UuidIdentity('997b7a4f-bfca-482d-a7ce-1f7bf5d33acf'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     groupsFixtures[0].id,
     courses[0].id,
@@ -100,14 +100,14 @@ export const EnrollmentsFixtures: Enrollment[] = [
     EnrollmentStatus.Approved
   ),
   new Enrollment(
-    new UuidIdentity(),
+    new UuidIdentity('d6ae0429-1e3d-4434-90e6-88aa2a367e8e'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     undefined,
     courses[0].id,
     EnrollmentStatus.Pending
   ),
   new Enrollment(
-    new UuidIdentity(),
+    new UuidIdentity('99681e90-17bb-482e-b00b-2966df238815'),
     '952ae116-1669-49e9-9e39-47a13104e475',
     groupsFixtures[1].id,
     courses[0].id,
@@ -143,72 +143,6 @@ export const lessonsFixtures: Lesson[] = [
     courses[0].id,
     'Lesson 1',
     'Introduction to the course',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Lesson 2',
-    'Understanding the basics',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Lesson 3',
-    'Advanced topics',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Lesson 4',
-    'Practical exercises',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Lesson 5',
-    'Advanced techniques',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Lesson 6',
-    'Mastering the course',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Chapter 1',
-    'Observing the Armies on the Battlefield of Kurukshetra',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Chapter 2',
-    'Contents of the Gita Summarized',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Chapter 3',
-    'Path of Selfless Service',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Chapter 4',
-    'Approaching the Ultimate Truth',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Chapter 5',
-    'Path of Renunciation',
-  ),
-  new Lesson(
-    new UuidIdentity(),
-    courses[0].id,
-    'Chapter 6',
-    'Path of Meditation',
   ),
 ]
 

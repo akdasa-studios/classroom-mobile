@@ -65,7 +65,7 @@ async function onFetchData() {
       id: 'unknown',
       name: fluent.$t('next-group'),
       info: fluent.$t('next-group-info'),
-      imageUrl: 'https://placekitten.com/400/400'
+      imageUrl: 'https://placekitten.com/200/200'
     }
   ]
 

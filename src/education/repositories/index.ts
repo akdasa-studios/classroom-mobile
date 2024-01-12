@@ -1,7 +1,8 @@
 import { RemoteEnrollmentsRepository, CacheEnrollmentsRepository } from './Enrollments/EnrollmentsRepository'
 import { RemoteGroupsRepository, CacheGroupsRepository } from './Groups/GroupsRepository'
 import { RemoteCoursesRepository, CacheCoursesRepository }  from './Courses/CoursesRepository'
-import { RemoteLessonsRepository, CacheLessonsRepository, CacheLessonSectionsRepository, RemoteLessonSectionssRepository }  from './Lessons/LessonsRepository'
+import { RemoteLessonsRepository, CacheLessonsRepository }  from './Lessons/LessonsRepository'
+import { CacheLessonSectionsRepository, RemoteLessonSectionssRepository }  from './Lessons/LessonSectionsRepository'
 import { CacheStudentHomeworksRepository, RemoteStudentHomeworksRepository } from './StudentHomeworks/StudentHomeworksRepository'
 
 export * from './Queries'

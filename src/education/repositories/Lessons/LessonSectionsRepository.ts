@@ -1,6 +1,6 @@
-import { Course } from '@/education'
+import { LessonSection } from '@/education'
 import { PouchRepository, RestRepository, ObjectMapper, DbScheme, CouchCacheDb } from '@/shared'
-import { courses } from '@/shared/fixtures'
+import { lessonSectionFixtures } from '@/shared/fixtures'
 import { UuidIdentity } from '@framework/domain'
 
 
@@ -8,13 +8,12 @@ import { UuidIdentity } from '@framework/domain'
 /*                               Database Models                              */
 /* -------------------------------------------------------------------------- */
 
-export interface CourseDbScheme
-  extends DbScheme<'course'>
+export interface LessonSectionDbScheme
+  extends DbScheme<'lessonSection'>
 {
+  lessonId: string,
   title: string,
-  subtitle: string,
-  summary: string,
-  coverImageUrl: string
+  blocks: any
 }
 
 
@@ -22,41 +21,39 @@ export interface CourseDbScheme
 /*                                 Serializers                                */
 /* -------------------------------------------------------------------------- */
 
-class CourseSerializer
+class LessonSectionSerializer
   implements ObjectMapper<
-    Course,
-    CourseDbScheme
+    LessonSection,
+    LessonSectionDbScheme
   >
 {
   map(
-    from: Course
-  ): CourseDbScheme {
+    from: LessonSection
+  ): LessonSectionDbScheme {
     return {
       _id: from.id.value,
-      '@type': 'course',
+      '@type': 'lessonSection',
+      lessonId: from.lessonId.value,
       title: from.title,
-      subtitle: from.subtitle,
-      summary: from.summary,
-      coverImageUrl: from.coverImageUrl
+      blocks: from.blocks
     }
   }
 }
 
-class CourseDeserializer
+class LessonSectionDeserializer
   implements ObjectMapper<
-    CourseDbScheme,
-    Course
+    LessonSectionDbScheme,
+    LessonSection
   >
 {
   map(
-    from: CourseDbScheme
-  ): Course {
-    return new Course(
+    from: LessonSectionDbScheme
+  ): LessonSection {
+    return new LessonSection(
       new UuidIdentity(from._id),
+      new UuidIdentity(from.lessonId),
       from.title,
-      from.subtitle,
-      from.summary,
-      from.coverImageUrl
+      from.blocks
     )
   }
 }
@@ -66,10 +63,10 @@ class CourseDeserializer
 /*                                Repositories                                */
 /* -------------------------------------------------------------------------- */
 
-export const CacheCoursesRepository = new PouchRepository<Course>(
-  CouchCacheDb, 'course',
-  new CourseSerializer(),
-  new CourseDeserializer(),
+export const CacheLessonSectionsRepository = new PouchRepository<LessonSection>(
+  CouchCacheDb, 'lessonSection',
+  new LessonSectionSerializer(),
+  new LessonSectionDeserializer(),
 )
 
-export const RemoteCoursesRepository = new RestRepository<Course>(courses)
+export const RemoteLessonSectionssRepository = new RestRepository<LessonSection>(lessonSectionFixtures)
