@@ -8,6 +8,7 @@
         :poster="localPosterUrl"
         controls
         class="video"
+        @timeupdate="onVideoTimeUpdate"
       >
         <source
           v-if="localVideoUrl"
@@ -16,17 +17,14 @@
         >
       </video>
 
-      <div
-        v-for="timestamp in timestamps"
+      <IonChip
+        v-for="timestamp, idx in timestamps"
         :key="timestamp.time"
+        :color="getColor(idx)"
         @click="() => onTimestampClicked(timestamp.time)"
       >
-        <span
-          class="timestamp"
-        >
-          {{ formatSeconds(timestamp.time) }}
-        </span> : {{ timestamp.title }}
-      </div>
+        {{ formatSeconds(timestamp.time) }} {{ timestamp.title }}
+      </IonChip>
     </template>
   </with-loader>
 </template>
@@ -36,6 +34,7 @@
 import { onMounted, ref } from 'vue'
 import { WithLoader, useDownloader } from '@/shared'
 import { Timestamp } from '@/education'
+import { IonChip, onIonViewWillEnter } from '@ionic/vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
@@ -63,35 +62,48 @@ const busy = ref(false)
 const localVideoUrl = ref<string>()
 const localPosterUrl = ref<string>()
 const video = ref()
+const currentTime = ref(0)
+
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-onMounted(onEnter)
+onMounted(fetchData)
+onIonViewWillEnter(fetchData)
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-async function onEnter() {
-  // busy.value = true
+function onTimestampClicked(time: number) {
+  video.value.currentTime = time
+}
+
+function onVideoTimeUpdate(event: any) {
+  currentTime.value = event.target.currentTime
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+
+async function fetchData() {
   try {
     localVideoUrl.value = await downloader.download(props.videoUrl)
     localPosterUrl.value = await downloader.download(props.posterUrl)
   } catch (ex) {
     alert(ex)
   }
-  // busy.value = false
 }
 
-function onTimestampClicked(time: number) {
-  video.value.currentTime = time
+function getColor(idx: number) {
+  return (currentTime.value >= (props.timestamps[idx+0].time)
+       && currentTime.value <  (props.timestamps[idx+1]?.time || 99999))
+       ? 'primary' : undefined
 }
-
-/* -------------------------------------------------------------------------- */
-/*                                   Helpers                                  */
-/* -------------------------------------------------------------------------- */
 
 function formatSeconds(seconds: number) {
   if (seconds < 3600) {
