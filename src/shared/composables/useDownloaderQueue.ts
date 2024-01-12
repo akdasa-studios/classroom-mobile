@@ -21,7 +21,7 @@ export function useDownloaderQueue() {
     try {
       isDownloading.value = true
       while (queue.value.length !== 0) {
-        const task = queue.value.pop()
+        const task = queue.value.shift()
         if (!task) { return }
         await downloader.download({ url: task.url, title: task.title })
       }
