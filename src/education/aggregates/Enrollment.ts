@@ -1,4 +1,5 @@
 import { Aggregate, UuidIdentity } from '@framework/domain'
+import { EnrollmentStatus } from '@core/aggregates'
 import { GroupIdentity } from './Group'
 import { CourseIdentity } from './Course'
 
@@ -6,12 +7,7 @@ import { CourseIdentity } from './Course'
 export type EnrollmentIdentity = UuidIdentity<'Enrollment'>
 
 
-export enum EnrollmentStatus {
-  Pending = 'pending',
-  InReview = 'in-review',
-  Approved = 'approved',
-  Declined = 'declined'
-}
+
 
 export class Enrollment
   extends Aggregate<EnrollmentIdentity>

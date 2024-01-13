@@ -1,6 +1,6 @@
 <template>
   <ion-page class="center">
-    <congrats-confetti />
+    <CongratsConfetti />
 
     <div class="ctnt">
       <img src="/congrats.png">
@@ -10,14 +10,14 @@
     </div>
 
     <div>
-      <ion-button
+      <IonButton
         class="btn"
         expand="block"
         fill="clear"
         @click="onGoToMyGroupsClicked"
       >
         {{ $t('go-to-my-enrollments') }}
-      </ion-button>
+      </IonButton>
     </div>
   </ion-page>
 </template>

@@ -4,3 +4,6 @@
 [submodule "framework"]
 	path = submodules/framework
 	url = https://github.com/akdasa-studios/framework.git
+[submodule "core"]
+	path = submodules/core
+	url = https://github.com/akdasa-studios/bcs-school-of-devotion-core.git

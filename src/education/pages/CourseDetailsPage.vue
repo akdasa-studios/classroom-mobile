@@ -1,7 +1,7 @@
 <template>
   <PageWithHeaderLayout
     :title="course?.title || ''"
-    :busy="syncTask.busy.value && !course"
+    :has-data="course !== undefined"
   >
     <CachedImage
       :url="course?.coverImageUrl"
@@ -42,7 +42,6 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const syncTask = useSyncTask()
 
 
 /* -------------------------------------------------------------------------- */
@@ -56,7 +55,6 @@ const course = shallowRef<Course>()
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-watch(syncTask.completedAt, onFetchData)
 onIonViewWillEnter(onFetchData)
 
 

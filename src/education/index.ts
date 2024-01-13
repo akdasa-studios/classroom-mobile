@@ -9,7 +9,7 @@ export * from './aggregates/StudentHomework'
 
 // repositories:
 export * from './repositories/GroupQueries'
-export * from './repositories/EnrollmentQueries'
+export * from './repositories/Enrollments/EnrollmentsQueries'
 export * from './repositories/CourseQueries'
 export * from './repositories/LessonQueries'
 export * from './repositories/LessonSectionQueries'
@@ -37,3 +37,5 @@ export * from './composables/useEnrollmentService'
 export * from './composables/useSyncTask'
 export * from './composables/useTimeFormatter'
 
+// helpers:
+export * from './helpers'

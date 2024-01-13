@@ -1,66 +1,70 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>{{ title }}</ion-title>
-        <ion-buttons slot="start">
-          <ion-back-button />
-        </ion-buttons>
-        <ion-buttons slot="secondary">
-          <ion-button
-            v-if="downloaderQueue.isDownloading.value"
+  <IonPage>
+    <IonHeader>
+      <IonToolbar>
+        <IonTitle>{{ title }}</IonTitle>
+        <IonButtons slot="start">
+          <IonBackButton />
+        </IonButtons>
+        <IonButtons slot="secondary">
+          <IonButton
+            v-if="busy"
             @click="onDownloadingIndicatorCkicked"
           >
-            <ion-icon
+            <IonIcon
               slot="icon-only"
               color="primary"
               :icon="cloudDownloadOutline"
             />
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
+          </IonButton>
+        </IonButtons>
+      </IonToolbar>
       <slot name="toolbar" />
-    </ion-header>
+    </IonHeader>
 
-    <ion-content
+    <IonContent
       :fullscreen="true"
       :class="{
         'ion-padding': hasPadding,
       }"
     >
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">
+      <IonHeader collapse="condense">
+        <IonToolbar>
+          <IonTitle size="large">
             {{ title }}
-          </ion-title>
-        </ion-toolbar>
-      </ion-header>
+          </IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-      <loading-spinner v-if="busy" />
+      <LoadingSpinner v-if="busy && !hasData" />
       <slot v-else />
-    </ion-content>
-  </ion-page>
+    </IonContent>
+  </IonPage>
 </template>
 
 
 <script setup lang="ts">
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonIcon,
-  IonButton,
-useIonRouter,
+  IonButton, useIonRouter,
 } from '@ionic/vue'
-import { toRefs } from 'vue'
+import { computed, watch } from 'vue'
 import { LoadingSpinner, useDownloaderQueue } from '@/shared'
 import { cloudDownloadOutline } from 'ionicons/icons'
+import { useSyncTask } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-const props = defineProps<{
+defineProps<{
   title: string,
   hasPadding?: boolean
-  busy?: boolean
+  hasData?: boolean
+}>()
+
+const emit = defineEmits<{
+  syncCompleted: []
 }>()
 
 /* -------------------------------------------------------------------------- */
@@ -68,6 +72,7 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const downloaderQueue = useDownloaderQueue()
+const syncTask = useSyncTask()
 const router = useIonRouter()
 
 
@@ -75,7 +80,14 @@ const router = useIonRouter()
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const { busy } = toRefs(props)
+const busy = computed(() => downloaderQueue.isDownloading.value || syncTask.busy.value)
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    Hooks                                   */
+/* -------------------------------------------------------------------------- */
+
+watch(syncTask.completedAt, () => emit('syncCompleted'))
 
 
 /* -------------------------------------------------------------------------- */

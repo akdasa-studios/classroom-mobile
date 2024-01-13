@@ -1,6 +1,7 @@
 import { LessonSection } from './../education/aggregates/LessonSection'
 import { UuidIdentity } from '@framework/domain'
-import { Course, Group, Enrollment, EnrollmentStatus, Lesson, StudentHomework, StudentHomeworkStatus } from '@/education'
+import { Course, Group, Enrollment, Lesson, StudentHomework, StudentHomeworkStatus } from '@/education'
+import { EnrollmentStatus } from '@core/aggregates'
 
 export const courses: Course[] = [
   new Course(
@@ -97,14 +98,14 @@ export const EnrollmentsFixtures: Enrollment[] = [
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     groupsFixtures[3].id,
     courses[1].id,
-    EnrollmentStatus.Approved
+    EnrollmentStatus.InReview
   ),
   new Enrollment(
     new UuidIdentity('d6ae0429-1e3d-4434-90e6-88aa2a367e8e'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     undefined,
     courses[0].id,
-    EnrollmentStatus.Pending
+    EnrollmentStatus.NotSubmitted
   ),
   new Enrollment(
     new UuidIdentity('99681e90-17bb-482e-b00b-2966df238815'),

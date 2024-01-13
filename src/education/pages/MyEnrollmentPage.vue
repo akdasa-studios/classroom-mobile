@@ -2,10 +2,15 @@
 <template>
   <PageWithHeaderLayout
     :title="isApproved ? $t('group') : ''"
-    :busy="busy"
+    :has-data="enrollment !== undefined"
   >
+    <EnrollmentNotSubmitted
+      v-if="isNotSubbmited"
+      @click="onGoBackButtonClicked"
+    />
+
     <EnrollmentInReview
-      v-if="isInReview"
+      v-else-if="isInReview"
       @click="onGoBackButtonClicked"
     />
 
@@ -24,10 +29,11 @@
 
 
 <script lang="ts" setup>
+import { EnrollmentStatus } from '@core/aggregates'
 import { PageWithHeaderLayout } from '@/shared'
 import {
-  LessonsList, Enrollment, EnrollmentIdentity, EnrollmentStatus,
-  EnrollmentInReview, EnrollmentDeclined, Cache, useSyncTask, OfCourse, Lesson
+  LessonsList, Enrollment, EnrollmentIdentity, EnrollmentNotSubmitted,
+  EnrollmentInReview, EnrollmentDeclined, Cache, useSyncTask, Lesson, FetchLessonsOfGroup
 } from '@/education'
 import { computed, shallowRef, watch } from 'vue'
 import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
@@ -54,11 +60,13 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const enrollment  = shallowRef<Enrollment>()
-const lessons     = shallowRef<Lesson[]>([])
-const isApproved  = computed(() => enrollment.value && enrollment.value.status === EnrollmentStatus.Approved)
-const isInReview  = computed(() => enrollment.value && [EnrollmentStatus.InReview, EnrollmentStatus.Pending].includes(enrollment.value.status))
-const isDeclined  = computed(() => enrollment.value && [EnrollmentStatus.Declined].includes(enrollment.value.status))
-const busy        = computed(() => syncTask.busy.value && enrollment.value === undefined)
+const lessons     = shallowRef<readonly Lesson[]>([])
+const status         = computed(() => enrollment.value?.status)
+const isNotSubbmited = computed(() => status.value === EnrollmentStatus.NotSubmitted)
+const isApproved     = computed(() => status.value === EnrollmentStatus.Approved)
+const isDeclined     = computed(() => status.value === EnrollmentStatus.Declined)
+const isInReview     = computed(() => status.value === EnrollmentStatus.InReview
+                                   || status.value === EnrollmentStatus.Pending)
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
@@ -77,7 +85,7 @@ function onGoBackButtonClicked() {
 }
 
 function onLessonClicked(lessonId: string) {
-  router.push({name: 'lesson', params: { id: lessonId } })
+  router.push({name: 'lesson', params: { lessonId: lessonId } })
 }
 
 
@@ -87,10 +95,9 @@ function onLessonClicked(lessonId: string) {
 
 async function fetchData() {
   enrollment.value = await Cache.Enrollments.get(props.enrollmentId)
-
-  const group    = await Cache.Groups.get(enrollment.value.groupId!)
-  const _lessons = await Cache.Lessons.find(OfCourse(group.courseId.value))
-  lessons.value = Array.from(_lessons.entities)
+  if (enrollment.value.groupId) {
+    lessons.value = await FetchLessonsOfGroup(enrollment.value.groupId)
+  }
 }
 </script>
 

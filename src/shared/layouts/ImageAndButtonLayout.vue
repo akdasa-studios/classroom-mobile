@@ -1,5 +1,5 @@
 <template>
-  <div class="center">
+  <div class="center ion-padding">
     <div class="ctnt">
       <img
         :src="image"
@@ -116,6 +116,7 @@ function onAlertDismiss(ev: CustomEvent) {
   justify-content: center;
   align-items: center;
   height: calc(100% - 50px);
+  text-align: center;
 }
 
 .ctnt {

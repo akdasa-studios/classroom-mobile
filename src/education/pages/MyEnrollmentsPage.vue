@@ -1,7 +1,8 @@
 <template>
   <PageWithHeaderLayout
     :title="$t('lessons')"
-    :has-padding="true"
+    :has-data="enrollments.length > 0 || homeworks.length > 0"
+    @sync-completed="onFetchData"
   >
     <WithListHeader :title="$t('my-enrollments')">
       <EnrollmentsList
@@ -23,19 +24,19 @@
 <script setup lang="ts">
 import {
   EnrollmentIdentity, EnrollmentViewModel, FetchHomeworkOfUser, HomeworkViewModel, StudentHomeworkList,
-  EnrollmentsList, useSyncTask, StudentHomeworkIdentity, LessonIdentity, LessonSectionIdentity
+  EnrollmentsList, StudentHomeworkIdentity, LessonIdentity, LessonSectionIdentity
 } from '@/education'
 import { PageWithHeaderLayout, WithListHeader } from '@/shared'
-import { onIonViewDidEnter, useIonRouter } from '@ionic/vue'
-import { shallowRef, watch } from 'vue'
+import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
+import { shallowRef } from 'vue'
 import { FetchEnrollmentsOfUser } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const syncTask = useSyncTask()
 const router = useIonRouter()
+const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 
 
 /* -------------------------------------------------------------------------- */
@@ -43,15 +44,14 @@ const router = useIonRouter()
 /* -------------------------------------------------------------------------- */
 
 const enrollments = shallowRef<EnrollmentViewModel[]>([])
-const homeworks = shallowRef<HomeworkViewModel[]>([])
+const homeworks   = shallowRef<HomeworkViewModel[]>([])
 
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-onIonViewDidEnter(onFetchData)
-watch(syncTask.completedAt, onFetchData)
+onIonViewWillEnter(onFetchData)
 
 
 /* -------------------------------------------------------------------------- */
@@ -59,14 +59,16 @@ watch(syncTask.completedAt, onFetchData)
 /* -------------------------------------------------------------------------- */
 
 async function onFetchData() {
-  enrollments.value = await FetchEnrollmentsOfUser('a243727d-57ab-4595-ba17-69f3a0679bf6')
-  homeworks.value = await FetchHomeworkOfUser('a243727d-57ab-4595-ba17-69f3a0679bf6')
+  await fetchData(userId)
 }
 
 function onEnrollmentClicked(
-  id: EnrollmentIdentity
+  enrollmentId: EnrollmentIdentity
 ) {
-  router.push({name: 'my-enrollment', params: { id: id.value } })
+  router.push({
+    name:   'my-enrollment',
+    params: { id: enrollmentId.value }
+  })
 }
 
 function onStudentHomeworkClicked(
@@ -75,15 +77,26 @@ function onStudentHomeworkClicked(
   lessonSectionId: LessonSectionIdentity,
 ) {
   router.push({
-    name: 'lesson',
-    params: {
-      id: lessonId.value,
-    },
-    query: {
-      sectionId: lessonSectionId.value
-    },
-    hash: '#gte'
+    name:   'lesson',
+    params: { lessonId:  lessonId.value },
+    query:  { sectionId: lessonSectionId.value },
   })
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+
+async function fetchData(
+  userId: string
+) {
+  [
+    enrollments.value,
+    homeworks.value
+  ] = await Promise.all([
+    FetchEnrollmentsOfUser(userId),
+    FetchHomeworkOfUser(userId)
+  ])
 }
 </script>
 

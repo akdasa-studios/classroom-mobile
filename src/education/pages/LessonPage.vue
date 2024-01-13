@@ -1,6 +1,7 @@
 <template>
   <PageWithHeaderLayout
     :title="lesson?.title || ''"
+    :has-data="lesson !== undefined"
   >
     <template #toolbar>
       <IonToolbar>
@@ -68,9 +69,7 @@ const activeSectionIdx = computed(() => activeSection.value ? sections.value.fin
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-onIonViewWillEnter(
-  () => fetchLessonData(props.lessonId)
-)
+onIonViewWillEnter(onEnter)
 
 watch(
   [syncTask.completedAt],
@@ -86,6 +85,13 @@ watch(query, (v) => {
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
+
+async function onEnter() {
+  await fetchLessonData(props.lessonId)
+  if (!query.value.sectionId) {
+    activeSection.value = sections.value[0]
+  }
+}
 
 async function onLessonSectionClicked(
   lessonSectionId: LessonSectionIdentity
@@ -113,15 +119,25 @@ async function onLessonSectionStateChanged(
 async function fetchLessonData(
   lessonId: LessonIdentity
 ) {
-  lesson.value   = await Cache.Lessons.get(lessonId)
-  sections.value = await FetchLessonSections(lessonId)
+  [
+    lesson.value,
+    sections.value
+  ] = await Promise.all([
+    Cache.Lessons.get(lessonId),
+    FetchLessonSections(lessonId)
+  ])
 }
 
 async function fetchLessonSectionData(
   lessonSectionId: LessonSectionIdentity,
   userId: string,
 ) {
-  activeSection.value      = await Cache.LessonSections.get(lessonSectionId)
-  activeSectionState.value = await FetchLessonSectionState(userId, lessonSectionId)
+  [
+    activeSection.value,
+    activeSectionState.value
+  ] = await Promise.all([
+    Cache.LessonSections.get(lessonSectionId),
+    FetchLessonSectionState(userId, lessonSectionId)
+  ])
 }
 </script>

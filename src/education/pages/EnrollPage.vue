@@ -2,6 +2,7 @@
   <PageWithHeaderLayout
     :title="$t('enroll')"
     :has-padding="true"
+    :has-data="groups.length > 0"
   >
     <!-- Select group -->
     <IonList>
@@ -52,8 +53,8 @@
     <!-- Enroll -->
     <AsyncButton
       :disabled="!networkStatus.connected.value"
+      :busy="false"
       expand="block"
-      :busy="busy"
       @click="onEnrollButtonClicked"
     >
       {{ $t("enroll") }}
@@ -66,8 +67,8 @@
 import { IonTextarea, IonItem, IonLabel, onIonViewWillEnter, IonList } from '@ionic/vue'
 import { useIonRouter } from '@ionic/vue'
 import { PageWithHeaderLayout, AsyncButton, useNetworkStatus } from '@/shared'
-import { Group, useEnrollmentService, useSyncTask, FetchActiveGroupsOfCourse, CourseIdentity } from '@/education'
-import { ref, shallowRef, watch } from 'vue'
+import { Group, useEnrollmentService, FetchActiveGroupsOfCourse, CourseIdentity } from '@/education'
+import { ref, shallowRef } from 'vue'
 import { GroupSelector, TimeRangeSelector } from '@/education'
 import { TimeRange, TimeRangePreset } from '../components/TimeRange'
 
@@ -86,7 +87,6 @@ const props = defineProps<{
 const router = useIonRouter()
 const networkStatus = useNetworkStatus()
 const enrollmentService = useEnrollmentService()
-const syncTask = useSyncTask()
 
 
 /* -------------------------------------------------------------------------- */
@@ -104,14 +104,12 @@ const groups = shallowRef<readonly Group[]>([])
 const groupId = ref('')
 const timeRanges = ref<TimeRange[]>([])
 const comments = ref('')
-const busy = ref(false)
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
 onIonViewWillEnter(onFetchData)
-watch(syncTask.completedAt, onFetchData)
 
 
 /* -------------------------------------------------------------------------- */
@@ -119,7 +117,6 @@ watch(syncTask.completedAt, onFetchData)
 /* -------------------------------------------------------------------------- */
 
 async function onEnrollButtonClicked() {
-  busy.value = true
   // TODO: handle errors and exceptions
   await enrollmentService.submit({
     groupId: groupId.value,
@@ -132,7 +129,6 @@ async function onEnrollButtonClicked() {
     ]
   })
   router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
-  busy.value = false
 }
 
 async function onFetchData() {

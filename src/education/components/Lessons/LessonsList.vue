@@ -20,7 +20,7 @@ import { WithListHeader } from '@/shared'
 /* -------------------------------------------------------------------------- */
 
 defineProps<{
-  items: Lesson[]
+  items: readonly Lesson[]
 }>()
 
 const emit = defineEmits<{

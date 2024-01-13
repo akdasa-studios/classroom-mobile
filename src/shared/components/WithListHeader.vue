@@ -1,10 +1,10 @@
 <template>
-  <ion-list>
-    <ion-list-header>
-      <ion-label>{{ title }}</ion-label>
-    </ion-list-header>
+  <IonList>
+    <IonListHeader>
+      <IonLabel>{{ title }}</IonLabel>
+    </IonListHeader>
     <slot />
-  </ion-list>
+  </IonList>
 </template>
 
 <script setup lang="ts">

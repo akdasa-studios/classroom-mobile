@@ -1,7 +1,8 @@
 <template>
   <PageWithHeaderLayout
     :title="$t('courses')"
-    :busy="syncTask.busy.value && !hasData"
+    :has-data="courses.length > 0"
+    @sync-completed="onFetchData"
   >
     <template #toolbar>
       <IonToolbar>
@@ -22,16 +23,15 @@
 
 <script setup lang="ts">
 import { useIonRouter, IonSearchbar, IonToolbar, onIonViewWillEnter } from '@ionic/vue'
-import { Course, CourseIdentity, FetchCourses, useSyncTask, CoursesList } from '@/education'
+import { Course, CourseIdentity, FetchCourses, CoursesList } from '@/education'
 import { PageWithHeaderLayout } from '@/shared'
-import { computed, onMounted, ref, shallowRef, watch } from 'vue'
+import { onMounted, ref, shallowRef, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const syncTask = useSyncTask()
 
 
 /* -------------------------------------------------------------------------- */
@@ -40,14 +40,12 @@ const syncTask = useSyncTask()
 
 const searchQuery = ref<string>('')
 const courses = shallowRef<readonly Course[]>([])
-const hasData = computed(() => courses.value.length !== 0)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-watch(syncTask.completedAt, onFetchData)
 watch(searchQuery, onFetchData)
 onIonViewWillEnter(onFetchData)
 onMounted(onFetchData)

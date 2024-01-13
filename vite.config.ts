@@ -23,6 +23,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@protocol': path.resolve(__dirname, './submodules/protocol'),
       '@framework': path.resolve(__dirname, './submodules/framework/lib'),
+      '@core': path.resolve(__dirname, './submodules/core'),
     },
   },
 })

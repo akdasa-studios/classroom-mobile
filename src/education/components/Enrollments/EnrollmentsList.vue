@@ -5,7 +5,7 @@
     :key="i.enrollment.id.value"
     :course-name="i.course.title"
     :group-name="i.group?.name"
-    :image-url="i.group?.couratorAvatarUrl || 'https://placekitten.com/400/400'"
+    :image-url="i.group?.couratorAvatarUrl || NO_CLASS_AVATAR"
     :status="i.enrollment.status"
     @click="() => onEnrollmentClicked(i.enrollment.id)"
   />
@@ -27,6 +27,13 @@ defineProps<{
 const emit = defineEmits<{
   click: [enrollmentId: EnrollmentIdentity]
 }>()
+
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const NO_CLASS_AVATAR = 'class-is-recruiting-avatar.png'
 
 
 /* -------------------------------------------------------------------------- */

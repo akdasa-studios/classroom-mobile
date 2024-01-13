@@ -15,8 +15,3 @@ next-group = Следующая группа
 next-group-info = Вы будете зачислены в группу, как только мы ее запустим
 
 go-to-my-enrollments = Перейти в мои группы
-
-pending = Ожидание
-in-review = На рассмотрении
-approved = Утверждено
-declined = Отклонено
