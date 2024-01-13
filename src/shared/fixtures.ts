@@ -1,6 +1,6 @@
 import { LessonSection } from './../education/aggregates/LessonSection'
 import { UuidIdentity } from '@framework/domain'
-import { Course, Group, Enrollment, EnrollmentStatus, Lesson, StudentHomework, StudentHomeworkState } from '@/education'
+import { Course, Group, Enrollment, EnrollmentStatus, Lesson, StudentHomework, StudentHomeworkStatus } from '@/education'
 
 export const courses: Course[] = [
   new Course(
@@ -141,7 +141,7 @@ export const lessonsFixtures: Lesson[] = [
   new Lesson(
     new UuidIdentity('f3d5c4a4-ef37-4a96-b9cd-68813c6e29aa'),
     courses[0].id,
-    'Lesson 1',
+    'ГЛАВА 1: Обзор армий на поле битвы Курукшетра',
     'Introduction to the course',
   ),
 ]
@@ -214,6 +214,17 @@ export const lessonSectionFixtures = [
           'Смысл в том, чтобы под конец жизни была куча интересных историй, которые с тобой случались. Чтобы было что рассказывать окружающим, чтобы они слушали, смеялись и удивлялись, а потом пересказывали их своим знакомым :)',
         ],
         rightAnswer: 2
+      },
+      {
+        type: 'quiz',
+        question: 'В чем смысл жизни?',
+        answers: [
+          'Смысл — получать удовольствие от каждого дня.',
+          'Смысл жизни — прожить ее так, чтобы тебя знала Википедия, но не знал «Ютуб».',
+          'Глобально — смысл в достижении единства с Богом.',
+          'Смысл в том, чтобы под конец жизни была куча интересных историй, которые с тобой случались. Чтобы было что рассказывать окружающим, чтобы они слушали, смеялись и удивлялись, а потом пересказывали их своим знакомым :)',
+        ],
+        rightAnswer: 2
       }
     ]
   ),
@@ -225,14 +236,21 @@ export const studentHomeworks = [
     new UuidIdentity('17a6a91a-4d6d-4d9c-a311-058d8bc0a200'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     lessonSectionFixtures[0].id,
-    StudentHomeworkState.Open,
+    StudentHomeworkStatus.Open,
     'Посмотреть видео'
   ),
   new StudentHomework(
     new UuidIdentity('17a6a91a-4d6d-4d9c-a311-058d8bc0a201'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     lessonSectionFixtures[2].id,
-    StudentHomeworkState.InReview,
+    StudentHomeworkStatus.InReview,
     'Завершить тест'
+  ),
+  new StudentHomework(
+    new UuidIdentity('17a6a91a-4d6d-4d9c-a311-058d8bc0a202'),
+    'a243727d-57ab-4595-ba17-69f3a0679bf6',
+    lessonSectionFixtures[1].id,
+    StudentHomeworkStatus.Open,
+    'Практическое задание'
   ),
 ]

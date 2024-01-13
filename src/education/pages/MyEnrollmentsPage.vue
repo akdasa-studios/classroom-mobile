@@ -75,11 +75,14 @@ function onStudentHomeworkClicked(
   lessonSectionId: LessonSectionIdentity,
 ) {
   router.push({
-    name: 'lesson-section',
+    name: 'lesson',
     params: {
       id: lessonId.value,
+    },
+    query: {
       sectionId: lessonSectionId.value
-    }
+    },
+    hash: '#gte'
   })
 }
 </script>

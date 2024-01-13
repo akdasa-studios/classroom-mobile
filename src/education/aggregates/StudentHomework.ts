@@ -1,7 +1,8 @@
 import { Aggregate, UuidIdentity } from '@framework/domain'
 import { LessonSectionIdentity } from './LessonSection'
+import { LessonSectionBlockState } from './LessonSectionBlock'
 
-export enum StudentHomeworkState {
+export enum StudentHomeworkStatus {
   Open = 'open',
   InReview = 'in-review',
   Returned = 'returned',
@@ -17,8 +18,9 @@ export class StudentHomework
     identity: StudentHomeworkIdentity,
     public readonly userId: string,
     public readonly lessonSectionId: LessonSectionIdentity,
-    public readonly state: StudentHomeworkState,
-    public readonly text: string
+    public readonly status: StudentHomeworkStatus,
+    public readonly text: string,
+    public work?: LessonSectionBlockState[],
   ) {
     super(identity)
   }

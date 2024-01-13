@@ -1,17 +1,18 @@
 <template>
-  <ion-item
+  <IonItem
     :detail="true"
+    lines="full"
     @click="onClicked"
   >
-    <ion-label>
+    <IonLabel>
       <h2>
         {{ item.title }}
       </h2>
       <p class="ion-text-wrap">
         {{ item.summary }}
       </p>
-    </ion-label>
-  </ion-item>
+    </IonLabel>
+  </IonItem>
 </template>
 
 

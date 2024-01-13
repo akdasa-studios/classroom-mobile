@@ -1,6 +1,8 @@
 <template>
-  <!-- eslint-disable-next-line vue/no-v-html -->
-  <div v-html="renderedContent" />
+  <div
+    class="ion-padding-start ion-padding-end"
+    v-html="renderedContent"
+  />
 </template>
 
 

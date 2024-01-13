@@ -63,15 +63,6 @@ export const routes: Array<RouteRecordRaw> = [
           lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
         }),
       },
-      {
-        name: 'lesson-section',
-        path: 'lesson/:id/:sectionId',
-        component: () => import('./pages/LessonPage.vue'),
-        props: (route) => ({
-          lessonId: new UuidIdentity(route.params.id as string) as LessonIdentity,
-          sectionId: new UuidIdentity(route.params.sectionId as string)
-        }),
-      },
     ]
   }
 ]

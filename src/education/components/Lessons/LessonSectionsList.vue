@@ -1,37 +1,34 @@
 <template>
-  <div v-bind="$attrs">
-    <ion-chip
+  <IonSegment
+    :value="selected"
+  >
+    <IonSegmentButton
       v-for="section, idx in items"
       :key="idx"
-      :color="getColor(idx)"
-      @click="emit('click', idx)"
+      :value="idx"
+      @click="emit('click', section.id)"
     >
-      <ion-icon
-        :icon="getSectionIcon(section.state)"
-        :color="getColor(idx)"
-      />
       <ion-label>{{ section.title }}</ion-label>
-    </ion-chip>
-  </div>
+    </IonSegmentButton>
+  </IonSegment>
 </template>
 
 
 <script setup lang="ts">
-import { LessonSectionViewModel } from '@/education'
-import { IonChip, IonIcon, IonLabel } from '@ionic/vue'
-import { attachOutline, checkmarkOutline, syncOutline, checkmarkDoneOutline } from 'ionicons/icons'
+import { LessonSection, LessonSectionIdentity } from '@/education'
+import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-const props = defineProps<{
-  items: LessonSectionViewModel[]
-  active: number
+defineProps<{
+  items: readonly LessonSection[]
+  selected: number
 }>()
 
 const emit = defineEmits<{
-  click: [index: number]
+  click: [id: LessonSectionIdentity]
 }>()
 
 
@@ -39,17 +36,13 @@ const emit = defineEmits<{
 /*                                   Helpers                                  */
 /* -------------------------------------------------------------------------- */
 
-function getColor(idx: number) {
-  return idx === props.active ? 'primary' : 'medium'
-}
-
-function getSectionIcon(
-  state: string
-) {
-  if (state === 'open')      { return attachOutline }
-  if (state === 'in-review') { return checkmarkOutline }
-  if (state === 'returned')  { return syncOutline }
-  if (state === 'accepted')  { return checkmarkDoneOutline }
-  return attachOutline
-}
+// function getSectionIcon(
+//   state: string
+// ) {
+//   if (state === 'open')      { return attachOutline }
+//   if (state === 'in-review') { return checkmarkOutline }
+//   if (state === 'returned')  { return syncOutline }
+//   if (state === 'accepted')  { return checkmarkDoneOutline }
+//   return attachOutline
+// }
 </script>

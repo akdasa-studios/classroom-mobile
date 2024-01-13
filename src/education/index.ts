@@ -35,4 +35,5 @@ export * from './services/EnrolmentService'
 // composables:
 export * from './composables/useEnrollmentService'
 export * from './composables/useSyncTask'
+export * from './composables/useTimeFormatter'
 

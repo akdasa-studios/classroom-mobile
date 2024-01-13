@@ -1,30 +1,28 @@
 <template>
-  <ion-item
-    :detail="true"
+  <IonItem
+    lines="none"
   >
-    <ion-label
+    <IonLabel
+      class="ion-text-nowrap"
       @click="onClicked"
     >
-      <h2>
-        {{ homework.text }}
-      </h2>
-      <p class="ion-text-wrap">
-        {{ lesson.title }}
-      </p>
-    </ion-label>
+      <h2> {{ homework.text }}</h2>
+      <!-- <p> {{ lesson.title }} </p> -->
+      <p>{{ getStatus() }}</p>
+    </IonLabel>
 
-    <ion-checkbox
+    <IonCheckbox
       slot="start"
       aria-label="{{ homework.text }}"
       @click.stop="dummy"
     />
-  </ion-item>
+  </IonItem>
 </template>
 
 
 <script setup lang="ts">
 import { IonItem, IonLabel, IonCheckbox } from '@ionic/vue'
-import { Lesson, LessonIdentity, LessonSection, LessonSectionIdentity, StudentHomework, StudentHomeworkIdentity } from '@/education'
+import { Lesson, LessonIdentity, LessonSection, LessonSectionIdentity, LessonSectionQuizBlockState, LessonSectionVideoBlockState, StudentHomework, StudentHomeworkIdentity, useTimeFormatter } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -46,6 +44,12 @@ const emit = defineEmits<{
 
 
 /* -------------------------------------------------------------------------- */
+/*                                Dependencies                                */
+/* -------------------------------------------------------------------------- */
+
+const timeFormatter = useTimeFormatter()
+
+/* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -55,5 +59,29 @@ function onClicked() {
 
 function dummy() {
   console.log('dummy')
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+
+function getStatus() {
+  if (!props.homework.work) { return }
+  const questionsTotal = props.lessonSection.blocks.filter(x => x.type === 'quiz').length
+  let questionsAnswered = 0
+
+  for (const b of props.homework.work) {
+    if (b.type === 'video') {
+      return `Осталось посмотреть ${timeFormatter.formatHoursAndMinutes((b as LessonSectionVideoBlockState).duration - (b as LessonSectionVideoBlockState).watched)}`
+    }
+    if (b.type === 'quiz') {
+      questionsAnswered += (b as LessonSectionQuizBlockState).answer !== undefined ? 1 : 0
+    }
+  }
+
+  if (questionsTotal) {
+    return `Отвечено ${questionsAnswered} из ${questionsTotal}`
+  }
 }
 </script>

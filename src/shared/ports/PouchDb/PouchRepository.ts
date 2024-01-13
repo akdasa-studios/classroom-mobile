@@ -14,17 +14,20 @@ export class PouchRepository<
   private _collectionName: string
   private _serializer: ObjectMapper<TAggregate, unknown>
   private _deserializer: ObjectMapper<unknown, TAggregate>
+  private _conflictSolver?: (a: unknown, b: unknown) => unknown
 
   constructor(
     db: CouchDB,
     collectionName: string,
     serializer: ObjectMapper<TAggregate, unknown>,
-    deserializer: ObjectMapper<unknown, TAggregate>
+    deserializer: ObjectMapper<unknown, TAggregate>,
+    conflictSolver?: (a: any, b: any) => unknown
   ) {
     this._db = db
     this._collectionName = collectionName
     this._serializer = serializer
     this._deserializer = deserializer
+    this._conflictSolver = conflictSolver
   }
 
   async all(): Promise<ResultSet<TAggregate>> {
@@ -42,7 +45,7 @@ export class PouchRepository<
     const doc = this._serializer.map(entity)
     await this._db.db.upsert(
       entity.id.value,
-      () => { return doc as any }
+      (old: any) => { return this._conflictSolver ? this._conflictSolver(old, doc) : doc as any }
     )
   }
 
@@ -84,7 +87,7 @@ export class PouchRepository<
     const items = await this._db.db.find(convertedQuery)
 
     return new ResultSet(
-      items.docs.map(x => this._deserializer.map(x)),
+      items.docs.map((x: any) => this._deserializer.map(x)),
       { start: options?.skip || 0, count: items.docs.length }
     )
   }

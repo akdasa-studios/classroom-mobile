@@ -1,19 +1,22 @@
 <template>
   <PageWithHeaderLayout
     :title="lesson?.title || ''"
-    :has-padding="true"
-    :busy="busy"
   >
-    <LessonSectionsList
-      class="sectionsList"
-      :items="sections"
-      :active="activeSectionIdx"
-      @click="onLessonSectionClicked"
-    />
+    <template #toolbar>
+      <IonToolbar>
+        <LessonSectionsList
+          :items="sections"
+          :selected="activeSectionIdx"
+          @click="onLessonSectionClicked"
+        />
+      </IonToolbar>
+    </template>
 
     <LessonSectionView
-      v-if="sections[activeSectionIdx]"
-      :section="sections[activeSectionIdx]"
+      v-if="activeSection !== undefined"
+      :section="activeSection"
+      :states="activeSectionState"
+      @change="onLessonSectionStateChanged"
     />
   </PageWithHeaderLayout>
 </template>
@@ -22,17 +25,22 @@
 <script lang="ts" setup>
 import { PageWithHeaderLayout } from '@/shared'
 import {
-  Lesson, LessonIdentity, LessonSectionIdentity, LessonSectionsList,
-  LessonSectionView, useSyncTask, LessonSectionViewModel,
+  LessonIdentity, LessonSectionsList, LessonSectionView,
+  useSyncTask, Cache, LessonSection, Lesson, LessonSectionIdentity, LessonSectionBlockState,
+  FetchLessonSectionState, FetchLessonSections, FetchLessonSectionHomework
 } from '@/education'
-import { computed, onMounted, ref, shallowRef, watch } from 'vue'
-import { LessonsDal } from '../repositories/LessonsDal'
+import { computed, shallowRef, toRefs, watch } from 'vue'
+import { IonToolbar, onIonViewWillEnter } from '@ionic/vue'
+import { useRoute } from 'vue-router'
+import { UuidIdentity } from '@framework/domain'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
 const syncTask = useSyncTask()
+const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
+const route = useRoute()
 
 
 /* -------------------------------------------------------------------------- */
@@ -41,7 +49,6 @@ const syncTask = useSyncTask()
 
 const props = defineProps<{
   lessonId: LessonIdentity
-  sectionId?: LessonSectionIdentity
 }>()
 
 
@@ -49,51 +56,72 @@ const props = defineProps<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const busy = computed(() => syncTask.busy.value && !lesson.value)
-const lesson = shallowRef<Lesson>()
-const activeSectionIdx = ref(0)
-const sections = shallowRef<LessonSectionViewModel[]>([])
+const { query } = toRefs(route)
+const lesson   = shallowRef<Lesson>()
+const sections = shallowRef<readonly LessonSection[]>([])
+const activeSection = shallowRef<LessonSection>()
+const activeSectionState = shallowRef<LessonSectionBlockState[]>([])
+const activeSectionIdx = computed(() => activeSection.value ? sections.value.findIndex((x) => x.id.value === activeSection.value?.id.value) : 0)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
-onMounted(onFetchData)
-watch(syncTask.completedAt, onFetchData)
+onIonViewWillEnter(
+  () => fetchLessonData(props.lessonId)
+)
+
+watch(
+  [syncTask.completedAt],
+  () => fetchLessonData(props.lessonId)
+)
+
+watch(query, (v) => {
+  if (!v.sectionId) { return }
+  fetchLessonSectionData(new UuidIdentity(v.sectionId as string), userId)
+}, { immediate: true })
 
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
-async function onFetchData() {
-  lesson.value = await LessonsDal.getLesson(props.lessonId)
-  const result = await LessonsDal.getLessonSections(lesson.value.id)
+async function onLessonSectionClicked(
+  lessonSectionId: LessonSectionIdentity
+) {
+  await fetchLessonSectionData(lessonSectionId, userId)
+}
 
-  sections.value = await Promise.all(
-    result.map(async (x) => ({
-      id: x.id.value,
-      title: x.title,
-      state: (await LessonsDal.getHomeworkOfSection(x.id))?.state || 'unknown',
-      blocks: x.blocks
-    } as LessonSectionViewModel))
+async function onLessonSectionStateChanged(
+  data: any
+) {
+  const homework = await FetchLessonSectionHomework(
+    userId, activeSection.value!.id
   )
 
-  if (props.sectionId) {
-    const idx = sections.value.findIndex(x => x.id === props.sectionId?.value)
-    if (idx != -1) { activeSectionIdx.value = idx }
+  if (homework) {
+    homework.work = data
+    Cache.StudentHomeworks.save(homework)
   }
 }
 
-async function onLessonSectionClicked(index: number) {
-  activeSectionIdx.value = index
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+
+async function fetchLessonData(
+  lessonId: LessonIdentity
+) {
+  lesson.value   = await Cache.Lessons.get(lessonId)
+  sections.value = await FetchLessonSections(lessonId)
+}
+
+async function fetchLessonSectionData(
+  lessonSectionId: LessonSectionIdentity,
+  userId: string,
+) {
+  activeSection.value      = await Cache.LessonSections.get(lessonSectionId)
+  activeSectionState.value = await FetchLessonSectionState(userId, lessonSectionId)
 }
 </script>
-
-
-<style scoped>
-.sectionsList {
-  margin-bottom: 1rem;
-}
-</style>

@@ -47,3 +47,31 @@ export interface LessonSectionQuizBlock
   answers: string[]
   rightAnswer: number
 }
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   States                                   */
+/* -------------------------------------------------------------------------- */
+
+export interface LessonSectionState {
+  states: LessonSectionBlockState[]
+}
+
+export interface LessonSectionBlockState {
+  type: string
+}
+
+export interface LessonSectionVideoBlockState
+  extends LessonSectionBlockState
+{
+  type: 'video'
+  watched: number
+  duration: number
+}
+
+export interface LessonSectionQuizBlockState
+  extends LessonSectionBlockState
+{
+  type: 'quiz'
+  answer: number
+}

@@ -1,45 +1,47 @@
 <template>
-  <ion-item
+  <IonItem
     lines="full"
     color="light"
   >
     <h3>{{ question }}</h3>
-  </ion-item>
+  </IonItem>
 
-  <ion-radio-group
+  <IonRadioGroup
     v-model="value"
   >
-    <ion-item
+    <IonItem
       v-for="answer, idx in answers"
       :key="idx"
       lines="none"
     >
-      <ion-radio :value="idx">
-        <ion-label class="ion-text-wrap">
+      <IonRadio :value="idx">
+        <IonLabel class="ion-text-wrap">
           {{ answer }}
-        </ion-label>
-      </ion-radio>
-    </ion-item>
-  </ion-radio-group>
+        </IonLabel>
+      </IonRadio>
+    </IonItem>
+  </IonRadioGroup>
 </template>
 
 
 <script lang="ts" setup>
+import { LessonSectionQuizBlockState } from '@/education'
 import { IonItem, IonLabel, IonRadio, IonRadioGroup } from '@ionic/vue'
-import { ref, watch } from 'vue'
+import { ref, toRefs, watch } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-defineProps<{
+const props = defineProps<{
   question: string,
   answers: string[],
   rightAnswer: number
+  state?: LessonSectionQuizBlockState
 }>()
 
 const emit = defineEmits<{
-  stateChange: [value: number]
+  change: [state: LessonSectionQuizBlockState]
 }>()
 
 
@@ -47,7 +49,8 @@ const emit = defineEmits<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const value = ref(-1)
+const { state } = toRefs(props)
+const value = ref(props.state !== undefined ? props.state.answer : -1)
 
 
 /* -------------------------------------------------------------------------- */
@@ -55,12 +58,13 @@ const value = ref(-1)
 /* -------------------------------------------------------------------------- */
 
 watch(value, onAnswerChange)
+watch(state, (x) => value.value = x !== undefined ? x.answer : -1)
 
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
 
 function onAnswerChange(value: number) {
-  emit('stateChange', value)
+  emit('change', { type: 'quiz', answer: value })
 }
 </script>

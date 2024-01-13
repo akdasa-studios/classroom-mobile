@@ -1,4 +1,4 @@
-import { StudentHomework, StudentHomeworkState } from '@/education'
+import { StudentHomework, StudentHomeworkStatus } from '@/education'
 import { PouchRepository, RestRepository, ObjectMapper, DbScheme, CouchCacheDb } from '@/shared'
 import { studentHomeworks } from '@/shared/fixtures'
 import { UuidIdentity } from '@framework/domain'
@@ -14,8 +14,9 @@ export interface StudentHomeworkDbScheme
 {
   userId: string
   lessonSectionId: string
-  state: string
+  status: string
   text: string
+  work: any
 }
 
 
@@ -37,8 +38,9 @@ class StudentHomeworkSerializer
       '@type': 'studentHomework',
       userId: from.userId,
       lessonSectionId: from.lessonSectionId.value,
-      state: from.state,
-      text: from.text
+      status: from.status,
+      text: from.text,
+      work: from.work
     }
   }
 }
@@ -56,10 +58,19 @@ class StudentHomeworkDeserializer
       new UuidIdentity(from._id),
       from.userId,
       new UuidIdentity(from.lessonSectionId),
-      from.state as StudentHomeworkState,
-      from.text
+      from.status as StudentHomeworkStatus,
+      from.text,
+      from.work
     )
   }
+}
+
+function ConflictResolver(
+  a: StudentHomeworkDbScheme,
+  b: StudentHomeworkDbScheme
+) {
+  if (!b.work) { b.work = a.work }
+  return b
 }
 
 
@@ -71,6 +82,7 @@ export const CacheStudentHomeworksRepository = new PouchRepository<StudentHomewo
   CouchCacheDb, 'studentHomework',
   new StudentHomeworkSerializer(),
   new StudentHomeworkDeserializer(),
+  ConflictResolver,
 )
 
 export const RemoteStudentHomeworksRepository = new RestRepository<StudentHomework>(studentHomeworks)

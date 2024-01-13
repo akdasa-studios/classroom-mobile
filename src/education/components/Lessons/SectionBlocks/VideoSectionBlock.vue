@@ -1,40 +1,35 @@
 <template>
-  <with-loader
-    :busy="busy"
+  <video
+    ref="video"
+    controls
+    class="video"
+    @timeupdate="onVideoTimeUpdate"
   >
-    <template #content>
-      <video
-        ref="video"
-        :poster="localPosterUrl"
-        controls
-        class="video"
-        @timeupdate="onVideoTimeUpdate"
-      >
-        <source
-          v-if="localVideoUrl"
-          :src="localVideoUrl"
-          type="video/mp4"
-        >
-      </video>
+    <source
+      v-if="localVideoUrl"
+      :src="localVideoUrl"
+      type="video/mp4"
+    >
+  </video>
 
-      <IonChip
-        v-for="timestamp, idx in timestamps"
-        :key="timestamp.time"
-        :color="getColor(idx)"
-        @click="() => onTimestampClicked(timestamp.time)"
-      >
-        {{ formatSeconds(timestamp.time) }} {{ timestamp.title }}
-      </IonChip>
-    </template>
-  </with-loader>
+  <div class="ion-padding">
+    <IonChip
+      v-for="timestamp, idx in timestamps"
+      :key="timestamp.time"
+      :color="getColor(idx)"
+      @click="() => onTimestampClicked(timestamp.time)"
+    >
+      {{ formatSeconds(timestamp.time) }} {{ timestamp.title }}
+    </IonChip>
+  </div>
 </template>
 
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import { WithLoader, useDownloader } from '@/shared'
-import { Timestamp } from '@/education'
-import { IonChip, onIonViewWillEnter } from '@ionic/vue'
+import { onMounted, ref, toRefs, watch } from 'vue'
+import { useDownloader } from '@/shared'
+import { LessonSectionVideoBlockState, Timestamp } from '@/education'
+import { onIonViewWillEnter, IonChip } from '@ionic/vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
@@ -51,6 +46,11 @@ const props = defineProps<{
   videoUrl: string
   posterUrl: string
   timestamps: Timestamp[]
+  state?: LessonSectionVideoBlockState
+}>()
+
+const emit = defineEmits<{
+  change: [state: LessonSectionVideoBlockState]
 }>()
 
 
@@ -58,17 +58,20 @@ const props = defineProps<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const busy = ref(false)
 const localVideoUrl = ref<string>()
 const localPosterUrl = ref<string>()
 const video = ref()
-const currentTime = ref(0)
+const currentTime = ref(props.state?.watched || 0)
+const { state } = toRefs(props)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
+watch([
+  localVideoUrl, video, state
+], () => video.value.currentTime = props.state?.watched || 0)
 onMounted(fetchData)
 onIonViewWillEnter(fetchData)
 
@@ -82,7 +85,13 @@ function onTimestampClicked(time: number) {
 }
 
 function onVideoTimeUpdate(event: any) {
+  if (!video.value) { return }
   currentTime.value = event.target.currentTime
+  emit('change', {
+    type: 'video',
+    watched: currentTime.value,
+    duration: video.value.duration
+  })
 }
 
 
@@ -118,11 +127,5 @@ function formatSeconds(seconds: number) {
 <style scoped>
 .video {
   width: 100%;
-}
-
-.timestamp {
-  color: var(--ion-color-primary);
-  font-family: 'Courier New', Courier, monospace;
-  font-variant-numeric: tabular-nums;
 }
 </style>
