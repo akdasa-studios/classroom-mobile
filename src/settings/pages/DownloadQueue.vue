@@ -3,6 +3,7 @@
   <PageWithHeaderLayout
     :title="$t('downloading-queue')"
     :has-padding="true"
+    :has-data="true"
   >
     <IonList>
       <IonItem
