@@ -36,7 +36,7 @@ const selectedGroup = defineModel<string>()
 
 const { groups } = toRefs(props)
 const groupsToShow = shallowRef<GroupViewModel[]>([])
-
+const NO_CLASS_AVATAR = 'class-is-recruiting-avatar.png'
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
@@ -65,7 +65,7 @@ async function onFetchData() {
       id: 'unknown',
       name: fluent.$t('next-group'),
       info: fluent.$t('next-group-info'),
-      imageUrl: 'https://placekitten.com/200/200'
+      imageUrl: NO_CLASS_AVATAR
     }
   ]
 
