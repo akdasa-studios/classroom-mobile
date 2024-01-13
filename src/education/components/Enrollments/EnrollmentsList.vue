@@ -33,7 +33,7 @@ const emit = defineEmits<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const NO_CLASS_AVATAR = '/class-is-recruiting-avatar.png'
+const NO_CLASS_AVATAR = 'class-is-recruiting-avatar.png'
 
 
 /* -------------------------------------------------------------------------- */

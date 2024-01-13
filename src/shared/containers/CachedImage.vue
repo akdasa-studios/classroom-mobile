@@ -25,6 +25,7 @@ const props = defineProps<{
   loadingHeight?: string
 }>()
 
+
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
@@ -47,6 +48,7 @@ const cachedUrl = ref<string>()
 onMounted(onDownload)
 watch(url, onDownload)
 
+
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
@@ -54,7 +56,12 @@ watch(url, onDownload)
 async function onDownload() {
   if (!url.value) { return }
   try {
-    cachedUrl.value = await downloader.download(url.value)
+    const isRemoteImage = url.value.startsWith('http://') || url.value.startsWith('https://')
+    if (isRemoteImage) {
+      cachedUrl.value = await downloader.download(url.value)
+    } else {
+      cachedUrl.value = url.value
+    }
   } catch (err) {
     cachedUrl.value = props.url
   }
