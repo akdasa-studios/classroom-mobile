@@ -1,6 +1,6 @@
 import { QueryBuilder } from '@framework/persistence'
-import { StudentHomework } from '../aggregates/StudentHomework'
-import { LessonSectionIdentity } from '../aggregates/LessonSection'
+import { StudentHomework } from '../../aggregates/StudentHomework'
+import { LessonSectionIdentity } from '../../aggregates/LessonSection'
 
 
 const qb = new QueryBuilder<StudentHomework>()

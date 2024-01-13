@@ -8,12 +8,12 @@ export * from './aggregates/LessonSectionBlock'
 export * from './aggregates/StudentHomework'
 
 // repositories:
-export * from './repositories/GroupQueries'
+export * from './repositories/Groups/GroupQueries'
 export * from './repositories/Enrollments/EnrollmentsQueries'
-export * from './repositories/CourseQueries'
-export * from './repositories/LessonQueries'
-export * from './repositories/LessonSectionQueries'
-export * from './repositories/StudentHomeworkQueries'
+export * from './repositories/Courses/CourseQueries'
+export * from './repositories/Lessons/LessonQueries'
+export * from './repositories/Lessons/LessonSectionQueries'
+export * from './repositories/StudentHomeworks/StudentHomeworkQueries'
 export * from './repositories'
 
 // components:
@@ -24,7 +24,6 @@ export * from './components/Groups'
 export * from './components/Enrollments'
 export * from './components/Lessons'
 export * from './components/StudentHomework'
-
 
 // containers:
 export { default as GroupSelector } from './containers/GroupSelector.vue'
