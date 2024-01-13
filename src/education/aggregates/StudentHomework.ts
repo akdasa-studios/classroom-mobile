@@ -4,6 +4,7 @@ import { LessonSectionBlockState } from './LessonSectionBlock'
 
 export enum StudentHomeworkStatus {
   Open = 'open',
+  PendingSubmission = 'pending',
   InReview = 'in-review',
   Returned = 'returned',
   Accepted = 'accepted'

@@ -17,22 +17,17 @@ export * from './repositories/StudentHomeworks/StudentHomeworkQueries'
 export * from './repositories'
 
 // components:
-export { default as TimeRangeSelector } from './components/TimeRangeSelector.vue'
-export { default as TimeRangeItem } from './components/TimeRangeItem.vue'
 export * from './components/Courses'
 export * from './components/Groups'
 export * from './components/Enrollments'
 export * from './components/Lessons'
 export * from './components/StudentHomework'
+export * from './components/TimeRange'
 
 // containers:
 export { default as GroupSelector } from './containers/GroupSelector.vue'
 
-// services:
-export * from './services/EnrolmentService'
-
 // composables:
-export * from './composables/useEnrollmentService'
 export * from './composables/useSyncTask'
 export * from './composables/useTimeFormatter'
 

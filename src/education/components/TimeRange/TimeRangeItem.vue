@@ -54,3 +54,4 @@ function formatDays(
   return getDaysNameAndIndex(days)[0]
 }
 </script>
+./TimeRange/TimeRange

@@ -86,34 +86,34 @@ export const EnrollmentsFixtures: Enrollment[] = [
     courses[0].id,
     EnrollmentStatus.Approved
   ),
-  new Enrollment(
-    new UuidIdentity('997b7a4f-bfca-482d-a7ce-1f7bf5d33acf'),
-    'a243727d-57ab-4595-ba17-69f3a0679bf6',
-    groupsFixtures[0].id,
-    courses[0].id,
-    EnrollmentStatus.Declined
-  ),
-  new Enrollment(
-    new UuidIdentity('67a6a91a-4d6d-4d9c-a311-058d8bc0a200'),
-    'a243727d-57ab-4595-ba17-69f3a0679bf6',
-    groupsFixtures[3].id,
-    courses[1].id,
-    EnrollmentStatus.InReview
-  ),
-  new Enrollment(
-    new UuidIdentity('d6ae0429-1e3d-4434-90e6-88aa2a367e8e'),
-    'a243727d-57ab-4595-ba17-69f3a0679bf6',
-    undefined,
-    courses[0].id,
-    EnrollmentStatus.NotSubmitted
-  ),
-  new Enrollment(
-    new UuidIdentity('99681e90-17bb-482e-b00b-2966df238815'),
-    '952ae116-1669-49e9-9e39-47a13104e475',
-    groupsFixtures[1].id,
-    courses[0].id,
-    EnrollmentStatus.InReview
-  ),
+  // new Enrollment(
+  //   new UuidIdentity('997b7a4f-bfca-482d-a7ce-1f7bf5d33acf'),
+  //   'a243727d-57ab-4595-ba17-69f3a0679bf6',
+  //   groupsFixtures[0].id,
+  //   courses[0].id,
+  //   EnrollmentStatus.Declined
+  // ),
+  // new Enrollment(
+  //   new UuidIdentity('67a6a91a-4d6d-4d9c-a311-058d8bc0a200'),
+  //   'a243727d-57ab-4595-ba17-69f3a0679bf6',
+  //   groupsFixtures[3].id,
+  //   courses[1].id,
+  //   EnrollmentStatus.InReview
+  // ),
+  // new Enrollment(
+  //   new UuidIdentity('d6ae0429-1e3d-4434-90e6-88aa2a367e8e'),
+  //   'a243727d-57ab-4595-ba17-69f3a0679bf6',
+  //   undefined,
+  //   courses[0].id,
+  //   EnrollmentStatus.NotSubmitted
+  // ),
+  // new Enrollment(
+  //   new UuidIdentity('99681e90-17bb-482e-b00b-2966df238815'),
+  //   '952ae116-1669-49e9-9e39-47a13104e475',
+  //   groupsFixtures[1].id,
+  //   courses[0].id,
+  //   EnrollmentStatus.InReview
+  // ),
 ]
 
 

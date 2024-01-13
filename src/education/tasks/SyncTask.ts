@@ -1,10 +1,18 @@
 import { useDownloaderQueue } from '@/shared'
 import { LessonSectionVideoBlock } from './../aggregates/LessonSectionBlock'
 import {
-  Repositories, OfUser, OfCourses, OfLessons, OfStudent
+  Repositories, OfUser, OfCourses, OfLessons, OfStudent, NotSubmitted
 } from '@/education'
 
 const Downloader = useDownloaderQueue()
+
+export async function UploadToRemoteServer() {
+  const notSubmittedEnrollments = await Repositories.Cache.Enrollments.find(NotSubmitted())
+  for (const e of notSubmittedEnrollments.entities) {
+    await Repositories.Remote.Enrollemnts.save(e)
+    console.log(notSubmittedEnrollments.entities)
+  }
+}
 
 
 export async function SyncWithRemoteServer(

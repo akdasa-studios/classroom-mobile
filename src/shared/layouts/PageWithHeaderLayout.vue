@@ -14,7 +14,7 @@
             <IonIcon
               slot="icon-only"
               color="primary"
-              :icon="cloudDownloadOutline"
+              :icon="cloudIcon"
             />
           </IonButton>
         </IonButtons>
@@ -50,7 +50,7 @@ import {
 } from '@ionic/vue'
 import { computed, watch } from 'vue'
 import { LoadingSpinner, useDownloaderQueue } from '@/shared'
-import { cloudDownloadOutline } from 'ionicons/icons'
+import { cloudDownloadOutline, cloudUploadOutline } from 'ionicons/icons'
 import { useSyncTask } from '@/education'
 
 /* -------------------------------------------------------------------------- */
@@ -81,6 +81,7 @@ const router = useIonRouter()
 /* -------------------------------------------------------------------------- */
 
 const busy = computed(() => downloaderQueue.isDownloading.value || syncTask.busy.value)
+const cloudIcon = computed(() => syncTask.direction.value === 'upload' ? cloudUploadOutline : cloudDownloadOutline)
 
 
 /* -------------------------------------------------------------------------- */

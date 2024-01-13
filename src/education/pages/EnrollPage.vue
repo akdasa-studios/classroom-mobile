@@ -52,7 +52,6 @@
 
     <!-- Enroll -->
     <AsyncButton
-      :disabled="!networkStatus.connected.value"
       :busy="false"
       expand="block"
       @click="onEnrollButtonClicked"
@@ -64,13 +63,15 @@
 
 
 <script setup lang="ts">
-import { IonTextarea, IonItem, IonLabel, onIonViewWillEnter, IonList } from '@ionic/vue'
-import { useIonRouter } from '@ionic/vue'
-import { PageWithHeaderLayout, AsyncButton, useNetworkStatus } from '@/shared'
-import { Group, useEnrollmentService, FetchActiveGroupsOfCourse, CourseIdentity } from '@/education'
 import { ref, shallowRef } from 'vue'
-import { GroupSelector, TimeRangeSelector } from '@/education'
-import { TimeRange, TimeRangePreset } from '../components/TimeRange'
+import { IonTextarea, IonItem, IonLabel, onIonViewWillEnter, IonList,  useIonRouter } from '@ionic/vue'
+import { PageWithHeaderLayout, AsyncButton } from '@/shared'
+import {
+  GroupSelector, TimeRangeSelector, TimeRange, TimeRangePreset, Group,
+  FetchActiveGroupsOfCourse, CourseIdentity, Cache, Enrollment
+} from '@/education'
+import { UuidIdentity } from '@framework/domain'
+import { EnrollmentStatus } from '@core/aggregates'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -85,8 +86,7 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const router = useIonRouter()
-const networkStatus = useNetworkStatus()
-const enrollmentService = useEnrollmentService()
+const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 
 
 /* -------------------------------------------------------------------------- */
@@ -117,17 +117,26 @@ onIonViewWillEnter(onFetchData)
 /* -------------------------------------------------------------------------- */
 
 async function onEnrollButtonClicked() {
-  // TODO: handle errors and exceptions
-  await enrollmentService.submit({
-    groupId: groupId.value,
-    comments: comments.value,
-    timeBlocks: [
-      {
-        startHours: timeRanges.value[0].start[0],
-        endHours: timeRanges.value[0].end[0]
-      }
-    ]
-  })
+  // // TODO: handle errors and exceptions
+  // await enrollmentService.submit({
+  //   groupId: groupId.value,
+  //   comments: comments.value,
+  //   timeBlocks: [
+  //     {
+  //       startHours: timeRanges.value[0].start[0],
+  //       endHours: timeRanges.value[0].end[0]
+  //     }
+  //   ]
+  // })
+
+  await Cache.Enrollments.save(new Enrollment(
+    new UuidIdentity(),
+    userId,
+    groupId.value ? new UuidIdentity(groupId.value) : undefined,
+    props.courseId,
+    EnrollmentStatus.NotSubmitted
+  ))
+
   router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
 }
 

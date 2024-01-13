@@ -25,7 +25,7 @@ export class RestRepository<
     entity: TAggregate
   ): Promise<void> {
     await sleep(RESPONSE_DELAY)
-    throw this.repo.save(entity)
+    return this.repo.save(entity)
   }
 
   async get(
