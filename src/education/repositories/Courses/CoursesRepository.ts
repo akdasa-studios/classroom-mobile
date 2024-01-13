@@ -1,5 +1,5 @@
 import { Course } from '@/education'
-import { PouchRepository, RestRepository, ObjectMapper, DbScheme, CouchCacheDb } from '@/shared'
+import { PouchRepository, RestRepository, DbScheme, CouchCacheDb } from '@/shared'
 import { courses } from '@/shared/fixtures'
 import { UuidIdentity } from '@framework/domain'
 
@@ -22,54 +22,36 @@ export interface CourseDbScheme
 /*                                 Serializers                                */
 /* -------------------------------------------------------------------------- */
 
-class CourseSerializer
-  implements ObjectMapper<
-    Course,
-    CourseDbScheme
-  >
-{
-  map(
-    from: Course
-  ): CourseDbScheme {
-    return {
-      _id: from.id.value,
-      '@type': 'course',
-      title: from.title,
-      subtitle: from.subtitle,
-      summary: from.summary,
-      coverImageUrl: from.coverImageUrl
-    }
-  }
-}
+const CourseSerializer = (
+  from: Course
+): CourseDbScheme => ({
+  _id: from.id.value,
+  '@type': 'course',
+  title: from.title,
+  subtitle: from.subtitle,
+  summary: from.summary,
+  coverImageUrl: from.coverImageUrl
+})
 
-class CourseDeserializer
-  implements ObjectMapper<
-    CourseDbScheme,
-    Course
-  >
-{
-  map(
-    from: CourseDbScheme
-  ): Course {
-    return new Course(
-      new UuidIdentity(from._id),
-      from.title,
-      from.subtitle,
-      from.summary,
-      from.coverImageUrl
-    )
-  }
-}
+const CourseDeserializer = (
+  from: CourseDbScheme
+): Course => new Course(
+  new UuidIdentity(from._id),
+  from.title,
+  from.subtitle,
+  from.summary,
+  from.coverImageUrl
+)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                Repositories                                */
 /* -------------------------------------------------------------------------- */
 
-export const CacheCoursesRepository = new PouchRepository<Course>(
+export const CacheCoursesRepository = new PouchRepository<Course, CourseDbScheme>(
   CouchCacheDb, 'course',
-  new CourseSerializer(),
-  new CourseDeserializer(),
+  CourseSerializer,
+  CourseDeserializer,
 )
 
 export const RemoteCoursesRepository = new RestRepository<Course>(courses)

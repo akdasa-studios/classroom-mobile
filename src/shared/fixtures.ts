@@ -145,6 +145,12 @@ export const lessonsFixtures: Lesson[] = [
     'ГЛАВА 1: Обзор армий на поле битвы Курукшетра',
     'Introduction to the course',
   ),
+  new Lesson(
+    new UuidIdentity('b3d5c4a4-ef37-4a96-b9cd-68813c6e29ab'),
+    courses[0].id,
+    'ГЛАВА 2: Краткое изложение «Бхагавад-гиты»',
+    'Introduction to the course',
+  ),
 ]
 
 
@@ -182,7 +188,7 @@ export const lessonSectionFixtures = [
   new LessonSection(
     new UuidIdentity('2ea76f2e-4308-4d5f-bd9a-3503f7d76ec7'),
     lessonsFixtures[0].id,
-    'Комментарий',
+    'BG 1.1',
     [
       {
         type: 'text',

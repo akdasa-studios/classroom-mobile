@@ -1,70 +1,66 @@
 import { Aggregate, AnyIdentity, Identity } from '@framework/domain'
 import { Expression, LogicalOperators, Operators, Predicate, Query, QueryBuilder, QueryOptions, Repository, ResultSet } from '@framework/persistence'
 
-import { ObjectMapper } from './ObjectMapper'
 import { deepMerge } from './DeepMerge'
 import { CouchDB } from './CouchDb'
+import { DbScheme } from './DbScheme'
+
+export type Mapper<TSource, TDestination> = (source: TSource) => TDestination
 
 
 export class PouchRepository<
-  TAggregate extends Aggregate<AnyIdentity>
+  TAggregate extends Aggregate<AnyIdentity>,
+  TScheme extends DbScheme<unknown>,
 > implements Repository<TAggregate> {
-
   private _db: CouchDB
-  private _collectionName: string
-  private _serializer: ObjectMapper<TAggregate, unknown>
-  private _deserializer: ObjectMapper<unknown, TAggregate>
-  private _conflictSolver?: (a: unknown, b: unknown) => unknown
+  private _collection: string
+  private _serializer: Mapper<TAggregate, TScheme>
+  private _deserializer: Mapper<TScheme, TAggregate>
+  private _conflictSolver: (a: TScheme, b: TScheme) => TScheme = (_, b) => b
 
   constructor(
     db: CouchDB,
     collectionName: string,
-    serializer: ObjectMapper<TAggregate, unknown>,
-    deserializer: ObjectMapper<unknown, TAggregate>,
-    conflictSolver?: (a: any, b: any) => unknown
+    serializer: Mapper<TAggregate, TScheme>,
+    deserializer: Mapper<TScheme, TAggregate>,
+    conflictSolver?: (a: TScheme, b: TScheme) => TScheme
   ) {
     this._db = db
-    this._collectionName = collectionName
+    this._collection = collectionName
     this._serializer = serializer
     this._deserializer = deserializer
-    this._conflictSolver = conflictSolver
+    if (conflictSolver) {
+      this._conflictSolver = conflictSolver
+    }
   }
 
   async all(): Promise<ResultSet<TAggregate>> {
     return await this.find(
       new QueryBuilder<TAggregate>()
         // @ts-ignore
-        .eq('@type', this._collectionName)
+        .eq('@type', this._collection)
     )
   }
 
   async save(
     entity: TAggregate
   ): Promise<void> {
-    console.debug(`[${this._collectionName}] save`, entity)
-    const doc = this._serializer.map(entity)
+    const document = this._serializer(entity)
     await this._db.db.upsert(
-      entity.id.value,
-      (old: any) => { return this._conflictSolver ? this._conflictSolver(old, doc) : doc as any }
+      entity.id.value, (old: any) => this._conflictSolver(old, document)
     )
   }
 
   async get(
     id: TAggregate['id']
   ): Promise<TAggregate> {
-    console.debug(`[${this._collectionName}] get`, id)
-    try {
-      const document = await this._db.db.get(id.value)
-      return this._deserializer.map(document)
-    } catch {
-      throw new Error('404')
-    }
+    const document = await this._db.db.get<TScheme>(id.value)
+    return this._deserializer(document)
   }
 
   async exists(
     id: TAggregate['id']
   ): Promise<boolean> {
-    console.debug(`[${this._collectionName}] exists`, id)
     const document = await this.get(id)
     return document !== undefined
   }
@@ -73,12 +69,11 @@ export class PouchRepository<
     query: Query<TAggregate>,
     options?: QueryOptions
   ): Promise<ResultSet<TAggregate>> {
-    console.debug(`[${this._collectionName}] find`, query)
     const convertedQuery = {
       selector: {
         '$and': [
+          { '@type': this._collection },
           ...[new QueryConverter().convert(query)],
-          { '@type': this._collectionName }
         ]
       },
       limit: options?.limit,
@@ -87,17 +82,16 @@ export class PouchRepository<
     const items = await this._db.db.find(convertedQuery)
 
     return new ResultSet(
-      items.docs.map((x: any) => this._deserializer.map(x)),
+      items.docs.map((x: any) => this._deserializer(x)),
       { start: options?.skip || 0, count: items.docs.length }
     )
   }
 
-  async delete(id: TAggregate['id']): Promise<void> {
-    console.debug(`[${this._collectionName}] delete`, id)
-    try {
-      const doc = await this._db.db.get(id.value, { latest: true })
-      await this._db.db.remove(doc)
-    } catch (e) { console.log('CANT DELETE', e, this._collectionName) }
+  async delete(
+    id: TAggregate['id']
+  ): Promise<void> {
+    const doc = await this._db.db.get(id.value, { latest: true })
+    await this._db.db.remove(doc)
   }
 }
 

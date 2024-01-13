@@ -1,5 +1,5 @@
 import { Lesson } from '@/education'
-import { PouchRepository, RestRepository, ObjectMapper, DbScheme, CouchCacheDb } from '@/shared'
+import { PouchRepository, RestRepository, DbScheme, CouchCacheDb } from '@/shared'
 import { lessonsFixtures } from '@/shared/fixtures'
 import { UuidIdentity } from '@framework/domain'
 
@@ -21,52 +21,35 @@ export interface LessonDbScheme
 /*                                 Serializers                                */
 /* -------------------------------------------------------------------------- */
 
-class LessonSerializer
-  implements ObjectMapper<
-    Lesson,
-    LessonDbScheme
-  >
-{
-  map(
-    from: Lesson
-  ): LessonDbScheme {
-    return {
-      _id: from.id.value,
-      '@type': 'lesson',
-      title: from.title,
-      summary: from.summary,
-      courseId: from.courseId.value
-    }
-  }
-}
+const LessonSerializer = (
+  from: Lesson
+): LessonDbScheme => ({
+  _id: from.id.value,
+  '@type': 'lesson',
+  title: from.title,
+  summary: from.summary,
+  courseId: from.courseId.value
+})
 
-class LessonDeserializer
-  implements ObjectMapper<
-    LessonDbScheme,
-    Lesson
-  >
-{
-  map(
-    from: LessonDbScheme
-  ): Lesson {
-    return new Lesson(
-      new UuidIdentity(from._id),
-      new UuidIdentity(from.courseId),
-      from.title,
-      from.summary,
-    )
-  }
-}
+
+const LessonDeserializer = (
+  from: LessonDbScheme
+): Lesson => new Lesson(
+  new UuidIdentity(from._id),
+  new UuidIdentity(from.courseId),
+  from.title,
+  from.summary,
+)
 
 
 /* -------------------------------------------------------------------------- */
 /*                                Repositories                                */
 /* -------------------------------------------------------------------------- */
 
-export const CacheLessonsRepository = new PouchRepository<Lesson>(
+export const CacheLessonsRepository = new PouchRepository<Lesson, LessonDbScheme>(
   CouchCacheDb, 'lesson',
-  new LessonSerializer(),
-  new LessonDeserializer(),
+  LessonSerializer,
+  LessonDeserializer,
 )
 
 export const RemoteLessonsRepository = new RestRepository<Lesson>(lessonsFixtures)
