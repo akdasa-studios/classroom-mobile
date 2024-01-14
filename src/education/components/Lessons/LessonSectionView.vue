@@ -1,50 +1,41 @@
 <template>
   <div
-    v-for="block, idx in section.blocks"
+    v-for="block, idx in blocks"
     :key="getBlockId(idx)"
   >
-    <video-section-block
-      v-if="block.type === 'video'"
-      :video-url="block.videoUrl"
-      :poster-url="block.posterUrl"
-      :timestamps="block.timestamps"
+    <component
+      v-bind="test(block)"
+      :is="getComponent(block.type)"
       :state="(states[idx] as LessonSectionVideoBlockState)"
-      @change="data => onBlockStateChanged(idx, data)"
+      @change="(data: any) => onBlockStateChanged(idx, data)"
     />
-    <text-section-block
-      v-else-if="block.type === 'text'"
-      :content="block.content"
-    />
-    <quiz-section-block
-      v-else-if="block.type === 'quiz'"
-      :question="block.question"
-      :answers="block.answers"
-      :right-answer="block.rightAnswer"
-      :state="(states[idx] as LessonSectionQuizBlockState)"
-      @change="data => onBlockStateChanged(idx, data)"
-    />
-    <div v-else>
-      Unsupported block type: {{ block.type }}
-    </div>
   </div>
 </template>
 
 
 <script setup lang="ts">
-import { QuizSectionBlock, VideoSectionBlock, TextSectionBlock, LessonSection, LessonSectionBlockState, LessonSectionVideoBlockState, LessonSectionQuizBlockState } from '@/education'
-import { toRefs } from 'vue'
+import {
+  QuizSectionBlock, VideoSectionBlock, TextSectionBlock,
+  LessonSectionBlockState, LessonSectionVideoBlockState,
+  LessonSectionBlock
+} from '@/education'
+import { toRef } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  section: LessonSection
+  /** Section of a lesson to display */
+  blocks: LessonSectionBlock[]
+
+  /** Homework attached to this section */
   states: LessonSectionBlockState[]
 }>()
 
+
 const emit = defineEmits<{
-  change: [states: LessonSectionBlockState[]]
+  change: [states: LessonSectionBlockState[]],
 }>()
 
 
@@ -52,7 +43,7 @@ const emit = defineEmits<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const { states } = toRefs(props)
+const states = toRef(props, 'states')
 
 
 /* -------------------------------------------------------------------------- */
@@ -70,6 +61,19 @@ function onBlockStateChanged(idx: number, data: any) {
 /* -------------------------------------------------------------------------- */
 
 function getBlockId(blockIndex: number) {
-  return `${props.section.id}::${blockIndex}`
+  return `${blockIndex}`
+}
+
+
+function getComponent(type: string) {
+  if (type === 'video') { return VideoSectionBlock }
+  if (type === 'quiz') { return QuizSectionBlock }
+  if (type === 'text') { return TextSectionBlock }
+}
+
+
+function test(obj: any) {
+  const {type, ...rest} = obj
+  return rest
 }
 </script>

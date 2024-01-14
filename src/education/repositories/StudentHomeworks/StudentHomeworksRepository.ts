@@ -1,8 +1,7 @@
-import { StudentHomework, StudentHomeworkStatus } from '@/education'
+import { AssessmentMethod, StudentHomework, StudentHomeworkStatus } from '@/education'
 import { PouchRepository, RestRepository, DbScheme, CouchCacheDb } from '@/shared'
 import { studentHomeworks } from '@/shared/fixtures'
 import { UuidIdentity } from '@framework/domain'
-
 
 
 /* -------------------------------------------------------------------------- */
@@ -16,7 +15,8 @@ export interface StudentHomeworkDbScheme
   lessonSectionId: string
   status: string
   text: string
-  work: any
+  work: any,
+  assessmentMethod: string
 }
 
 
@@ -33,7 +33,8 @@ const StudentHomeworkSerializer = (
   lessonSectionId: from.lessonSectionId.value,
   status: from.status,
   text: from.text,
-  work: from.work
+  work: from.work,
+  assessmentMethod: from.assessmentMethod
 })
 
 const StudentHomeworkDeserializer = (
@@ -44,14 +45,15 @@ const StudentHomeworkDeserializer = (
   new UuidIdentity(from.lessonSectionId),
   from.status as StudentHomeworkStatus,
   from.text,
-  from.work
+  from.work,
+  from.assessmentMethod as AssessmentMethod
 )
 
 function ConflictResolver(
   a: StudentHomeworkDbScheme,
   b: StudentHomeworkDbScheme
 ) {
-  if (!b.work) { b.work = a.work }
+  if (b.work === undefined || b.work.length === 0) { b.work = a.work }
   return b
 }
 

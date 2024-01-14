@@ -8,7 +8,13 @@
     >
       <h2> {{ homework.text }}</h2>
       <!-- <p> {{ lesson.title }} </p> -->
-      <p>{{ getStatus() }}</p>
+
+      <p v-if="showProgress">
+        {{ getProgress() }}
+      </p>
+      <p v-else>
+        {{ $t(homework.status) }}
+      </p>
     </IonLabel>
 
     <IonCheckbox
@@ -22,7 +28,11 @@
 
 <script setup lang="ts">
 import { IonItem, IonLabel, IonCheckbox } from '@ionic/vue'
-import { Lesson, LessonIdentity, LessonSection, LessonSectionIdentity, LessonSectionQuizBlockState, LessonSectionVideoBlockState, StudentHomework, StudentHomeworkIdentity, useTimeFormatter } from '@/education'
+import {
+  Lesson, LessonIdentity, LessonSection, LessonSectionIdentity, LessonSectionQuizBlockState,
+  LessonSectionVideoBlockState, StudentHomework, StudentHomeworkIdentity, StudentHomeworkStatus, useTimeFormatter
+} from '@/education'
+import { computed } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -49,6 +59,14 @@ const emit = defineEmits<{
 
 const timeFormatter = useTimeFormatter()
 
+
+/* -------------------------------------------------------------------------- */
+/*                                    State                                   */
+/* -------------------------------------------------------------------------- */
+
+const showProgress = computed(() => props.homework.status === StudentHomeworkStatus.Open)
+
+
 /* -------------------------------------------------------------------------- */
 /*                                  Handlers                                  */
 /* -------------------------------------------------------------------------- */
@@ -66,7 +84,7 @@ function dummy() {
 /*                                   Helpers                                  */
 /* -------------------------------------------------------------------------- */
 
-function getStatus() {
+function getProgress() {
   if (!props.homework.work) { return }
   const questionsTotal = props.lessonSection.blocks.filter(x => x.type === 'quiz').length
   let questionsAnswered = 0
@@ -85,3 +103,20 @@ function getStatus() {
   }
 }
 </script>
+
+
+<fluent locale="en">
+open = Open
+pending = Pending
+in-review = In Review
+returned = Returned
+accepted = Accepted
+</fluent>
+
+<fluent locale="ru">
+open = Открыто
+pending = Ожидает отправки
+in-review = На рассмотрении
+returned = Возвращено
+accepted = Принято
+</fluent>

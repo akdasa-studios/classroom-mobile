@@ -4,6 +4,7 @@ import { RouteRecordRaw } from 'vue-router'
 import { routes as authRoutes } from './auth/routes'
 import { routes as educationRoutes } from './education/routes'
 import { routes as settingsRoutes } from './settings/routes'
+import { routes as messengerRoutes } from './messenger/routes'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -12,7 +13,8 @@ const routes: Array<RouteRecordRaw> = [
   },
   ...authRoutes,
   ...educationRoutes,
-  ...settingsRoutes
+  ...settingsRoutes,
+  ...messengerRoutes
 ]
 
 const router = createRouter({

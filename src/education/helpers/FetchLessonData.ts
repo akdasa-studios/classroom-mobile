@@ -1,6 +1,6 @@
 import {
   Cache, LessonSectionIdentity, OfStudentAndLessonSection, LessonSectionBlockState,
-  LessonIdentity, OfLesson, LessonSection, StudentHomework
+  LessonIdentity, OfLesson, LessonSection, StudentHomework, OfStudentAndLessonSections
 } from '@/education'
 
 export async function FetchLessonSectionState(
@@ -15,6 +15,17 @@ export async function FetchLessonSectionState(
   }
   return []
 }
+
+export async function FetchLessonSectionsHomeworks(
+  userId: string,
+  lessonSectionIds: LessonSectionIdentity[]
+): Promise<readonly StudentHomework[]> {
+  const homeworks = await Cache.StudentHomeworks.find(
+    OfStudentAndLessonSections(userId, lessonSectionIds)
+  )
+  return homeworks.entities
+}
+
 
 export async function FetchLessonSectionHomework(
   userId: string,

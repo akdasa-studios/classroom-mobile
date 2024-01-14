@@ -2,23 +2,33 @@
   <PageWithHeaderLayout
     :title="lesson?.title || ''"
     :has-data="lesson !== undefined"
+    @sync-completed="onEnter"
   >
     <template #toolbar>
       <IonToolbar>
         <LessonSectionsList
+          v-model="selected"
           :items="sections"
-          :selected="activeSectionIdx"
-          @click="onLessonSectionClicked"
         />
       </IonToolbar>
     </template>
 
     <LessonSectionView
-      v-if="activeSection !== undefined"
-      :section="activeSection"
-      :states="activeSectionState"
+      v-if="selectedSection !== undefined"
+      :blocks="selectedSection.blocks"
+      :states="selectedHomework?.work || []"
       @change="onLessonSectionStateChanged"
     />
+
+    <IonButton
+      v-if="showSendToReview"
+      class="ion-padding"
+      expand="block"
+      :disabled="!enabledSentToReview"
+      @click="onLessonSectionCopleted"
+    >
+      {{ enabledSentToReview ? $t('send-to-review') : $t('sent-to-review') }}
+    </IonButton>
   </PageWithHeaderLayout>
 </template>
 
@@ -27,21 +37,20 @@
 import { PageWithHeaderLayout } from '@/shared'
 import {
   LessonIdentity, LessonSectionsList, LessonSectionView,
-  useSyncTask, Cache, LessonSection, Lesson, LessonSectionIdentity, LessonSectionBlockState,
-  FetchLessonSectionState, FetchLessonSections, FetchLessonSectionHomework
+  Cache, LessonSection, Lesson, FetchLessonSections, StudentHomework,
+  AssessmentMethod, StudentHomeworkStatus, FetchLessonSectionsHomeworks
 } from '@/education'
-import { computed, shallowRef, toRefs, watch } from 'vue'
-import { IonToolbar, onIonViewWillEnter } from '@ionic/vue'
+import { computed, onMounted, ref, shallowRef, toRefs, watch } from 'vue'
+import { IonToolbar, IonButton, onIonViewWillEnter, useIonRouter } from '@ionic/vue'
 import { useRoute } from 'vue-router'
-import { UuidIdentity } from '@framework/domain'
 
 /* -------------------------------------------------------------------------- */
 /*                                Dependencies                                */
 /* -------------------------------------------------------------------------- */
 
-const syncTask = useSyncTask()
 const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 const route = useRoute()
+const router = useIonRouter()
 
 
 /* -------------------------------------------------------------------------- */
@@ -58,28 +67,40 @@ const props = defineProps<{
 /* -------------------------------------------------------------------------- */
 
 const { query } = toRefs(route)
-const lesson   = shallowRef<Lesson>()
-const sections = shallowRef<readonly LessonSection[]>([])
-const activeSection = shallowRef<LessonSection>()
-const activeSectionState = shallowRef<LessonSectionBlockState[]>([])
-const activeSectionIdx = computed(() => activeSection.value ? sections.value.findIndex((x) => x.id.value === activeSection.value?.id.value) : 0)
 
+const selected  = ref(0)
+const lesson    = shallowRef<Lesson>()
+const sections  = shallowRef<readonly LessonSection[]>([])
+const homeworks = shallowRef<readonly StudentHomework[]>([])
+
+const selectedSection  = computed(() => sections.value[selected.value])
+const selectedHomework = computed(() => homeworks.value.find(x => x.lessonSectionId.value === selectedSection.value.id.value))
+
+const showSendToReview = computed(() => selectedHomework.value?.assessmentMethod !== AssessmentMethod.NotRequired)
+const enabledSentToReview = computed(() => selectedHomework.value && [StudentHomeworkStatus.Open, StudentHomeworkStatus.Returned].includes(selectedHomework.value.status) )
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
 /* -------------------------------------------------------------------------- */
 
+onMounted(onEnter)
 onIonViewWillEnter(onEnter)
 
-watch(
-  [syncTask.completedAt],
-  () => fetchLessonData(props.lessonId)
-)
+watch(selected, (v) => {
+  if (sections.value[v]) {
+    router.replace({
+      name:   'lesson',
+      params: { lessonId:  props.lessonId.value },
+      query:  { sectionId: sections.value[v].id.value },
+    })
+  }
+})
 
-watch(query, (v) => {
-  if (!v.sectionId) { return }
-  fetchLessonSectionData(new UuidIdentity(v.sectionId as string), userId)
-}, { immediate: true })
+watch([query, sections], () => {
+  if (query.value.sectionId) {
+    selected.value = sections.value.findIndex(x => x.id.value === query.value.sectionId)
+  }
+})
 
 
 /* -------------------------------------------------------------------------- */
@@ -88,29 +109,24 @@ watch(query, (v) => {
 
 async function onEnter() {
   await fetchLessonData(props.lessonId)
-  if (!query.value.sectionId) {
-    activeSection.value = sections.value[0]
-  }
-}
-
-async function onLessonSectionClicked(
-  lessonSectionId: LessonSectionIdentity
-) {
-  await fetchLessonSectionData(lessonSectionId, userId)
 }
 
 async function onLessonSectionStateChanged(
   data: any
 ) {
-  const homework = await FetchLessonSectionHomework(
-    userId, activeSection.value!.id
-  )
-
-  if (homework) {
-    homework.work = data
-    Cache.StudentHomeworks.save(homework)
-  }
+  if (!selectedHomework.value) { return }
+  selectedHomework.value.work = data
+  Cache.StudentHomeworks.save(selectedHomework.value)
 }
+
+async function onLessonSectionCopleted() {
+  if (!selectedHomework.value) { return }
+  selectedHomework.value.sendToReview()
+  await Cache.StudentHomeworks.save(selectedHomework.value)
+  // TODO: fetch only homework
+  await fetchLessonData(props.lessonId)
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*                                   Helpers                                  */
@@ -121,23 +137,23 @@ async function fetchLessonData(
 ) {
   [
     lesson.value,
-    sections.value
+    sections.value,
   ] = await Promise.all([
     Cache.Lessons.get(lessonId),
-    FetchLessonSections(lessonId)
+    FetchLessonSections(lessonId),
   ])
-}
-
-async function fetchLessonSectionData(
-  lessonSectionId: LessonSectionIdentity,
-  userId: string,
-) {
-  [
-    activeSection.value,
-    activeSectionState.value
-  ] = await Promise.all([
-    Cache.LessonSections.get(lessonSectionId),
-    FetchLessonSectionState(userId, lessonSectionId)
-  ])
+  homeworks.value = await FetchLessonSectionsHomeworks(userId, sections.value.map(x => x.id))
 }
 </script>
+
+
+
+<fluent locale="en">
+send-to-review = Send to review
+sent-to-review = Sent
+</fluent>
+
+<fluent locale="ru">
+send-to-review = Отправить на проверку
+sent-to-review = Отправлено
+</fluent>

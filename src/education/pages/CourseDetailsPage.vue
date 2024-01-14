@@ -24,9 +24,9 @@
 
 <script setup lang="ts">
 import { IonButton, onIonViewWillEnter, useIonRouter } from '@ionic/vue'
-import { Cache, Course, CourseIdentity, useSyncTask } from '@/education'
+import { Cache, Course, CourseIdentity } from '@/education'
 import { CachedImage, PageWithHeaderLayout } from '@/shared'
-import { shallowRef, watch } from 'vue'
+import { shallowRef } from 'vue'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */

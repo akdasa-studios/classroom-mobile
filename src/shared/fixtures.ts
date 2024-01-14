@@ -1,6 +1,6 @@
 import { LessonSection } from './../education/aggregates/LessonSection'
 import { UuidIdentity } from '@framework/domain'
-import { Course, Group, Enrollment, Lesson, StudentHomework, StudentHomeworkStatus } from '@/education'
+import { Course, Group, Enrollment, Lesson, StudentHomework, StudentHomeworkStatus, AssessmentMethod } from '@/education'
 import { EnrollmentStatus } from '@core/aggregates'
 
 export const courses: Course[] = [
@@ -244,20 +244,26 @@ export const studentHomeworks = [
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     lessonSectionFixtures[0].id,
     StudentHomeworkStatus.Open,
-    'Посмотреть видео'
+    'Посмотреть видео',
+    [],
+    AssessmentMethod.NotRequired
   ),
   new StudentHomework(
     new UuidIdentity('17a6a91a-4d6d-4d9c-a311-058d8bc0a201'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     lessonSectionFixtures[2].id,
-    StudentHomeworkStatus.InReview,
-    'Завершить тест'
+    StudentHomeworkStatus.Open,
+    'Завершить тест',
+    [],
+    AssessmentMethod.Teacher
   ),
   new StudentHomework(
     new UuidIdentity('17a6a91a-4d6d-4d9c-a311-058d8bc0a202'),
     'a243727d-57ab-4595-ba17-69f3a0679bf6',
     lessonSectionFixtures[1].id,
     StudentHomeworkStatus.Open,
-    'Практическое задание'
+    'Практическое задание',
+    [],
+    AssessmentMethod.Teacher
   ),
 ]

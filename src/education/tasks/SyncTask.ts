@@ -7,11 +7,11 @@ import {
 const Downloader = useDownloaderQueue()
 
 export async function UploadToRemoteServer() {
-  const notSubmittedEnrollments = await Repositories.Cache.Enrollments.find(NotSubmitted())
-  for (const e of notSubmittedEnrollments.entities) {
-    await Repositories.Remote.Enrollemnts.save(e)
-    console.log(notSubmittedEnrollments.entities)
-  }
+  // const notSubmittedEnrollments = await Repositories.Cache.Enrollments.find(NotSubmitted())
+  // for (const e of notSubmittedEnrollments.entities) {
+  //   await Repositories.Remote.Enrollemnts.save(e)
+  //   console.log(notSubmittedEnrollments.entities)
+  // }
 }
 
 
