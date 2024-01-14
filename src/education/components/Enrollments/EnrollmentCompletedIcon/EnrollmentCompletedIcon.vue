@@ -2,6 +2,8 @@
   <Vue3Lottie
     v-bind="$attrs"
     :animation-data="AnimationIn"
+    :speed=".3"
+    :delay="1500"
     :loop="false"
   />
 </template>
