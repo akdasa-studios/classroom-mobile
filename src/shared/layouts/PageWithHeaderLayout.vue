@@ -7,16 +7,10 @@
           <IonBackButton />
         </IonButtons>
         <IonButtons slot="secondary">
-          <IonButton
+          <SyncIcon
             v-if="busy"
             @click="onDownloadingIndicatorCkicked"
-          >
-            <IonIcon
-              slot="icon-only"
-              color="primary"
-              :icon="cloudIcon"
-            />
-          </IonButton>
+          />
         </IonButtons>
       </IonToolbar>
       <slot name="toolbar" />
@@ -45,12 +39,10 @@
 
 <script setup lang="ts">
 import {
-  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonIcon,
-  IonButton, useIonRouter,
+  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, useIonRouter,
 } from '@ionic/vue'
 import { computed, watch } from 'vue'
-import { LoadingSpinner, useDownloaderQueue } from '@/shared'
-import { cloudDownloadOutline, cloudUploadOutline } from 'ionicons/icons'
+import { LoadingSpinner, SyncIcon, useDownloaderQueue } from '@/shared'
 import { useSyncTask } from '@/education'
 
 /* -------------------------------------------------------------------------- */
@@ -81,7 +73,6 @@ const router = useIonRouter()
 /* -------------------------------------------------------------------------- */
 
 const busy = computed(() => downloaderQueue.isDownloading.value || syncTask.busy.value)
-const cloudIcon = computed(() => syncTask.direction.value === 'upload' ? cloudUploadOutline : cloudDownloadOutline)
 
 
 /* -------------------------------------------------------------------------- */

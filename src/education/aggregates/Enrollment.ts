@@ -38,7 +38,7 @@ export class Enrollment
     return this._groupId
   }
 
-  get courseId(): CourseIdentity | undefined {
+  get courseId(): CourseIdentity {
     return this._courseId
   }
 
