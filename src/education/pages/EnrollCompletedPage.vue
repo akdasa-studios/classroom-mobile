@@ -3,7 +3,7 @@
     <CongratsConfetti />
 
     <div class="ctnt">
-      <EnrollmentCompletedIcon />
+      <EnrollmentCompletedIcon class="icon" />
       <h2>{{ $t('congratulations') }}</h2>
       <div>{{ $t('enrollment-request-submited') }}</div>
       {{ $t('wait-for-assignment') }}
@@ -54,7 +54,7 @@ function onGoToMyGroupsClicked() {
 </script>
 
 
-<style>
+<style scoped>
 .center {
   display: flex;
   justify-content: center;
@@ -71,6 +71,11 @@ function onGoToMyGroupsClicked() {
 
 .btn {
   margin: 20px;
+}
+
+.icon {
+  max-width: 60%;
+  max-height: 60%;
 }
 </style>
 
