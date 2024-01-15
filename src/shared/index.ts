@@ -20,7 +20,6 @@ export { default as LoadingSpinner } from './components/LoadingSpinner.vue'
 export { default as TimePicker } from './components/TimePicker.vue'
 export { default as CongratsConfetti } from './components/CongratsConfetti.vue'
 export { default as WithListHeader } from './components/WithListHeader.vue'
-export { default as SyncIcon } from './components/SyncIcon/SyncIcon.vue'
 
 
 // services:

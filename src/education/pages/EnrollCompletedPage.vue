@@ -3,7 +3,7 @@
     <CongratsConfetti />
 
     <div class="ctnt">
-      <EnrollmentCompletedIcon class="icon" />
+      <img src="/congrats.png">
       <h2>{{ $t('congratulations') }}</h2>
       <div>{{ $t('enrollment-request-submited') }}</div>
       {{ $t('wait-for-assignment') }}
@@ -27,7 +27,6 @@
 import { useIonRouter } from '@ionic/vue'
 import { IonPage, IonButton } from '@ionic/vue'
 import { CongratsConfetti } from '@/shared'
-import { EnrollmentCompletedIcon } from '@/education'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */

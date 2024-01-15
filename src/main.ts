@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 
 import { IonicVue } from '@ionic/vue'
-import Vue3Lottie from 'vue3-lottie'
 import { fluent } from './i18n'
 
 
@@ -36,7 +35,6 @@ const app = createApp(App)
   .use(IonicVue)
   .use(router)
   .use(fluent)
-  .use(Vue3Lottie)
 
 router.isReady().then(async () => {
   await serviceLocator.init()
