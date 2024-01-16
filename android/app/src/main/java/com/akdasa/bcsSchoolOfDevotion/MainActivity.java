@@ -1,4 +1,4 @@
-package com.akdasa.bcsSchoolOfDevotion;
+package com.akdasa.classroom;
 
 import com.getcapacitor.BridgeActivity;
 
