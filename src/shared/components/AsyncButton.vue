@@ -26,7 +26,6 @@
 
 <script lang="ts" setup>
 import { IonButton, IonSpinner, IonIcon } from '@ionic/vue'
-import { KnownErrorCode } from '@protocol/core'
 import { ref, toRefs, watch } from 'vue'
 import { alertCircleOutline } from 'ionicons/icons'
 
@@ -37,7 +36,7 @@ import { alertCircleOutline } from 'ionicons/icons'
 const props = defineProps<{
   busy: boolean,
   disabled?: boolean,
-  errorCode?: KnownErrorCode
+  errorCode?: string
 }>()
 
 const emit = defineEmits<{
@@ -66,9 +65,9 @@ watch(errorCode, onErrorStateChanged)
 /* -------------------------------------------------------------------------- */
 
 function onErrorStateChanged(
-  errorCode: KnownErrorCode | undefined
+  errorCode: string | undefined
 ) {
-  const errorOccured = !isInErrorState.value && errorCode !== KnownErrorCode.NoError
+  const errorOccured = !isInErrorState.value && errorCode !== undefined
   if (errorOccured) {
     isInErrorState.value = true
     if (timer) { clearTimeout(timer) }
