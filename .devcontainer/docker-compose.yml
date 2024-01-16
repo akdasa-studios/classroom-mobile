@@ -1,4 +1,4 @@
-name: bcs-school-of-devotion-app
+name: classroom
 
 services:
   app:
@@ -13,9 +13,9 @@ services:
     expose:
       - 8080
     networks:
-      - bcs-sod
+      - classroom
     volumes:
       - ..:/workspaces
 
 networks:
-  bcs-sod:
+  classroom:

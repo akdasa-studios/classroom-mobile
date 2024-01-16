@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'com.akdasa.bcsSchoolOfDevotion',
-  appName: 'BCS School of Devotion',
+  appId: 'com.akdasa.classroom',
+  appName: 'Classroom',
   webDir: 'dist',
   server: {
     androidScheme: 'https'

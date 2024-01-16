@@ -1,5 +1,5 @@
 {
-  "name": "BCS SoD App",
+  "name": "Classroom (Mobile)",
   "dockerComposeFile": [
     "docker-compose.yml"
   ],
