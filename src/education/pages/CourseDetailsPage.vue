@@ -1,7 +1,8 @@
 <template>
   <PageWithHeaderLayout
     :title="course?.title || ''"
-    :has-data="course !== undefined"
+    :has-data="isReady"
+    @sync-completed="fetchCourse"
   >
     <CachedImage
       :url="course?.coverImageUrl"
@@ -23,51 +24,26 @@
 
 
 <script setup lang="ts">
-import { IonButton, onIonViewWillEnter, useIonRouter } from '@ionic/vue'
-import { Cache, Course, CourseIdentity } from '@/education'
+import { useAsyncState } from '@vueuse/core'
+import { IonButton, useIonRouter } from '@ionic/vue'
+import { Cache, CourseIdentity } from '@/education'
 import { CachedImage, PageWithHeaderLayout } from '@/shared'
-import { shallowRef } from 'vue'
 
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 const props = defineProps<{
   id: CourseIdentity
 }>()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
+// --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()
 
+// --- State -----------------------------------------------------------------
+const { state: course, isReady, execute: fetchCourse } =
+  useAsyncState(async () => await Cache.Courses.get(props.id), undefined)
 
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
-const course = shallowRef<Course>()
-
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-onIonViewWillEnter(onFetchData)
-
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
+// --- Handlers --------------------------------------------------------------
 function onEnrollButtonClicked() {
   router.push({ name: 'enroll', params: { 'id': props.id.value } })
-}
-
-async function onFetchData() {
-  course.value = await Cache.Courses.get(props.id)
 }
 </script>
 

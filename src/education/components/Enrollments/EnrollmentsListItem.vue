@@ -32,7 +32,7 @@
 import { computed } from 'vue'
 import { IonItem, IonLabel, IonAvatar, IonText } from '@ionic/vue'
 import { CachedImage } from '@/shared'
-import { EnrollmentStatus } from '@core/aggregates'
+import { EnrollmentStatus } from '@/education';
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -55,7 +55,7 @@ const emit = defineEmits<{
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const showStatus = computed(() => props.status !== EnrollmentStatus.Approved)
+const showStatus = computed(() => props.status !== 'approved')
 
 
 /* -------------------------------------------------------------------------- */

@@ -1,11 +1,10 @@
 import { Aggregate, UuidIdentity } from '@framework/domain'
-import { EnrollmentStatus } from '@core/aggregates'
 import { GroupIdentity } from './Group'
 import { CourseIdentity } from './Course'
 
 
 export type EnrollmentIdentity = UuidIdentity<'Enrollment'>
-
+export type EnrollmentStatus = 'not-submitted' | 'pending' | 'approved' | 'declined' | 'graduated'
 
 export class Enrollment
   extends Aggregate<EnrollmentIdentity>
@@ -46,9 +45,13 @@ export class Enrollment
     return this._status
   }
 
+  submit() {
+    this._status = 'pending'
+  }
+
   enroll(groupId: GroupIdentity) {
     this._groupId = groupId
-    this._status = EnrollmentStatus.Approved
+    this._status = 'approved'
   }
 
   get isAssignedToGroup() {

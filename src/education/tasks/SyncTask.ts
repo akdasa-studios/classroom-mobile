@@ -1,17 +1,24 @@
 import { useDownloaderQueue } from '@/shared'
 import { LessonSectionVideoBlock } from './../aggregates/LessonSectionBlock'
 import {
-  Repositories, OfUser, OfCourses, OfLessons, OfStudent, NotSubmitted
+  Repositories, OfUser, OfCourses, OfLessons, OfStudent, NotSubmitted, Course, Group, Enrollment, CourseIdentity
 } from '@/education'
+import { Services } from '@/education'
+import { UuidIdentity } from '@framework/domain'
 
 const Downloader = useDownloaderQueue()
 
 export async function UploadToRemoteServer() {
-  // const notSubmittedEnrollments = await Repositories.Cache.Enrollments.find(NotSubmitted())
-  // for (const e of notSubmittedEnrollments.entities) {
-  //   await Repositories.Remote.Enrollemnts.save(e)
-  //   console.log(notSubmittedEnrollments.entities)
-  // }
+  const notSubmittedEnrollments = await Repositories.Cache.Enrollments.find(NotSubmitted())
+  for (const e of notSubmittedEnrollments.entities) {
+    await Services.Enrollments.create({
+      id: e.id.value,
+      groupId: e.groupId?.value,
+      courseId: e.courseId.value,
+    })
+    e.submit()
+    await Repositories.Remote.Enrollemnts.save(e)
+  }
 }
 
 
@@ -19,19 +26,26 @@ export async function SyncWithRemoteServer(
   userId: string = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 ) {
   console.log('courses')
-  const courses = await Repositories.Remote.Courses.all() // TODO: active only
-  courses.entities.forEach(x => Repositories.Cache.Courses.save(x))
+  const courses = await Services.Courses.getAll()
+  courses.items.forEach(x => Repositories.Cache.Courses.save(
+    new Course(new UuidIdentity(x.id), x.title, x.subtitle, x.description, x.coverImageUrl)
+  ))
 
+  // TODO avatarURl
   console.log('groups')
-  const groups = await Repositories.Remote.Groups.all() // TODO: get active only groups
-  groups.entities.forEach(x => Repositories.Cache.Groups.save(x))
+  const groups = await Services.Groups.getAll() // TODO: get active only groups
+  groups.items.forEach(x => Repositories.Cache.Groups.save(
+    new Group( new UuidIdentity(x.id), new UuidIdentity(x.course.id), x.name, x.leader.name, x.leader.avatarUrl || "https://i.pravatar.cc/300", new Date(x.startsAt).getTime())
+  ))
 
   console.log('enrollments')
-  const enrollments = await Repositories.Remote.Enrollemnts.find(OfUser(userId))
-  enrollments.entities.forEach(x => Repositories.Cache.Enrollments.save(x))
+  const enrollments = await Services.Enrollments.getAll()
+  enrollments.items.forEach(x => Repositories.Cache.Enrollments.save(
+    new Enrollment(new UuidIdentity(x.id), userId, new UuidIdentity(x.group.id), new UuidIdentity(x.course.id), x.status)
+  ))
 
   console.log('lessons')
-  const myCourses = enrollments.entities.map(x => x.courseId)
+  const myCourses = enrollments.items.map(x => new UuidIdentity(x.course.id) as CourseIdentity)
   const lessons = await Repositories.Remote.Lessons.find(OfCourses(myCourses))
   lessons.entities.forEach(x => Repositories.Cache.Lessons.save(x))
 
@@ -45,8 +59,8 @@ export async function SyncWithRemoteServer(
   studentHomeworks.entities.forEach(x => Repositories.Cache.StudentHomeworks.save(x))
 
   console.log('files')
-  groups.entities.forEach(x => Downloader.addToQueue(x.couratorAvatarUrl, `Avatar of ${x.couratorName}`))
-  courses.entities.forEach(x => Downloader.addToQueue(x.coverImageUrl, `Cover image of ${x.title}`))
+  groups.items.forEach(x => Downloader.addToQueue(x.leader.avatarUrl, `Avatar of ${x.leader.name}`))
+  courses.items.forEach(x => Downloader.addToQueue(x.coverImageUrl, `Cover image of ${x.title}`))
   lessonSections.entities.forEach(function (x) {
     const lesson = lessons.entities.find(l => x.lessonId.equals(l.id))
 

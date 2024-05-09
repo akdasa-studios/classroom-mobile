@@ -27,6 +27,7 @@ export * from './services/IService'
 export * from './services/LocalStorageService'
 export * from './services/ServiceLocator'
 export * from './services/DownloaderService'
+export * from './services/RemoteService'
 
 // ports:
 export * from './ports/CacheRepository'

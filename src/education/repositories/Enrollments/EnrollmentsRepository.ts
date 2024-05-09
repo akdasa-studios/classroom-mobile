@@ -1,8 +1,7 @@
-import { Enrollment } from '@/education'
+import { Enrollment, EnrollmentStatus } from '@/education'
 import { PouchRepository, RestRepository, DbScheme, CouchCacheDb } from '@/shared'
 import { EnrollmentsFixtures } from '@/shared/fixtures'
 import { UuidIdentity } from '@framework/domain'
-import { EnrollmentStatus } from '@core/aggregates'
 
 /* -------------------------------------------------------------------------- */
 /*                               Database Models                              */

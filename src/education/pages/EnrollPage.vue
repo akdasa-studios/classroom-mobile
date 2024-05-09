@@ -2,7 +2,7 @@
   <PageWithHeaderLayout
     :title="$t('enroll')"
     :has-padding="true"
-    :has-data="groups.length > 0"
+    :has-data="isReady"
   >
     <!-- Select group -->
     <IonList>
@@ -63,36 +63,27 @@
 
 
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue'
-import { IonTextarea, IonItem, IonLabel, onIonViewWillEnter, IonList,  useIonRouter } from '@ionic/vue'
+import { useAsyncState } from '@vueuse/core'
+import { ref } from 'vue'
+import { IonTextarea, IonItem, IonLabel, IonList,  useIonRouter } from '@ionic/vue'
 import { PageWithHeaderLayout, AsyncButton } from '@/shared'
 import {
   GroupSelector, TimeRangeSelector, TimeRange, TimeRangePreset, Group,
   FetchActiveGroupsOfCourse, CourseIdentity, Cache, Enrollment
 } from '@/education'
 import { UuidIdentity } from '@framework/domain'
-import { EnrollmentStatus } from '@core/aggregates'
 
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 const props = defineProps<{
   courseId: CourseIdentity
 }>()
 
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 const router = useIonRouter()
 const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 
 
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
+// --- State -----------------------------------------------------------------
 const timeRangePresets: TimeRangePreset[] = [
   { name: 'Выходные до 11 утра',    range: { start: [6, 0],  end: [11, 0], days: [6,7] } },
   { name: 'Будние дни до 9:00',     range: { start: [6, 0],  end: [9, 0],  days: [1,2,3,4,5] } },
@@ -100,48 +91,22 @@ const timeRangePresets: TimeRangePreset[] = [
   { name: 'Любое время ',           range: { start: [0, 0],  end: [24, 0], days: [1,2,3,4,5,6,7] } },
 ]
 
-const groups = shallowRef<readonly Group[]>([])
+const { state: groups, isReady } = useAsyncState(async () => await FetchActiveGroupsOfCourse(props.courseId), [])
 const groupId = ref('')
 const timeRanges = ref<TimeRange[]>([])
 const comments = ref('')
 
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-onIonViewWillEnter(onFetchData)
-
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
+// --- Handlers --------------------------------------------------------------
 async function onEnrollButtonClicked() {
-  // // TODO: handle errors and exceptions
-  // await enrollmentService.submit({
-  //   groupId: groupId.value,
-  //   comments: comments.value,
-  //   timeBlocks: [
-  //     {
-  //       startHours: timeRanges.value[0].start[0],
-  //       endHours: timeRanges.value[0].end[0]
-  //     }
-  //   ]
-  // })
-
   await Cache.Enrollments.save(new Enrollment(
     new UuidIdentity(),
     userId,
     groupId.value ? new UuidIdentity(groupId.value) : undefined,
     props.courseId,
-    EnrollmentStatus.NotSubmitted
+    'not-submitted',
   ))
 
   router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
-}
-
-async function onFetchData() {
-  groups.value = await FetchActiveGroupsOfCourse(props.courseId)
 }
 </script>
 

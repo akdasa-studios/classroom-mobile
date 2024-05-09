@@ -53,7 +53,9 @@ defineProps<{
 function formatDate(
   timestamp: number
 ) {
-  return new Date(timestamp * 100000)
-    .toLocaleDateString('ru', {  month:'short', day:'numeric'})
+  return new Date(timestamp)
+    .toLocaleDateString('ru', {
+      month:'long', day:'numeric', hour:'numeric', minute:'numeric'
+    })
 }
 </script>

@@ -29,7 +29,6 @@
 
 
 <script lang="ts" setup>
-import { EnrollmentStatus } from '@core/aggregates'
 import { PageWithHeaderLayout } from '@/shared'
 import {
   LessonsList, Enrollment, EnrollmentIdentity, EnrollmentNotSubmitted,
@@ -62,11 +61,10 @@ const props = defineProps<{
 const enrollment  = shallowRef<Enrollment>()
 const lessons     = shallowRef<readonly Lesson[]>([])
 const status         = computed(() => enrollment.value?.status)
-const isNotSubbmited = computed(() => status.value === EnrollmentStatus.NotSubmitted)
-const isApproved     = computed(() => status.value === EnrollmentStatus.Approved)
-const isDeclined     = computed(() => status.value === EnrollmentStatus.Declined)
-const isInReview     = computed(() => status.value === EnrollmentStatus.InReview
-                                   || status.value === EnrollmentStatus.Pending)
+const isNotSubbmited = computed(() => status.value === 'not-submitted')
+const isApproved     = computed(() => status.value === 'approved')
+const isDeclined     = computed(() => status.value === 'declined')
+const isInReview     = computed(() => status.value === 'pending')
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */

@@ -16,14 +16,13 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@protocol/*": ["./submodules/protocol/*"],
+      "@protocol/*": ["./submodules/protocol/lib/*"],
       "@framework/*": ["./submodules/framework/lib/*"],
-      "@core/*": ["./submodules/core/*"]
     }
   },
   "include": [
     "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue",
-    "submodules/protocol/**/*.ts",
+    "submodules/protocol/lib/**/*.ts",
     "submodues/framework/lib/**/*.ts",
     "submodues/core/**/*.ts"
   ],

@@ -21,9 +21,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@protocol': path.resolve(__dirname, './submodules/protocol'),
+      '@protocol': path.resolve(__dirname, './submodules/protocol/lib'),
       '@framework': path.resolve(__dirname, './submodules/framework/lib'),
-      '@core': path.resolve(__dirname, './submodules/core'),
     },
   },
 })

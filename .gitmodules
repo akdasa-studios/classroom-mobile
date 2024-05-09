@@ -4,6 +4,3 @@
 [submodule "protocol"]
 	path = submodules/protocol
 	url = https://github.com/akdasa-studios/classroom-protocol.git
-[submodule "core"]
-	path = submodules/core
-	url = https://github.com/akdasa-studios/classroom-core.git

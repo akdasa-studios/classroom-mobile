@@ -1,6 +1,5 @@
 import { Course } from '@/education'
-import { PouchRepository, RestRepository, DbScheme, CouchCacheDb } from '@/shared'
-import { courses } from '@/shared/fixtures'
+import { PouchRepository, DbScheme, CouchCacheDb } from '@/shared'
 import { UuidIdentity } from '@framework/domain'
 
 
@@ -53,5 +52,3 @@ export const CacheCoursesRepository = new PouchRepository<Course, CourseDbScheme
   CourseSerializer,
   CourseDeserializer,
 )
-
-export const RemoteCoursesRepository = new RestRepository<Course>(courses)
