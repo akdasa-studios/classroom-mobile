@@ -1,19 +1,19 @@
 <template>
   <EnrollmentsListItem
     v-for="i in items"
-    :id="i.enrollment.id.value"
-    :key="i.enrollment.id.value"
+    :id="i.enrollment._id"
+    :key="i.enrollment._id"
     :course-name="i.course.title"
     :group-name="i.group?.name"
     :image-url="i.group?.couratorAvatarUrl || NO_CLASS_AVATAR"
     :status="i.enrollment.status"
-    @click="() => onEnrollmentClicked(i.enrollment.id)"
+    @click="() => onEnrollmentClicked(i.enrollment._id)"
   />
 </template>
 
 
 <script setup lang="ts">
-import { EnrollmentIdentity, EnrollmentsListItem } from '@/education'
+import { EnrollmentsListItem } from '@/education'
 import { EnrollmentViewModel } from './EnrollmentViewModel'
 
 /* -------------------------------------------------------------------------- */
@@ -25,7 +25,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  click: [enrollmentId: EnrollmentIdentity]
+  click: [enrollmentId: string]
 }>()
 
 
@@ -41,7 +41,7 @@ const NO_CLASS_AVATAR = 'class-is-recruiting-avatar.png'
 /* -------------------------------------------------------------------------- */
 
 function onEnrollmentClicked(
-  enrollmentId: EnrollmentIdentity
+  enrollmentId: string
 ) {
   emit('click', enrollmentId)
 }

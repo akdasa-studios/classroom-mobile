@@ -1,5 +1,5 @@
-import { QueryBuilder } from '@framework/persistence'
 import { Enrollment } from '@/education'
+import { QueryBuilder } from '@/shared'
 
 
 const qb = new QueryBuilder<Enrollment>()

@@ -1,26 +1,15 @@
-import { RemoteEnrollmentsRepository, CacheEnrollmentsRepository } from './Enrollments/EnrollmentsRepository'
-import { RemoteGroupsRepository, CacheGroupsRepository } from './Groups/GroupsRepository'
+import { CacheEnrollmentsRepository } from './Enrollments/EnrollmentsRepository'
+import { CacheGroupsRepository } from './Groups/GroupsRepository'
 import { CacheCoursesRepository }  from './Courses/CoursesRepository'
-import { RemoteLessonsRepository, CacheLessonsRepository }  from './Lessons/LessonsRepository'
-import { CacheLessonSectionsRepository, RemoteLessonSectionssRepository }  from './Lessons/LessonSectionsRepository'
-import { CacheStudentHomeworksRepository, RemoteStudentHomeworksRepository } from './StudentHomeworks/StudentHomeworksRepository'
+import { CacheLessonsRepository }  from './Lessons/LessonsRepository'
+import { CacheLessonSectionsRepository }  from './Lessons/LessonSectionsRepository'
+import { CacheStudentHomeworksRepository } from './StudentHomeworks/StudentHomeworksRepository'
 
-export const Cache = {
+export const Repositories = {
   Enrollments: CacheEnrollmentsRepository,
   Groups: CacheGroupsRepository,
   Courses: CacheCoursesRepository,
   Lessons: CacheLessonsRepository,
   LessonSections: CacheLessonSectionsRepository,
   StudentHomeworks: CacheStudentHomeworksRepository,
-}
-
-export const Repositories = {
-  Remote: {
-    Enrollemnts: RemoteEnrollmentsRepository,
-    Groups: RemoteGroupsRepository,
-    Lessons: RemoteLessonsRepository,
-    LessonSections: RemoteLessonSectionssRepository,
-    StudentHomeworks: RemoteStudentHomeworksRepository
-  },
-  Cache
 }

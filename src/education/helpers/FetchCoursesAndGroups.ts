@@ -1,17 +1,16 @@
 import {
-  Cache, CourseIdentity, Group, GroupsOfCourse, Course, CourseWithTitle
+  Repositories, Group, GroupsOfCourse, Course, CourseWithTitle
 } from '@/education'
 
 export async function FetchActiveGroupsOfCourse(
-  courseId: CourseIdentity
+  courseId: string,
 ): Promise<readonly Group[]> {
-  const result = await Cache.Groups.find(GroupsOfCourse(courseId.value))
-  return result.entities
+  const result = await Repositories.Groups.find(GroupsOfCourse(courseId))
+  return result
 }
 
 export async function FetchCourses(
   query: string
 ): Promise<readonly Course[]> {
-  const result = await Cache.Courses.find(CourseWithTitle(query))
-  return result.entities
+  return await Repositories.Courses.find(CourseWithTitle(query))
 }

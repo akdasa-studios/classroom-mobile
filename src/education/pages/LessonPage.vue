@@ -36,9 +36,9 @@
 <script lang="ts" setup>
 import { PageWithHeaderLayout } from '@/shared'
 import {
-  LessonIdentity, LessonSectionsList, LessonSectionView,
-  Cache, LessonSection, Lesson, FetchLessonSections, StudentHomework,
-  AssessmentMethod, StudentHomeworkStatus, FetchLessonSectionsHomeworks
+  LessonSectionsList, LessonSectionView,
+  Repositories, LessonSection, Lesson, FetchLessonSections, StudentHomework,
+  FetchLessonSectionsHomeworks
 } from '@/education'
 import { computed, onMounted, ref, shallowRef, toRefs, watch } from 'vue'
 import { IonToolbar, IonButton, onIonViewWillEnter, useIonRouter } from '@ionic/vue'
@@ -58,7 +58,7 @@ const router = useIonRouter()
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  lessonId: LessonIdentity
+  lessonId: string
 }>()
 
 
@@ -74,10 +74,10 @@ const sections  = shallowRef<readonly LessonSection[]>([])
 const homeworks = shallowRef<readonly StudentHomework[]>([])
 
 const selectedSection  = computed(() => sections.value[selected.value])
-const selectedHomework = computed(() => homeworks.value.find(x => x.lessonSectionId.value === selectedSection.value.id.value))
+const selectedHomework = computed(() => homeworks.value.find(x => x.lessonSectionId === selectedSection.value._id))
 
-const showSendToReview = computed(() => selectedHomework.value?.assessmentMethod !== AssessmentMethod.NotRequired)
-const enabledSentToReview = computed(() => selectedHomework.value && [StudentHomeworkStatus.Open, StudentHomeworkStatus.Returned].includes(selectedHomework.value.status) )
+const showSendToReview = computed(() => selectedHomework.value?.assessmentMethod !== 'not-required')
+const enabledSentToReview = computed(() => selectedHomework.value && ['open', 'returned'].includes(selectedHomework.value.status) )
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
@@ -90,15 +90,15 @@ watch(selected, (v) => {
   if (sections.value[v]) {
     router.replace({
       name:   'lesson',
-      params: { lessonId:  props.lessonId.value },
-      query:  { sectionId: sections.value[v].id.value },
+      params: { lessonId:  props.lessonId },
+      query:  { sectionId: sections.value[v]._id },
     })
   }
 })
 
 watch([query, sections], () => {
   if (query.value.sectionId) {
-    selected.value = sections.value.findIndex(x => x.id.value === query.value.sectionId)
+    selected.value = sections.value.findIndex(x => x._id === query.value.sectionId)
   }
 })
 
@@ -116,13 +116,13 @@ async function onLessonSectionStateChanged(
 ) {
   if (!selectedHomework.value) { return }
   selectedHomework.value.work = data
-  Cache.StudentHomeworks.save(selectedHomework.value)
+  Repositories.StudentHomeworks.save(selectedHomework.value)
 }
 
 async function onLessonSectionCopleted() {
   if (!selectedHomework.value) { return }
-  selectedHomework.value.sendToReview()
-  await Cache.StudentHomeworks.save(selectedHomework.value)
+  selectedHomework.value.status = 'pending'
+  await Repositories.StudentHomeworks.save(selectedHomework.value)
   // TODO: fetch only homework
   await fetchLessonData(props.lessonId)
 }
@@ -133,16 +133,18 @@ async function onLessonSectionCopleted() {
 /* -------------------------------------------------------------------------- */
 
 async function fetchLessonData(
-  lessonId: LessonIdentity
+  lessonId: string
 ) {
   [
     lesson.value,
     sections.value,
   ] = await Promise.all([
-    Cache.Lessons.get(lessonId),
+    Repositories.Lessons.get(lessonId),
     FetchLessonSections(lessonId),
   ])
-  homeworks.value = await FetchLessonSectionsHomeworks(userId, sections.value.map(x => x.id))
+  console.log("======> ", sections.value.map(x => x._id))
+  homeworks.value = await FetchLessonSectionsHomeworks(userId, sections.value.map(x => x._id))
+  console.log(homeworks.value)
 }
 </script>
 

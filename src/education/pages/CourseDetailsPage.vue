@@ -26,12 +26,12 @@
 <script setup lang="ts">
 import { useAsyncState } from '@vueuse/core'
 import { IonButton, useIonRouter } from '@ionic/vue'
-import { Cache, CourseIdentity } from '@/education'
+import { Repositories } from '@/education'
 import { CachedImage, PageWithHeaderLayout } from '@/shared'
 
 // --- Interface -------------------------------------------------------------
 const props = defineProps<{
-  id: CourseIdentity
+  id: string
 }>()
 
 // --- Dependencies ----------------------------------------------------------
@@ -39,11 +39,11 @@ const router = useIonRouter()
 
 // --- State -----------------------------------------------------------------
 const { state: course, isReady, execute: fetchCourse } =
-  useAsyncState(async () => await Cache.Courses.get(props.id), undefined)
+  useAsyncState(async () => await Repositories.Courses.get(props.id), undefined)
 
 // --- Handlers --------------------------------------------------------------
 function onEnrollButtonClicked() {
-  router.push({ name: 'enroll', params: { 'id': props.id.value } })
+  router.push({ name: 'enroll', params: { 'id': props.id } })
 }
 </script>
 

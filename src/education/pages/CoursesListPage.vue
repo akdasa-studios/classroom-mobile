@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { useAsyncState, watchDebounced } from '@vueuse/core'
 import { useIonRouter, IonSearchbar, IonToolbar } from '@ionic/vue'
-import { CourseIdentity, FetchCourses, CoursesList } from '@/education'
+import { FetchCourses, CoursesList } from '@/education'
 import { PageWithHeaderLayout } from '@/shared'
 import { ref } from 'vue'
 
@@ -33,16 +33,25 @@ const router = useIonRouter()
 // --- State -----------------------------------------------------------------
 const searchQuery = ref<string>('')
 const { state: courses, execute: fetchCourses, isReady } =
-  useAsyncState(async (value: string) => await FetchCourses(value), [])
+  useAsyncState((value: string) => fetch(value), [])
 
 // --- Hooks -----------------------------------------------------------------
-watchDebounced(searchQuery, async (query) => await fetchCourses(0, query), { debounce: 500 })
+watchDebounced(searchQuery, (query) => fetchCourses(0, query), { debounce: 500 })
 
 // --- Handlers --------------------------------------------------------------
-function onCourseCardClicked(
-  id: CourseIdentity
-) {
-  router.push({ name: 'course', params: { 'id': id.value } })
+function onCourseCardClicked(id: string) {
+  router.push({ name: 'course', params: { 'id': id } })
+}
+
+// --- Helpers ---------------------------------------------------------------
+async function fetch(query: string) {
+  return (await FetchCourses(query)).map(course => ({
+    id: course._id,
+    title: course.title,
+    subtitle: course.subtitle,
+    summary: course.summary,
+    coverImageUrl: course.coverImageUrl
+  }))
 }
 </script>
 

@@ -31,8 +31,8 @@
 <script lang="ts" setup>
 import { PageWithHeaderLayout } from '@/shared'
 import {
-  LessonsList, Enrollment, EnrollmentIdentity, EnrollmentNotSubmitted,
-  EnrollmentInReview, EnrollmentDeclined, Cache, useSyncTask, Lesson, FetchLessonsOfGroup
+  LessonsList, Enrollment, EnrollmentNotSubmitted,
+  EnrollmentInReview, EnrollmentDeclined, Repositories, useSyncTask, Lesson, FetchLessonsOfGroup
 } from '@/education'
 import { computed, shallowRef, watch } from 'vue'
 import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
@@ -50,7 +50,7 @@ const syncTask = useSyncTask()
 /* -------------------------------------------------------------------------- */
 
 const props = defineProps<{
-  enrollmentId: EnrollmentIdentity
+  enrollmentId: string
 }>()
 
 
@@ -92,7 +92,7 @@ function onLessonClicked(lessonId: string) {
 /* -------------------------------------------------------------------------- */
 
 async function fetchData() {
-  enrollment.value = await Cache.Enrollments.get(props.enrollmentId)
+  enrollment.value = await Repositories.Enrollments.get(props.enrollmentId)
   if (enrollment.value.groupId) {
     lessons.value = await FetchLessonsOfGroup(enrollment.value.groupId)
   }

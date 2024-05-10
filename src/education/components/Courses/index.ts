@@ -1,2 +1,2 @@
 export { default as CourseCard } from './CourseCard.vue'
-export { default as CoursesList } from './CoursesList.vue'
+export { default as CoursesList, type CourseListItem } from './CoursesList.vue'

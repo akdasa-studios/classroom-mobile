@@ -1,7 +1,7 @@
 <template>
   <StudentHomeworkListItem
     v-for="m in items"
-    :key="m.studentHomework.id.value"
+    :key="m.studentHomework._id"
     :homework="m.studentHomework"
     :lesson="m.lesson"
     :lesson-section="m.lessonSection"
@@ -12,8 +12,7 @@
 
 <script setup lang="ts">
 import {
-  HomeworkViewModel, StudentHomeworkListItem, StudentHomeworkIdentity,
-  LessonIdentity, LessonSectionIdentity
+  HomeworkViewModel, StudentHomeworkListItem,
 } from '@/education'
 
 /* -------------------------------------------------------------------------- */
@@ -22,9 +21,9 @@ import {
 
 const emit = defineEmits<{
   click: [
-    studentHomeworkId: StudentHomeworkIdentity,
-    lessonId: LessonIdentity,
-    lessonSectionId: LessonSectionIdentity
+    studentHomeworkId: string,
+    lessonId: string,
+    lessonSectionId: string
   ],
 }>()
 
@@ -38,9 +37,9 @@ defineProps<{
 /* -------------------------------------------------------------------------- */
 
 function onStudentHomeworkClicked(
-  homeworkId: StudentHomeworkIdentity,
-  lessonId: LessonIdentity,
-  lessonSectionId: LessonSectionIdentity,
+  homeworkId: string,
+  lessonId: string,
+  lessonSectionId: string,
 ) {
   emit('click', homeworkId, lessonId, lessonSectionId)
 }

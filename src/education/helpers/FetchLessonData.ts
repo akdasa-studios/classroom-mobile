@@ -1,45 +1,44 @@
 import {
-  Cache, LessonSectionIdentity, OfStudentAndLessonSection, LessonSectionBlockState,
-  LessonIdentity, OfLesson, LessonSection, StudentHomework, OfStudentAndLessonSections
+  Repositories, OfStudentAndLessonSection, LessonSectionBlockState,
+  OfLesson, LessonSection, StudentHomework, OfStudentAndLessonSections
 } from '@/education'
 
 export async function FetchLessonSectionState(
   userId: string,
-  lessonSectionId: LessonSectionIdentity
+  lessonSectionId: string,
 ): Promise<LessonSectionBlockState[]> {
-  const homeworks = await Cache.StudentHomeworks.find(
+  const homeworks = await Repositories.StudentHomeworks.find(
     OfStudentAndLessonSection(userId, lessonSectionId)
   )
-  if (homeworks.entities.length > 0) {
-    return homeworks.entities[0].work || []
+  if (homeworks.length > 0) {
+    return homeworks[0].work || []
   }
   return []
 }
 
 export async function FetchLessonSectionsHomeworks(
   userId: string,
-  lessonSectionIds: LessonSectionIdentity[]
+  lessonSectionIds: string[]
 ): Promise<readonly StudentHomework[]> {
-  const homeworks = await Cache.StudentHomeworks.find(
+  return await Repositories.StudentHomeworks.find(
     OfStudentAndLessonSections(userId, lessonSectionIds)
   )
-  return homeworks.entities
 }
 
 
 export async function FetchLessonSectionHomework(
   userId: string,
-  lessonSectionId: LessonSectionIdentity
+  lessonSectionId: string
 ): Promise<StudentHomework | undefined> {
-  const homeworks = await Cache.StudentHomeworks.find(
+  const homeworks = await Repositories.StudentHomeworks.find(
     OfStudentAndLessonSection(userId, lessonSectionId)
   )
-  return homeworks.entities.length > 0 ? homeworks.entities[0] : undefined
+  return homeworks.length > 0 ? homeworks[0] : undefined
 }
 
 export async function FetchLessonSections(
-  lessonId: LessonIdentity
+  lessonId: string
 ): Promise<readonly LessonSection[]> {
-  const result = await Cache.LessonSections.find(OfLesson(lessonId))
-  return result.entities
+  const result = await Repositories.LessonSections.find(OfLesson(lessonId))
+  return result
 }

@@ -30,9 +30,5 @@ export * from './services/DownloaderService'
 export * from './services/RemoteService'
 
 // ports:
-export * from './ports/CacheRepository'
-export * from './ports/RestRepository'
-export * from './ports/PouchDb/PouchRepository'
-export * from './ports/PouchDb/ObjectMapper'
-export * from './ports/PouchDb/DbScheme'
+export * from './ports/PouchDb/PouchRepositoryLight'
 export * from './ports/CouchCacheDb'

@@ -1,7 +1,7 @@
 <template>
   <CourseCard
     v-for="item in items"
-    :key="item.id.value"
+    :key="item.id"
     :title="item.title"
     :subtitle="item.subtitle"
     :summary="item.summary"
@@ -11,29 +11,27 @@
 </template>
 
 <script setup lang="ts">
-import { Course, CourseCard, CourseIdentity } from '@/education'
+import CourseCard from './CourseCard.vue'
 
-
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
+// --- Interface -------------------------------------------------------------
+export type CourseListItem = {
+  id: string
+  title: string
+  subtitle: string
+  summary: string
+  coverImageUrl: string
+}
 
 defineProps<{
-  items: readonly Course[]
+  items: CourseListItem[]
 }>()
 
 const emit = defineEmits<{
-  click: [courseId: CourseIdentity]
+  click: [courseId: string]
 }>()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
-function onCourseCardClicked(
-  courseId: CourseIdentity
-) {
+// --- Handlers --------------------------------------------------------------
+function onCourseCardClicked(courseId: string) {
   emit('click', courseId)
 }
 </script>

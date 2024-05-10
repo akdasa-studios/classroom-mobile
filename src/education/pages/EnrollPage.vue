@@ -68,14 +68,14 @@ import { ref } from 'vue'
 import { IonTextarea, IonItem, IonLabel, IonList,  useIonRouter } from '@ionic/vue'
 import { PageWithHeaderLayout, AsyncButton } from '@/shared'
 import {
-  GroupSelector, TimeRangeSelector, TimeRange, TimeRangePreset, Group,
-  FetchActiveGroupsOfCourse, CourseIdentity, Cache, Enrollment
+  GroupSelector, TimeRangeSelector, TimeRange, TimeRangePreset,
+  FetchActiveGroupsOfCourse, Repositories
 } from '@/education'
-import { UuidIdentity } from '@framework/domain'
+import { v4 } from 'uuid'
 
 // --- Interface -------------------------------------------------------------
 const props = defineProps<{
-  courseId: CourseIdentity
+  courseId: string
 }>()
 
 // --- Interface -------------------------------------------------------------
@@ -98,13 +98,13 @@ const comments = ref('')
 
 // --- Handlers --------------------------------------------------------------
 async function onEnrollButtonClicked() {
-  await Cache.Enrollments.save(new Enrollment(
-    new UuidIdentity(),
-    userId,
-    groupId.value ? new UuidIdentity(groupId.value) : undefined,
-    props.courseId,
-    'not-submitted',
-  ))
+  await Repositories.Enrollments.save({
+    _id: v4(),
+    userId: userId,
+    groupId: groupId.value,
+    courseId: props.courseId,
+    status: 'not-submitted',
+  })
 
   router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
 }

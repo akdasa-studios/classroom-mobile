@@ -23,10 +23,7 @@
 import { CachedImage } from '@/shared'
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue'
 
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 const props = defineProps<{
   title: string,
   subtitle: string,

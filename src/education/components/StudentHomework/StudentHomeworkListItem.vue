@@ -29,8 +29,8 @@
 <script setup lang="ts">
 import { IonItem, IonLabel, IonCheckbox } from '@ionic/vue'
 import {
-  Lesson, LessonIdentity, LessonSection, LessonSectionIdentity, LessonSectionQuizBlockState,
-  LessonSectionVideoBlockState, StudentHomework, StudentHomeworkIdentity, StudentHomeworkStatus, useTimeFormatter
+  Lesson, LessonSection, LessonSectionQuizBlockState,
+  LessonSectionVideoBlockState, StudentHomework, useTimeFormatter
 } from '@/education'
 import { computed } from 'vue'
 
@@ -46,9 +46,9 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   click: [
-    studentHomeworkId: StudentHomeworkIdentity,
-    lessonId: LessonIdentity,
-    lessonSectionId: LessonSectionIdentity
+    studentHomeworkId: string,
+    lessonId: string,
+    lessonSectionId: string
   ],
 }>()
 
@@ -64,7 +64,7 @@ const timeFormatter = useTimeFormatter()
 /*                                    State                                   */
 /* -------------------------------------------------------------------------- */
 
-const showProgress = computed(() => props.homework.status === StudentHomeworkStatus.Open)
+const showProgress = computed(() => props.homework.status === 'open')
 
 
 /* -------------------------------------------------------------------------- */
@@ -72,7 +72,7 @@ const showProgress = computed(() => props.homework.status === StudentHomeworkSta
 /* -------------------------------------------------------------------------- */
 
 function onClicked() {
-  emit('click', props.homework.id, props.lesson.id, props.lessonSection.id)
+  emit('click', props.homework._id, props.lesson._id, props.lessonSection._id)
 }
 
 function dummy() {

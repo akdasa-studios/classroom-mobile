@@ -4,9 +4,9 @@
   >
     <LessonsListItem
       v-for="(lesson, idx) in items"
-      :key="lesson.id.value"
+      :key="lesson._id"
       :item="items[idx]"
-      @click="() => onLessonClicked(lesson.id.value)"
+      @click="() => onLessonClicked(lesson._id)"
     />
   </WithListHeader>
 </template>

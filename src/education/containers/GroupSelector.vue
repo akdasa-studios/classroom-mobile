@@ -52,7 +52,7 @@ watch(groups, onFetchData)
 
 async function onFetchData() {
   const views = props.groups.map(x => ({
-    id: x.id.value,
+    id: x._id,
     name: x.name,
     leader: x.couratorName,
     imageUrl: x.couratorAvatarUrl,

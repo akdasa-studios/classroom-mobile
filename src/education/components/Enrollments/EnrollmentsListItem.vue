@@ -32,7 +32,6 @@
 import { computed } from 'vue'
 import { IonItem, IonLabel, IonAvatar, IonText } from '@ionic/vue'
 import { CachedImage } from '@/shared'
-import { EnrollmentStatus } from '@/education';
 
 /* -------------------------------------------------------------------------- */
 /*                                  Interface                                 */
@@ -43,7 +42,7 @@ const props = defineProps<{
   courseName: string,
   groupName?: string,
   imageUrl: string
-  status: EnrollmentStatus
+  status: string
 }>()
 
 const emit = defineEmits<{

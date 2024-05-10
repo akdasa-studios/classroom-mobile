@@ -23,8 +23,8 @@
 
 <script setup lang="ts">
 import {
-  EnrollmentIdentity, EnrollmentViewModel, FetchHomeworkOfUser, HomeworkViewModel, StudentHomeworkList,
-  EnrollmentsList, StudentHomeworkIdentity, LessonIdentity, LessonSectionIdentity
+  EnrollmentViewModel, FetchHomeworkOfUser, HomeworkViewModel, StudentHomeworkList,
+  EnrollmentsList
 } from '@/education'
 import { PageWithHeaderLayout, WithListHeader } from '@/shared'
 import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
@@ -63,23 +63,23 @@ async function onFetchData() {
 }
 
 function onEnrollmentClicked(
-  enrollmentId: EnrollmentIdentity
+  enrollmentId: string
 ) {
   router.push({
     name:   'my-enrollment',
-    params: { id: enrollmentId.value }
+    params: { id: enrollmentId }
   })
 }
 
 function onStudentHomeworkClicked(
-  homeworkId: StudentHomeworkIdentity,
-  lessonId: LessonIdentity,
-  lessonSectionId: LessonSectionIdentity,
+  homeworkId: string,
+  lessonId: string,
+  lessonSectionId: string,
 ) {
   router.push({
     name:   'lesson',
-    params: { lessonId:  lessonId.value },
-    query:  { sectionId: lessonSectionId.value },
+    params: { lessonId:  lessonId },
+    query:  { sectionId: lessonSectionId },
   })
 }
 

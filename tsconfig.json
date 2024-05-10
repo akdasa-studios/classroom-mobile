@@ -17,14 +17,11 @@
     "paths": {
       "@/*": ["./src/*"],
       "@protocol/*": ["./submodules/protocol/lib/*"],
-      "@framework/*": ["./submodules/framework/lib/*"],
     }
   },
   "include": [
     "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue",
     "submodules/protocol/lib/**/*.ts",
-    "submodues/framework/lib/**/*.ts",
-    "submodues/core/**/*.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
