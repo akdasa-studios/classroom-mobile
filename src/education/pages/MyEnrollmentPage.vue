@@ -1,27 +1,19 @@
 
 <template>
   <PageWithHeaderLayout
-    :title="isApproved ? $t('group') : ''"
-    :has-data="enrollment !== undefined"
+    :title="state.enrollment.status === 'approved' ? $t('group') : ''"
+    :has-data="isReady"
+    @sync-completed="onSyncCompleted"
   >
-    <EnrollmentNotSubmitted
-      v-if="isNotSubbmited"
-      @click="onGoBackButtonClicked"
-    />
-
-    <EnrollmentInReview
-      v-else-if="isInReview"
-      @click="onGoBackButtonClicked"
-    />
-
-    <EnrollmentDeclined
-      v-else-if="isDeclined"
+    <component
+      :is="statusComponentMap[state.enrollment.status]"
+      :self-declined="state.enrollment.declinedBy === userId"
       @click="onGoBackButtonClicked"
     />
 
     <LessonsList
-      v-if="isApproved && enrollment?.groupId"
-      :items="lessons"
+      v-if="state.enrollment.status === 'approved' && state.enrollment?.groupId"
+      :items="state.lessons"
       @click="onLessonClicked"
     />
   </PageWithHeaderLayout>
@@ -29,56 +21,50 @@
 
 
 <script lang="ts" setup>
+import { useAsyncState } from '@vueuse/core'
 import { PageWithHeaderLayout } from '@/shared'
 import {
-  LessonsList, Enrollment, EnrollmentNotSubmitted,
-  EnrollmentInReview, EnrollmentDeclined, Repositories, useSyncTask, Lesson, FetchLessonsOfGroup
+  LessonsList, Enrollment, EnrollmentNotSubmitted, EnrollmentInReview,
+  EnrollmentDeclined, Repositories, Lesson, FetchLessonsOfGroup,
+  EmptyEnrollment, useSyncTask
 } from '@/education'
-import { computed, shallowRef, watch } from 'vue'
-import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
+import { useIonRouter } from '@ionic/vue'
 
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
+// --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()
-const syncTask = useSyncTask()
+const sync = useSyncTask()
+const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 
-
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 const props = defineProps<{
   enrollmentId: string
 }>()
 
+// --- State -----------------------------------------------------------------
+const statusComponentMap = {
+  'not-submitted': EnrollmentNotSubmitted,
+  'pending': EnrollmentInReview,
+  'declined': EnrollmentDeclined,
+  'approved': undefined,
+  'graduated': undefined,
+}
 
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
+type State = { enrollment: Enrollment, lessons: readonly Lesson[] }
+const { state, isReady, execute: reloadState } = useAsyncState(
+  () => fetchData(props.enrollmentId),
+  { enrollment: EmptyEnrollment(), lessons: [] },
+  { resetOnExecute: false }
+)
 
-const enrollment  = shallowRef<Enrollment>()
-const lessons     = shallowRef<readonly Lesson[]>([])
-const status         = computed(() => enrollment.value?.status)
-const isNotSubbmited = computed(() => status.value === 'not-submitted')
-const isApproved     = computed(() => status.value === 'approved')
-const isDeclined     = computed(() => status.value === 'declined')
-const isInReview     = computed(() => status.value === 'pending')
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-onIonViewWillEnter(fetchData)
-watch(syncTask.completedAt, fetchData)
-
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
-function onGoBackButtonClicked() {
+// --- Handlers --------------------------------------------------------------
+async function onGoBackButtonClicked(action: string) {
+  if (action === 'danger') {
+    state.value.enrollment.status = 'declined'
+    state.value.enrollment.declinedBy = userId
+    state.value.enrollment.shouldSync = true
+    await Repositories.Enrollments.save(state.value.enrollment)
+    await sync.start()
+  }
   router.back()
 }
 
@@ -86,16 +72,18 @@ function onLessonClicked(lessonId: string) {
   router.push({name: 'lesson', params: { lessonId: lessonId } })
 }
 
+async function onSyncCompleted() {
+  await reloadState()
+}
 
-/* -------------------------------------------------------------------------- */
-/*                                   Helpers                                  */
-/* -------------------------------------------------------------------------- */
-
-async function fetchData() {
-  enrollment.value = await Repositories.Enrollments.get(props.enrollmentId)
-  if (enrollment.value.groupId) {
-    lessons.value = await FetchLessonsOfGroup(enrollment.value.groupId)
+// --- Helpers ---------------------------------------------------------------
+async function fetchData(enrollmentId: string) {
+  const state: State = { enrollment: EmptyEnrollment(), lessons: [] }
+  state.enrollment = await Repositories.Enrollments.get(enrollmentId)
+  if (state.enrollment.groupId) {
+    state.lessons = await FetchLessonsOfGroup(state.enrollment.groupId)
   }
+  return state
 }
 </script>
 

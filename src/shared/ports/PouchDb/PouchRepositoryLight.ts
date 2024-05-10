@@ -127,7 +127,8 @@ export class PouchRepositoryLight<
 > {
   private _db: CouchDB
   private _collection: string
-  private _conflictSolver: (a: TAggregate, b: TAggregate) => TAggregate = (_, b) => b
+  private _conflictSolver: (a: TAggregate, b: TAggregate) => TAggregate =
+    (a, b) => b // deepMerge(a, b) as TAggregate
 
   constructor(
     db: CouchDB,
@@ -182,7 +183,6 @@ export class PouchRepositoryLight<
         ]
       },
     }
-    console.log('>>>> query', query, convertedQuery)
     const items = await this._db.db.find(convertedQuery)
 
     // @ts-ignore
@@ -224,8 +224,6 @@ class QueryConverter {
         // @ts-ignore
         value = new RegExp(value)
       }
-      console.log('>>>> value', value, query.value, query.operator, query.field)
-
       // return query
       return {
         [query.field]: { [this.operatorsMap[query.operator]]: value }

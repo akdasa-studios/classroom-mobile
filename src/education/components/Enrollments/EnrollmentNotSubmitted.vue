@@ -2,7 +2,9 @@
   <ImageAndButtonLayout
     image="/enrollment-not-submitted.webp"
     :action="$t('go-back')"
-    @click="emit('click')"
+    :danger-action="$t('cancel-enrollment')"
+    :danger-action-alert="$t('cancel-enrollment-alert')"
+    @click="(a) => emit('click', a)"
   >
     <h1>{{ $t('enrollment-not-submitted') }}</h1>
     {{ $t('waiting-internet') }}
@@ -14,7 +16,7 @@
 import { ImageAndButtonLayout } from '@/shared'
 
 const emit = defineEmits<{
-  click: []
+  click: [action: 'normal' | 'danger']
 }>()
 </script>
 

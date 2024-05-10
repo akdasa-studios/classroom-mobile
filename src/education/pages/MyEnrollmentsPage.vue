@@ -2,12 +2,13 @@
   <PageWithHeaderLayout
     :title="$t('lessons')"
     :has-data="enrollments.length > 0 || homeworks.length > 0"
-    @sync-completed="onFetchData"
+    @sync-completed="refresh"
   >
     <WithListHeader :title="$t('my-enrollments')">
       <EnrollmentsList
         :items="enrollments"
         @click="onEnrollmentClicked"
+        @delete="onDeleteEnrollment"
       />
     </WithListHeader>
 
@@ -22,46 +23,27 @@
 
 
 <script setup lang="ts">
-import {
-  EnrollmentViewModel, FetchHomeworkOfUser, HomeworkViewModel, StudentHomeworkList,
-  EnrollmentsList
-} from '@/education'
-import { PageWithHeaderLayout, WithListHeader } from '@/shared'
 import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
-import { shallowRef } from 'vue'
+import { useAsyncState } from '@vueuse/core'
+import { FetchHomeworkOfUser, StudentHomeworkList, EnrollmentsList, Repositories, useSyncTask } from '@/education'
+import { PageWithHeaderLayout, WithListHeader } from '@/shared'
 import { FetchEnrollmentsOfUser } from '@/education'
 
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
+// --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()
+const sync = useSyncTask()
 const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 
+// --- State -----------------------------------------------------------------
+const { state: enrollments, execute: refreshEnrollments } =
+  useAsyncState(() => FetchEnrollmentsOfUser(userId), [], { resetOnExecute: false })
+const { state: homeworks, execute: refreshHomeworks } =
+  useAsyncState(() => FetchHomeworkOfUser(userId), [], { resetOnExecute: false })
 
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
+// --- Hooks -----------------------------------------------------------------
+onIonViewWillEnter(async () => await refresh())
 
-const enrollments = shallowRef<EnrollmentViewModel[]>([])
-const homeworks   = shallowRef<HomeworkViewModel[]>([])
-
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-onIonViewWillEnter(onFetchData)
-
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
-async function onFetchData() {
-  await fetchData(userId)
-}
-
+// --- Handlers --------------------------------------------------------------
 function onEnrollmentClicked(
   enrollmentId: string
 ) {
@@ -69,6 +51,17 @@ function onEnrollmentClicked(
     name:   'my-enrollment',
     params: { id: enrollmentId }
   })
+}
+
+async function onDeleteEnrollment(
+  enrollmentId: string
+) {
+  const enr = await Repositories.Enrollments.get(enrollmentId)
+  enr.archivedAt = new Date().toISOString()
+  enr.shouldSync = true
+  Repositories.Enrollments.save(enr)
+  await refresh()
+  await sync.start()
 }
 
 function onStudentHomeworkClicked(
@@ -83,20 +76,10 @@ function onStudentHomeworkClicked(
   })
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                   Helpers                                  */
-/* -------------------------------------------------------------------------- */
-
-async function fetchData(
-  userId: string
-) {
-  [
-    enrollments.value,
-    homeworks.value
-  ] = await Promise.all([
-    FetchEnrollmentsOfUser(userId),
-    FetchHomeworkOfUser(userId)
-  ])
+// --- Helpers ---------------------------------------------------------------
+async function refresh() {
+  await refreshHomeworks()
+  await refreshEnrollments()
 }
 </script>
 

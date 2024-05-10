@@ -48,4 +48,16 @@ export abstract class RemoteService {
       throw Error('Failed to fetch data')
     }
   }
+
+  protected async delete<TResponse>(url: string): Promise<void> {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: { 'accept': 'application/json' }
+    })
+    if (response.ok) {
+      return;// await response.json() as TResponse
+    } else {
+      throw Error('Failed to fetch data')
+    }
+  }
 }

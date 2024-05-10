@@ -1,42 +1,51 @@
 <template>
-  <IonItem
-    :detail="true"
-    lines="none"
-    @click="onClicked"
-  >
-    <IonAvatar
-      slot="start"
-      aria-hidden="true"
+  <IonItemSliding ref="slidingItem">
+    <IonItem
+      :detail="true"
+      lines="none"
+      @click="onClicked"
     >
-      <CachedImage :url="imageUrl" />
-    </IonAvatar>
+      <IonAvatar
+        slot="start"
+        aria-hidden="true"
+      >
+        <CachedImage :url="imageUrl" />
+      </IonAvatar>
 
-    <IonLabel>
-      <h2>{{ courseName }}</h2>
-      <p class="ion-text-wrap">
-        {{ groupName }}
+      <IonLabel>
+        <h2>{{ courseName }}</h2>
+        <p class="ion-text-wrap">
+          {{ groupName }}
 
-        <IonText
-          v-if="showStatus"
-          color="primary"
-        >
-          {{ $t(status) }}
-        </IonText>
-      </p>
-    </IonLabel>
-  </IonItem>
+          <IonText
+            v-if="showStatus"
+            color="primary"
+          >
+            {{ $t(status) }}
+          </IonText>
+        </p>
+      </IonLabel>
+    </IonItem>
+
+    <IonItemOptions>
+      <IonItemOption
+        color="danger"
+        @click="onDeleteClicked"
+        expandable
+      >
+        {{ $t('delete') }}
+      </IonItemOption>
+    </IonItemOptions>
+  </IonItemSliding>
 </template>
 
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { IonItem, IonLabel, IonAvatar, IonText } from '@ionic/vue'
+import { computed, ref } from 'vue'
+import { IonItem, IonLabel, IonAvatar, IonText, IonItemSliding, IonItemOption, IonItemOptions } from '@ionic/vue'
 import { CachedImage } from '@/shared'
 
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 const props = defineProps<{
   id: string
   courseName: string,
@@ -47,22 +56,21 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   click: [],
+  delete: [],
 }>()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
+// --- State -----------------------------------------------------------------
 const showStatus = computed(() => props.status !== 'approved')
+const slidingItem = ref<typeof IonItemSliding>();
 
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
+// --- Handlers --------------------------------------------------------------
 function onClicked() {
   emit('click')
+}
+
+async function onDeleteClicked() {
+  await slidingItem.value?.$el.close()
+  emit('delete')
 }
 </script>
 
@@ -73,6 +81,7 @@ pending = Pending
 in-review = In Review
 approved = Approved
 declined = Declined
+delete = Delete
 </fluent>
 
 <fluent locale="ru">
@@ -81,4 +90,5 @@ pending = В ожидании
 in-review = На рассмотрении
 approved = Одобрено
 declined = Отклонено
+delete = Удалить
 </fluent>

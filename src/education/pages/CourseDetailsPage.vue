@@ -1,16 +1,16 @@
 <template>
   <PageWithHeaderLayout
-    :title="course?.title || ''"
+    :title="course.title"
     :has-data="isReady"
     @sync-completed="fetchCourse"
   >
     <CachedImage
-      :url="course?.coverImageUrl"
+      :url="course.coverImageUrl"
       loading-height="200px"
     />
 
     <p class="ion-padding">
-      {{ course?.summary }}
+      {{ course.summary }}
 
       <IonButton
         expand="block"
@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { useAsyncState } from '@vueuse/core'
 import { IonButton, useIonRouter } from '@ionic/vue'
-import { Repositories } from '@/education'
+import { Repositories, EmptyCourse } from '@/education'
 import { CachedImage, PageWithHeaderLayout } from '@/shared'
 
 // --- Interface -------------------------------------------------------------
@@ -39,7 +39,8 @@ const router = useIonRouter()
 
 // --- State -----------------------------------------------------------------
 const { state: course, isReady, execute: fetchCourse } =
-  useAsyncState(async () => await Repositories.Courses.get(props.id), undefined)
+  useAsyncState(() => Repositories.Courses.get(props.id), EmptyCourse(),
+  { resetOnExecute: false })
 
 // --- Handlers --------------------------------------------------------------
 function onEnrollButtonClicked() {

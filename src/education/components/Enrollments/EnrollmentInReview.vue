@@ -4,7 +4,7 @@
     :action="$t('wait-more')"
     :danger-action="$t('cancel-enrollment')"
     :danger-action-alert="$t('cancel-enrollment-alert')"
-    @click="emit('click')"
+    @click="(a) => emit('click', a)"
   >
     <h1>{{ $t('wait') }}</h1>
     {{ $t('in-progress') }}
@@ -16,7 +16,7 @@
 import { ImageAndButtonLayout } from '@/shared'
 
 const emit = defineEmits<{
-  click: []
+  click: [action: 'normal' | 'danger']
 }>()
 </script>
 

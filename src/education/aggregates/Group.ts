@@ -6,3 +6,5 @@ export type Group = {
   couratorAvatarUrl: string
   startsAt: number
 }
+
+export const UnknownGroupId = '00000000-0000-0000-0000-000000000000';

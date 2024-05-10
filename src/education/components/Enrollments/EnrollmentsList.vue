@@ -8,6 +8,7 @@
     :image-url="i.group?.couratorAvatarUrl || NO_CLASS_AVATAR"
     :status="i.enrollment.status"
     @click="() => onEnrollmentClicked(i.enrollment._id)"
+    @delete="() => onDelete(i.enrollment._id)"
   />
 </template>
 
@@ -16,33 +17,29 @@
 import { EnrollmentsListItem } from '@/education'
 import { EnrollmentViewModel } from './EnrollmentViewModel'
 
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface --------------------------------------------------------------
 defineProps<{
   items: EnrollmentViewModel[]
 }>()
 
 const emit = defineEmits<{
   click: [enrollmentId: string]
+  delete: [enrollmentId: string]
 }>()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
+// --- State -----------------------------------------------------------------
 const NO_CLASS_AVATAR = 'class-is-recruiting-avatar.png'
 
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
+// --- Handlers --------------------------------------------------------------
 function onEnrollmentClicked(
   enrollmentId: string
 ) {
   emit('click', enrollmentId)
+}
+
+function onDelete(
+  enrollmentId: string
+) {
+  emit('delete', enrollmentId)
 }
 </script>

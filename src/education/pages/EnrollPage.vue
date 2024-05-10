@@ -3,6 +3,7 @@
     :title="$t('enroll')"
     :has-padding="true"
     :has-data="isReady"
+    @sync-completed="onSyncCompleted"
   >
     <!-- Select group -->
     <IonList>
@@ -63,15 +64,16 @@
 
 
 <script setup lang="ts">
-import { useAsyncState } from '@vueuse/core'
+import { v4 } from 'uuid'
 import { ref } from 'vue'
+import { useAsyncState } from '@vueuse/core'
 import { IonTextarea, IonItem, IonLabel, IonList,  useIonRouter } from '@ionic/vue'
 import { PageWithHeaderLayout, AsyncButton } from '@/shared'
 import {
   GroupSelector, TimeRangeSelector, TimeRange, TimeRangePreset,
-  FetchActiveGroupsOfCourse, Repositories
+  FetchActiveGroupsOfCourse, Repositories, useSyncTask
 } from '@/education'
-import { v4 } from 'uuid'
+
 
 // --- Interface -------------------------------------------------------------
 const props = defineProps<{
@@ -80,6 +82,7 @@ const props = defineProps<{
 
 // --- Interface -------------------------------------------------------------
 const router = useIonRouter()
+const sync = useSyncTask()
 const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 
 
@@ -91,12 +94,18 @@ const timeRangePresets: TimeRangePreset[] = [
   { name: 'Любое время ',           range: { start: [0, 0],  end: [24, 0], days: [1,2,3,4,5,6,7] } },
 ]
 
-const { state: groups, isReady } = useAsyncState(async () => await FetchActiveGroupsOfCourse(props.courseId), [])
+const { state: groups, isReady, execute: reloadGroups } =
+  useAsyncState(() => FetchActiveGroupsOfCourse(props.courseId),
+  [], { resetOnExecute: false })
 const groupId = ref('')
 const timeRanges = ref<TimeRange[]>([])
 const comments = ref('')
 
 // --- Handlers --------------------------------------------------------------
+async function onSyncCompleted() {
+  await reloadGroups()
+}
+
 async function onEnrollButtonClicked() {
   await Repositories.Enrollments.save({
     _id: v4(),
@@ -105,7 +114,7 @@ async function onEnrollButtonClicked() {
     courseId: props.courseId,
     status: 'not-submitted',
   })
-
+  await sync.start()
   router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
 }
 </script>

@@ -22,4 +22,8 @@ export class EnrollmentsService extends RemoteService {
   async find(query: string): Promise<GetEnrollmentsResponse> {
     return await this.get("http://localhost:3000/enrollments", { query })
   }
+
+  async remove(id: string): Promise<void> {
+    return await this.delete(`http://localhost:3000/enrollments/${id}`)
+  }
 }

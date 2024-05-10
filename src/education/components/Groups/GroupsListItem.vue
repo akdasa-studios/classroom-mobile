@@ -37,7 +37,7 @@ import { CachedImage } from '@/shared'
 /* -------------------------------------------------------------------------- */
 
 defineProps<{
-  id: string
+  id: string | undefined,
   name: string,
   leader?: string,
   info?: string,

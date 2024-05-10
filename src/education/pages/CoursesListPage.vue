@@ -2,7 +2,7 @@
   <PageWithHeaderLayout
     :title="$t('courses')"
     :has-data="isReady"
-    @sync-completed="fetchCourses(0, searchQuery)"
+    @sync-completed="onSyncCompleted"
   >
     <template #toolbar>
       <IonToolbar>
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { useAsyncState, watchDebounced } from '@vueuse/core'
 import { useIonRouter, IonSearchbar, IonToolbar } from '@ionic/vue'
-import { FetchCourses, CoursesList } from '@/education'
+import { FetchCourses, CoursesList, CourseListItem } from '@/education'
 import { PageWithHeaderLayout } from '@/shared'
 import { ref } from 'vue'
 
@@ -33,7 +33,8 @@ const router = useIonRouter()
 // --- State -----------------------------------------------------------------
 const searchQuery = ref<string>('')
 const { state: courses, execute: fetchCourses, isReady } =
-  useAsyncState((value: string) => fetch(value), [])
+  useAsyncState((value: string) => fetch(value), [],
+  { resetOnExecute: false })
 
 // --- Hooks -----------------------------------------------------------------
 watchDebounced(searchQuery, (query) => fetchCourses(0, query), { debounce: 500 })
@@ -43,15 +44,13 @@ function onCourseCardClicked(id: string) {
   router.push({ name: 'course', params: { 'id': id } })
 }
 
+async function onSyncCompleted() {
+  await fetchCourses(0, searchQuery.value)
+}
+
 // --- Helpers ---------------------------------------------------------------
-async function fetch(query: string) {
-  return (await FetchCourses(query)).map(course => ({
-    id: course._id,
-    title: course.title,
-    subtitle: course.subtitle,
-    summary: course.summary,
-    coverImageUrl: course.coverImageUrl
-  }))
+async function fetch(query: string): Promise<CourseListItem[]> {
+  return (await FetchCourses(query)).map(course => ({ ...course, id: course._id }))
 }
 </script>
 

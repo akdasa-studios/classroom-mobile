@@ -5,3 +5,7 @@ export type Course = {
   summary: string,
   coverImageUrl: string
 }
+
+export const EmptyCourse = (): Course => ({
+  _id: '', title: '', subtitle: '', summary: '', coverImageUrl: ''
+})

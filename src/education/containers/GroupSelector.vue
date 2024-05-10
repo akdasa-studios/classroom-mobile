@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { onMounted, shallowRef, toRefs, watch } from 'vue'
-import { GroupsList, Group, GroupViewModel } from '@/education'
+import { GroupsList, Group, GroupViewModel, UnknownGroupId } from '@/education'
 import { useFluent } from 'fluent-vue'
 
 /* -------------------------------------------------------------------------- */
@@ -62,7 +62,7 @@ async function onFetchData() {
   groupsToShow.value = [
     ...views,
     {
-      id: 'unknown',
+      id: UnknownGroupId,
       name: fluent.$t('next-group'),
       info: fluent.$t('next-group-info'),
       imageUrl: NO_CLASS_AVATAR

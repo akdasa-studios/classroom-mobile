@@ -142,7 +142,6 @@ async function fetchLessonData(
     Repositories.Lessons.get(lessonId),
     FetchLessonSections(lessonId),
   ])
-  console.log("======> ", sections.value.map(x => x._id))
   homeworks.value = await FetchLessonSectionsHomeworks(userId, sections.value.map(x => x._id))
   console.log(homeworks.value)
 }

@@ -1,11 +1,11 @@
 <template>
   <image-and-button-layout
-    image="/declined.webp"
+    :image="selfDeclined ? '/enrollment-declined-by-myself.webp' : '/declined.webp'"
     :action="$t('go-back')"
     @click="emit('click')"
   >
     <h1>{{ $t('enrollment-declined') }}</h1>
-    {{ reason || $t('reason-not-specified') }}
+    {{ selfDeclined ? $t('self-declined') : reason || $t('reason-not-specified') }}
   </image-and-button-layout>
 </template>
 
@@ -14,6 +14,7 @@
 import { ImageAndButtonLayout } from '@/shared'
 
 defineProps<{
+  selfDeclined?: boolean
   reason?: string
 }>()
 
@@ -27,6 +28,7 @@ const emit = defineEmits<{
 enrollment-declined = Enrollment declined
 go-back = Go back
 reason-not-specified = Reason not specified
+self-declined = Self declined
 </fluent>
 
 
@@ -34,4 +36,5 @@ reason-not-specified = Reason not specified
 enrollment-declined = Заявка отклонена
 go-back = Назад
 reason-not-specified = Причина не указана
+self-declined = Самостоятельное отклонение
 </fluent>
