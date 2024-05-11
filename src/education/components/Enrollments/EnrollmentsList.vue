@@ -1,14 +1,14 @@
 <template>
   <EnrollmentsListItem
     v-for="i in items"
-    :id="i.enrollment._id"
-    :key="i.enrollment._id"
+    :id="i.enrollment.id"
+    :key="i.enrollment.id"
     :course-name="i.course.title"
     :group-name="i.group?.name"
     :image-url="i.group?.couratorAvatarUrl || NO_CLASS_AVATAR"
     :status="i.enrollment.status"
-    @click="() => onEnrollmentClicked(i.enrollment._id)"
-    @delete="() => onDelete(i.enrollment._id)"
+    @click="() => onEnrollmentClicked(i.enrollment.id)"
+    @delete="() => onDelete(i.enrollment.id)"
   />
 </template>
 

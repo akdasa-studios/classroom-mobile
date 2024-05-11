@@ -1,15 +1,15 @@
-import { CacheEnrollmentsRepository } from './Enrollments/EnrollmentsRepository'
-import { CacheGroupsRepository } from './Groups/GroupsRepository'
-import { CacheCoursesRepository }  from './Courses/CoursesRepository'
-import { CacheLessonsRepository }  from './Lessons/LessonsRepository'
-import { CacheLessonSectionsRepository }  from './Lessons/LessonSectionsRepository'
-import { CacheStudentHomeworksRepository } from './StudentHomeworks/StudentHomeworksRepository'
+import { EnrollmentsRepository } from './Enrollments/EnrollmentsRepository'
+import { GroupsRepository } from './Groups/GroupsRepository'
+import { CoursesRepository }  from './Courses/CoursesRepository'
+import { LessonsRepository }  from './Lessons/LessonsRepository'
+import { LessonSectionsRepository }  from './Lessons/LessonSectionsRepository'
+import { StudentHomeworksRepository } from './StudentHomeworks/StudentHomeworksRepository'
 
-export const Repositories = {
-  Enrollments: CacheEnrollmentsRepository,
-  Groups: CacheGroupsRepository,
-  Courses: CacheCoursesRepository,
-  Lessons: CacheLessonsRepository,
-  LessonSections: CacheLessonSectionsRepository,
-  StudentHomeworks: CacheStudentHomeworksRepository,
+export const Database = {
+  Enrollments: EnrollmentsRepository,
+  Groups: GroupsRepository,
+  Courses: CoursesRepository,
+  Lessons: LessonsRepository,
+  LessonSections: LessonSectionsRepository,
+  StudentHomeworks: StudentHomeworksRepository,
 }

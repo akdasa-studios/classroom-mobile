@@ -50,7 +50,7 @@ async function onSyncCompleted() {
 
 // --- Helpers ---------------------------------------------------------------
 async function fetch(query: string): Promise<CourseListItem[]> {
-  return (await FetchCourses(query)).map(course => ({ ...course, id: course._id }))
+  return await FetchCourses(query)
 }
 </script>
 

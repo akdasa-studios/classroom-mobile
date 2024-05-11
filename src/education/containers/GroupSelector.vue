@@ -52,11 +52,11 @@ watch(groups, onFetchData)
 
 async function onFetchData() {
   const views = props.groups.map(x => ({
-    id: x._id,
+    id: x.id,
     name: x.name,
     leader: x.couratorName,
     imageUrl: x.couratorAvatarUrl,
-    startsAt: x.startsAt
+    startsAt: x.startsAt.getTime(),
   } as GroupViewModel))
 
   groupsToShow.value = [

@@ -37,7 +37,7 @@
 import { PageWithHeaderLayout } from '@/shared'
 import {
   LessonSectionsList, LessonSectionView,
-  Repositories, LessonSection, Lesson, FetchLessonSections, StudentHomework,
+  Database, LessonSection, Lesson, FetchLessonSections, StudentHomework,
   FetchLessonSectionsHomeworks
 } from '@/education'
 import { computed, onMounted, ref, shallowRef, toRefs, watch } from 'vue'
@@ -74,7 +74,7 @@ const sections  = shallowRef<readonly LessonSection[]>([])
 const homeworks = shallowRef<readonly StudentHomework[]>([])
 
 const selectedSection  = computed(() => sections.value[selected.value])
-const selectedHomework = computed(() => homeworks.value.find(x => x.lessonSectionId === selectedSection.value._id))
+const selectedHomework = computed(() => homeworks.value.find(x => x.lessonSectionId === selectedSection.value.id))
 
 const showSendToReview = computed(() => selectedHomework.value?.assessmentMethod !== 'not-required')
 const enabledSentToReview = computed(() => selectedHomework.value && ['open', 'returned'].includes(selectedHomework.value.status) )
@@ -91,14 +91,14 @@ watch(selected, (v) => {
     router.replace({
       name:   'lesson',
       params: { lessonId:  props.lessonId },
-      query:  { sectionId: sections.value[v]._id },
+      query:  { sectionId: sections.value[v].id },
     })
   }
 })
 
 watch([query, sections], () => {
   if (query.value.sectionId) {
-    selected.value = sections.value.findIndex(x => x._id === query.value.sectionId)
+    selected.value = sections.value.findIndex(x => x.id === query.value.sectionId)
   }
 })
 
@@ -115,14 +115,14 @@ async function onLessonSectionStateChanged(
   data: any
 ) {
   if (!selectedHomework.value) { return }
-  selectedHomework.value.work = data
-  Repositories.StudentHomeworks.save(selectedHomework.value)
+  selectedHomework.value.setWork(data)
+  Database.StudentHomeworks.save(selectedHomework.value)
 }
 
 async function onLessonSectionCopleted() {
   if (!selectedHomework.value) { return }
-  selectedHomework.value.status = 'pending'
-  await Repositories.StudentHomeworks.save(selectedHomework.value)
+  selectedHomework.value.submit()
+  await Database.StudentHomeworks.save(selectedHomework.value)
   // TODO: fetch only homework
   await fetchLessonData(props.lessonId)
 }
@@ -139,10 +139,10 @@ async function fetchLessonData(
     lesson.value,
     sections.value,
   ] = await Promise.all([
-    Repositories.Lessons.get(lessonId),
+    Database.Lessons.get(lessonId),
     FetchLessonSections(lessonId),
   ])
-  homeworks.value = await FetchLessonSectionsHomeworks(userId, sections.value.map(x => x._id))
+  homeworks.value = await FetchLessonSectionsHomeworks(userId, sections.value.map(x => x.id))
   console.log(homeworks.value)
 }
 </script>

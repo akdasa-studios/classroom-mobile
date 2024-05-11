@@ -4,7 +4,7 @@
     :action="$t('wait-more')"
     :danger-action="$t('cancel-enrollment')"
     :danger-action-alert="$t('cancel-enrollment-alert')"
-    @click="(a) => emit('click', a)"
+    @click="onButtonClicked"
   >
     <h1>{{ $t('wait') }}</h1>
     {{ $t('in-progress') }}
@@ -15,9 +15,20 @@
 <script setup lang="ts">
 import { ImageAndButtonLayout } from '@/shared'
 
+// --- Interface -------------------------------------------------------------
 const emit = defineEmits<{
-  click: [action: 'normal' | 'danger']
+  close: []
+  declineEnrollment: []
 }>()
+
+// --- Handlers --------------------------------------------------------------
+function onButtonClicked(action: 'normal' | 'danger') {
+  if (action === 'normal') {
+    emit('close')
+  } else {
+    emit('declineEnrollment')
+  }
+}
 </script>
 
 

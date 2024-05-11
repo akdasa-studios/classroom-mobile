@@ -1,4 +1,4 @@
-import { StudentHomework } from '../../aggregates/StudentHomework'
+import { StudentHomework } from '@/education'
 import { QueryBuilder } from '@/shared'
 
 

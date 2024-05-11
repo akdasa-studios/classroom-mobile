@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { useAsyncState } from '@vueuse/core'
 import { IonButton, useIonRouter } from '@ionic/vue'
-import { Repositories, EmptyCourse } from '@/education'
+import { Database, EmptyCourse } from '@/education'
 import { CachedImage, PageWithHeaderLayout } from '@/shared'
 
 // --- Interface -------------------------------------------------------------
@@ -39,7 +39,7 @@ const router = useIonRouter()
 
 // --- State -----------------------------------------------------------------
 const { state: course, isReady, execute: fetchCourse } =
-  useAsyncState(() => Repositories.Courses.get(props.id), EmptyCourse(),
+  useAsyncState(() => Database.Courses.get(props.id), EmptyCourse(),
   { resetOnExecute: false })
 
 // --- Handlers --------------------------------------------------------------

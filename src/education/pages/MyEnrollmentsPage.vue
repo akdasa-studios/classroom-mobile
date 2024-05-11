@@ -25,9 +25,11 @@
 <script setup lang="ts">
 import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
 import { useAsyncState } from '@vueuse/core'
-import { FetchHomeworkOfUser, StudentHomeworkList, EnrollmentsList, Repositories, useSyncTask } from '@/education'
 import { PageWithHeaderLayout, WithListHeader } from '@/shared'
-import { FetchEnrollmentsOfUser } from '@/education'
+import {
+  FetchHomeworkOfUser, StudentHomeworkList, EnrollmentsList, Database,
+  FetchEnrollmentsOfUser, useSyncTask
+} from '@/education'
 
 // --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()
@@ -56,10 +58,9 @@ function onEnrollmentClicked(
 async function onDeleteEnrollment(
   enrollmentId: string
 ) {
-  const enr = await Repositories.Enrollments.get(enrollmentId)
-  enr.archivedAt = new Date().toISOString()
-  enr.shouldSync = true
-  Repositories.Enrollments.save(enr)
+  const enrollment = await Database.Enrollments.get(enrollmentId)
+  enrollment.archive()
+  Database.Enrollments.save(enrollment)
   await refresh()
   await sync.start()
 }

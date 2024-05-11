@@ -57,7 +57,7 @@ const fluent = useFluent()
 /*                                  Interface                                 */
 /* -------------------------------------------------------------------------- */
 
-defineProps<{
+const props = defineProps<{
   image: string
   action: string
   dangerAction?: string
@@ -97,7 +97,11 @@ function onActionButtonClicked() {
 }
 
 function onDangerButtonClicked() {
-  isAlertOpen.value = true
+  if (props.dangerActionAlert) {
+    isAlertOpen.value = true
+  } else {
+    emit('click', 'danger')
+  }
 }
 
 function onAlertDismiss(ev: CustomEvent) {

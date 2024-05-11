@@ -71,7 +71,7 @@ import { IonTextarea, IonItem, IonLabel, IonList,  useIonRouter } from '@ionic/v
 import { PageWithHeaderLayout, AsyncButton } from '@/shared'
 import {
   GroupSelector, TimeRangeSelector, TimeRange, TimeRangePreset,
-  FetchActiveGroupsOfCourse, Repositories, useSyncTask
+  FetchActiveGroupsOfCourse, Database, useSyncTask, Enrollment
 } from '@/education'
 
 
@@ -107,13 +107,11 @@ async function onSyncCompleted() {
 }
 
 async function onEnrollButtonClicked() {
-  await Repositories.Enrollments.save({
-    _id: v4(),
-    userId: userId,
+  await Database.Enrollments.save(new Enrollment(v4(), {
     groupId: groupId.value,
     courseId: props.courseId,
     status: 'not-submitted',
-  })
+  }))
   await sync.start()
   router.navigate({ name: 'enroll-completed' }, 'none', 'pop')
 }

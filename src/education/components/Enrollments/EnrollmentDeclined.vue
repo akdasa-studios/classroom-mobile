@@ -1,12 +1,12 @@
 <template>
-  <image-and-button-layout
+  <ImageAndButtonLayout
     :image="selfDeclined ? '/enrollment-declined-by-myself.webp' : '/declined.webp'"
     :action="$t('go-back')"
-    @click="emit('click')"
+    @click="emit('close')"
   >
     <h1>{{ $t('enrollment-declined') }}</h1>
     {{ selfDeclined ? $t('self-declined') : reason || $t('reason-not-specified') }}
-  </image-and-button-layout>
+  </ImageAndButtonLayout>
 </template>
 
 
@@ -19,7 +19,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  click: []
+  close: []
 }>()
 </script>
 

@@ -1,25 +1,22 @@
 import { Lesson, LessonSection, StudentHomework } from '@/education'
 
 export const lessonsFixtures: Lesson[] = [
-  {
-    _id: 'f3d5c4a4-ef37-4a96-b9cd-68813c6e29aa',
+  new Lesson("f3d5c4a4-ef37-4a96-b9cd-68813c6e29aa", {
     courseId: "9c16ba20-a7b2-4dbe-8e4a-ce87b80a8d51",
     title: 'ГЛАВА 1: Обзор армий на поле битвы Курукшетра',
     summary: 'Introduction to the course',
-  },
-  {
-    _id: 'b3d5c4a4-ef37-4a96-b9cd-68813c6e29ab',
+  }),
+  new Lesson("b3d5c4a4-ef37-4a96-b9cd-68813c6e29ab", {
     courseId: "9c16ba20-a7b2-4dbe-8e4a-ce87b80a8d51",
     title: 'ГЛАВА 2: Краткое изложение «Бхагавад-гиты»',
     summary: 'Introduction to the course',
-  },
+  }),
 ]
 
 
 export const lessonSectionFixtures: LessonSection[] = [
-  {
-    _id: 'bafd8919-6a33-445d-b5a5-d10e57f60e72',
-    lessonId: lessonsFixtures[0]._id,
+  new LessonSection("bafd8919-6a33-445d-b5a5-d10e57f60e72", {
+    lessonId: lessonsFixtures[0].id,
     title: 'Видео',
     blocks: [
       {
@@ -46,10 +43,9 @@ export const lessonSectionFixtures: LessonSection[] = [
         ]
       },
     ]
-  },
-  {
-    _id: '2ea76f2e-4308-4d5f-bd9a-3503f7d76ec7',
-    lessonId: lessonsFixtures[0]._id,
+  }),
+  new LessonSection("2ea76f2e-4308-4d5f-bd9a-3503f7d76ec7", {
+    lessonId: lessonsFixtures[0].id,
     title: 'BG 1.1',
     blocks: [
       {
@@ -57,10 +53,9 @@ export const lessonSectionFixtures: LessonSection[] = [
         content: "### content"
       }
     ]
-  },
-  {
-    _id: '2ea76f2e-4308-4d5f-bd9a-3503f7d76ec8',
-    lessonId: lessonsFixtures[0]._id,
+  }),
+  new LessonSection("2ea76f2e-4308-4d5f-bd9a-3503f7d76ec8", {
+    lessonId: lessonsFixtures[0].id,
     title: 'Тест',
     blocks: [
       {
@@ -96,36 +91,33 @@ export const lessonSectionFixtures: LessonSection[] = [
         rightAnswer: 2
       }
     ]
-  },
+  })
 ]
 
 
 export const studentHomeworks: StudentHomework[] = [
-  {
-    _id: '17a6a91a-4d6d-4d9c-a311-058d8bc0a200',
+  new StudentHomework("17a6a91a-4d6d-4d9c-a311-058d8bc0a200", {
     userId: 'a243727d-57ab-4595-ba17-69f3a0679bf6',
-    lessonSectionId: lessonSectionFixtures[0]._id,
+    lessonSectionId: lessonSectionFixtures[0].id,
     status: 'open',
     text: 'Посмотреть видео',
     work: [],
     assessmentMethod: 'teacher',
-  },
-  {
-    _id: '17a6a91a-4d6d-4d9c-a311-058d8bc0a201',
+  }),
+  new StudentHomework("17a6a91a-4d6d-4d9c-a311-058d8bc0a201", {
     userId: 'a243727d-57ab-4595-ba17-69f3a0679bf6',
-    lessonSectionId: lessonSectionFixtures[2]._id,
+    lessonSectionId: lessonSectionFixtures[2].id,
     status: 'open',
     text: 'Завершить тест',
     work: [],
     assessmentMethod: 'teacher',
-  },
-  {
-    _id: '17a6a91a-4d6d-4d9c-a311-058d8bc0a202',
+  }),
+  new StudentHomework("17a6a91a-4d6d-4d9c-a311-058d8bc0a202", {
     userId: 'a243727d-57ab-4595-ba17-69f3a0679bf6',
-    lessonSectionId: lessonSectionFixtures[1]._id,
+    lessonSectionId: lessonSectionFixtures[1].id,
     status: 'open',
     text: 'Практическое задание',
     work: [],
     assessmentMethod: 'teacher',
-  },
+  }),
 ]

@@ -1,7 +1,7 @@
 <template>
   <StudentHomeworkListItem
     v-for="m in items"
-    :key="m.studentHomework._id"
+    :key="m.studentHomework.id"
     :homework="m.studentHomework"
     :lesson="m.lesson"
     :lesson-section="m.lessonSection"

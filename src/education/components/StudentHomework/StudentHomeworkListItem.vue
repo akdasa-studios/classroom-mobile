@@ -72,7 +72,7 @@ const showProgress = computed(() => props.homework.status === 'open')
 /* -------------------------------------------------------------------------- */
 
 function onClicked() {
-  emit('click', props.homework._id, props.lesson._id, props.lessonSection._id)
+  emit('click', props.homework.id, props.lesson.id, props.lessonSection.id)
 }
 
 function dummy() {

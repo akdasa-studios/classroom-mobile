@@ -1,9 +1,6 @@
 import { deepMerge } from './DeepMerge'
 import { CouchDB } from './CouchDb'
-
-export type Aggregate = {
-  _id: string
-}
+import { Aggregate, DbScheme } from '@/shared';
 
 /**
  * Comparison operators. These are used to compare a field with a value.
@@ -36,13 +33,13 @@ type NestedKeyOf<ObjectType extends object> =
 /**
  * Binding between Entity field and database column.
  */
-export type Binding<TEntity extends Aggregate> =
+export type Binding<TEntity extends Aggregate<unknown, unknown>> =
   NestedKeyOf<TEntity> // todo: | ((x: TEntity) => void)
 
 /**
  * A predicate is a comparison between a field and a value.
  */
-export class Predicate<TEntity extends Aggregate> {
+export class Predicate<TEntity extends Aggregate<unknown, unknown>> {
   constructor(
     public readonly field: Binding<TEntity>,
     public readonly operator: Operators,
@@ -53,7 +50,7 @@ export class Predicate<TEntity extends Aggregate> {
 /**
  *
  */
-export class Expression<TEntity extends Aggregate> {
+export class Expression<TEntity extends Aggregate<unknown, unknown>> {
   public operator: LogicalOperators
   public query: Query<TEntity>[]
 
@@ -66,10 +63,10 @@ export class Expression<TEntity extends Aggregate> {
   }
 }
 
-export type Query<TEntity extends Aggregate> = Predicate<TEntity> | Expression<TEntity>
+export type Query<TEntity extends Aggregate<unknown, unknown>> = Predicate<TEntity> | Expression<TEntity>
 
 
-export class QueryBuilder<TEntity extends Aggregate> {
+export class QueryBuilder<TEntity extends Aggregate<unknown, unknown>> {
 
   /* -------------------------------------------------------------------------- */
   /*                            Comparison Operators                            */
@@ -122,21 +119,30 @@ export class QueryBuilder<TEntity extends Aggregate> {
   }
 }
 
-export class PouchRepositoryLight<
-  TAggregate extends Aggregate,
+export type Mapper<TSource, TDestination> = (source: TSource) => TDestination
+
+
+export class PouchRepository<
+  TAggregate extends Aggregate<string, unknown>,
+  TScheme extends DbScheme<unknown>,
 > {
   private _db: CouchDB
   private _collection: string
-  private _conflictSolver: (a: TAggregate, b: TAggregate) => TAggregate =
-    (a, b) => b // deepMerge(a, b) as TAggregate
+  private _serializer: Mapper<TAggregate, TScheme>
+  private _deserializer: Mapper<TScheme, TAggregate>
+  private _conflictSolver: (a: TScheme, b: TScheme) => TScheme = (_, b) => b
 
   constructor(
     db: CouchDB,
     collectionName: string,
-    conflictSolver?: (a: TAggregate, b: TAggregate) => TAggregate
+    serializer: Mapper<TAggregate, TScheme>,
+    deserializer: Mapper<TScheme, TAggregate>,
+    conflictSolver?: (a: TScheme, b: TScheme) => TScheme
   ) {
     this._db = db
     this._collection = collectionName
+    this._serializer = serializer
+    this._deserializer = deserializer
     if (conflictSolver) {
       this._conflictSolver = conflictSolver
     }
@@ -153,20 +159,21 @@ export class PouchRepositoryLight<
   async save(
     entity: TAggregate
   ): Promise<void> {
-    const toSave = { ...entity, '@type': this._collection }
+    const document = this._serializer(entity)
     await this._db.db.upsert(
-      toSave._id, (old: any) => this._conflictSolver(old, toSave)
+      entity.id, (old: any) => this._conflictSolver(old, document)
     )
   }
 
   async get(
-    id: TAggregate['_id']
+    id: TAggregate['id']
   ): Promise<TAggregate> {
-    return await this._db.db.get<TAggregate>(id)
+    const document = await this._db.db.get<TScheme>(id)
+    return this._deserializer(document)
   }
 
   async exists(
-    id: TAggregate['_id']
+    id: TAggregate['id']
   ): Promise<boolean> {
     const document = await this.get(id)
     return document !== undefined
@@ -184,13 +191,11 @@ export class PouchRepositoryLight<
       },
     }
     const items = await this._db.db.find(convertedQuery)
-
-    // @ts-ignore
-    return items.docs
+    return items.docs.map((x: any) => this._deserializer(x))
   }
 
   async delete(
-    id: TAggregate['_id']
+    id: TAggregate['id']
   ): Promise<void> {
     const doc = await this._db.db.get(id, { latest: true })
     await this._db.db.remove(doc)
@@ -224,6 +229,7 @@ class QueryConverter {
         // @ts-ignore
         value = new RegExp(value)
       }
+
       // return query
       return {
         [query.field]: { [this.operatorsMap[query.operator]]: value }

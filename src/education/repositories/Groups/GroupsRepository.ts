@@ -1,4 +1,43 @@
-import { PouchRepositoryLight, CouchCacheDb } from '@/shared'
 import { Group } from '@/education'
+import { CouchCacheDb, DbScheme, PouchRepository } from '@/shared'
 
-export const CacheGroupsRepository = new PouchRepositoryLight<Group>(CouchCacheDb, 'group')
+// --- Database Scheme -------------------------------------------------------
+export type GroupDbScheme = {
+  name: string
+  courseId: string
+  couratorName: string
+  couratorAvatarUrl: string
+  startsAt: number
+} & DbScheme<'group'>
+
+
+// --- Serialization & Deserialization ---------------------------------------
+const GroupSerializer = (
+  from: Group
+): GroupDbScheme => ({
+  _id: from.id,
+  '@type': 'group',
+  name: from.name,
+  courseId: from.courseId,
+  couratorName: from.couratorName,
+  couratorAvatarUrl: from.couratorAvatarUrl,
+  startsAt: from.startsAt.getTime(),
+})
+
+const GroupDeserializer = (
+  from: GroupDbScheme
+): Group => new Group(from._id, {
+  name: from.name,
+  courseId: from.courseId,
+  couratorName: from.couratorName,
+  couratorAvatarUrl: from.couratorAvatarUrl,
+  startsAt: new Date(from.startsAt),
+})
+
+
+// --- Repositories ----------------------------------------------------------
+export const GroupsRepository = new PouchRepository<Group, GroupDbScheme>(
+  CouchCacheDb, 'group',
+  GroupSerializer,
+  GroupDeserializer,
+)
