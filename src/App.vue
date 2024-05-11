@@ -6,12 +6,20 @@
 
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue'
-import { onMounted } from 'vue'
-import { useSyncTask } from './education'
-import { useDownloaderQueue } from './shared'
+import { onMounted, watch } from 'vue'
+import { useSyncTask } from '@/education'
+import { useConfig, useDownloaderQueue } from '@/shared'
 
 const syncTask = useSyncTask()
 const downloaderQueue = useDownloaderQueue()
+const config = useConfig()
+
+watch(config.token, async (token) => {
+  if (token) {
+    await syncTask.start()
+    await downloaderQueue.downloadAll()
+  }
+})
 
 onMounted(async () => {
   await syncTask.start()

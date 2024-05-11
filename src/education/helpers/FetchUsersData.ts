@@ -1,7 +1,6 @@
 import { Database, EnrollmentViewModel, HomeworkViewModel, Lesson, OfCourse, OfStudent } from '@/education'
 
 export async function FetchEnrollmentsOfUser(
-  userId: string
 ): Promise<EnrollmentViewModel[]> {
   const result = await Database.Enrollments.all()
 
@@ -15,9 +14,8 @@ export async function FetchEnrollmentsOfUser(
 }
 
 export async function FetchHomeworkOfUser(
-  userId: string
 ): Promise<HomeworkViewModel[]> {
-  const studentHomeworks = await Database.StudentHomeworks.find(OfStudent(userId))
+  const studentHomeworks = await Database.StudentHomeworks.all()
 
   return await Promise.all(
     studentHomeworks.map(async x => ({

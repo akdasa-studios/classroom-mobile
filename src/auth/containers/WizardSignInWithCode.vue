@@ -21,44 +21,43 @@
 
 
 <script lang="ts" setup>
-import { CodeInput, HelpMessage, useAuthService } from '@/auth'
-import { AsyncButton } from '@/shared'
+import { CodeInput, HelpMessage, useAuthService, useProfileService } from '@/auth'
+import { AsyncButton, useConfig } from '@/shared'
 import { ref } from 'vue'
 
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 const emit = defineEmits<{
   complete: [isRegistrationRequired: boolean]
   goBack: []
 }>()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
+// --- Dependencies ----------------------------------------------------------
 const authService = useAuthService()
+const profileService = useProfileService()
+const config = useConfig()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
+// --- State -----------------------------------------------------------------
 const code = ref('')
 const busy = ref(false)
 
-
-/* -------------------------------------------------------------------------- */
-/*                                   Handles                                  */
-/* -------------------------------------------------------------------------- */
-
+// --- Handlers --------------------------------------------------------------
 async function onValidateCodeClicked() {
   // TODO: handler errors and exceptions
   busy.value = true
-  // const result = await authService.signInWithCode(code.value)
-  emit('complete', false) //result.registrationRequired)
+
+  // Authenticate
+  const email = config.email.value
+  const authResult = await authService.signIn({ email: email, code: code.value })
+  config.token.value = authResult.accessToken
+  profileService.setToken(authResult.accessToken)
+
+  // Check if profile exists
+  try {
+    await profileService.get()
+    emit('complete', false) // No registration required
+  } catch (error) {
+    emit('complete', true) // Registration required
+  }
   busy.value = false
 }
 

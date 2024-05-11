@@ -10,10 +10,10 @@ export { default as WizardSignInWithCode } from './containers/WizardSignInWithCo
 
 // composables:
 export * from './composables/useAuthService'
-export * from './composables/useAccountService'
+export * from './composables/useProfileService'
 
 
 // services:
 export * from './services/AuthService'
-export * from './services/AccountService'
+export * from './services/ProfileService'
 

@@ -34,13 +34,12 @@ import {
 // --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()
 const sync = useSyncTask()
-const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
 
 // --- State -----------------------------------------------------------------
 const { state: enrollments, execute: refreshEnrollments } =
-  useAsyncState(() => FetchEnrollmentsOfUser(userId), [], { resetOnExecute: false })
+  useAsyncState(() => FetchEnrollmentsOfUser(), [], { resetOnExecute: false })
 const { state: homeworks, execute: refreshHomeworks } =
-  useAsyncState(() => FetchHomeworkOfUser(userId), [], { resetOnExecute: false })
+  useAsyncState(() => FetchHomeworkOfUser(), [], { resetOnExecute: false })
 
 // --- Hooks -----------------------------------------------------------------
 onIonViewWillEnter(async () => await refresh())

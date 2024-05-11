@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import { useAsyncState } from '@vueuse/core'
-import { PageWithHeaderLayout } from '@/shared'
+import { PageWithHeaderLayout, useConfig } from '@/shared'
 import {
   LessonsList, Enrollment, EnrollmentReviewStatus, Database, Lesson,
   FetchLessonsOfGroup, EmptyEnrollment, useSyncTask, Group,
@@ -39,7 +39,7 @@ import { computed } from 'vue';
 const router = useIonRouter()
 const sync = useSyncTask()
 const fluent = useFluent()
-const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
+const config = useConfig()
 
 // --- Interface -------------------------------------------------------------
 const props = defineProps<{
@@ -60,7 +60,7 @@ const i18n = computed(() => ({
 // --- Handlers --------------------------------------------------------------
 async function onStatusButtonClicked(action: 'normal' | 'danger') {
   if (action === 'danger') {
-    state.value.enrollment.decline(userId)
+    state.value.enrollment.decline(config.userId.value)
     state.value.enrollment.archive()
     await Database.Enrollments.save(state.value.enrollment)
     await sync.start()
@@ -118,6 +118,7 @@ enrollment-not-submitted = Заявка еще не отправлена
   .danger-action-alert = Ваша заявка будет отменена и мы не сможем добавить вас в группу
 
 enrollment-pending = Заявка на рассмотрении
+  .summary = Заявка будет рассмотрена в ближайшее время
   .normal-action = Подождать
   .danger-action = Отменить заявку
   .danger-action-alert = Ваша заявка будет отменена и мы не сможем добавить вас в группу

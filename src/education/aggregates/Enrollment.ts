@@ -32,7 +32,6 @@ export class Enrollment extends Aggregate<string, EnrollmentProps> {
   get isArchived() { return this.archivedAt !== undefined }
   get isAssignedToGroup() { return this.groupId !== undefined }
   isDeclinedBy(userId: string) {
-    console.log(this.status, this.declinedBy, userId)
     return this.status === 'declined' && this.declinedBy === userId
   }
 }

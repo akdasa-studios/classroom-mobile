@@ -5,7 +5,7 @@
     :key="i.enrollment.id"
     :course-name="i.course.title"
     :group-name="i.group?.name"
-    :image-url="i.group?.couratorAvatarUrl || NO_CLASS_AVATAR"
+    :image-url="getAvatarUrl(i.group?.couratorAvatarUrl, i.group?.id)"
     :status="i.enrollment.status"
     @click="() => onEnrollmentClicked(i.enrollment.id)"
     @delete="() => onDelete(i.enrollment.id)"
@@ -29,6 +29,7 @@ const emit = defineEmits<{
 
 // --- State -----------------------------------------------------------------
 const NO_CLASS_AVATAR = 'class-is-recruiting-avatar.png'
+const NO_LEADER_AVATAR = 'user/no-avatar.jpg'
 
 // --- Handlers --------------------------------------------------------------
 function onEnrollmentClicked(
@@ -41,5 +42,13 @@ function onDelete(
   enrollmentId: string
 ) {
   emit('delete', enrollmentId)
+}
+
+// --- Helpers ---------------------------------------------------------------
+function getAvatarUrl(
+  leaderAvatarUrl?: string,
+  groupId?: string,
+) {
+  return !groupId ? NO_CLASS_AVATAR : leaderAvatarUrl || NO_LEADER_AVATAR
 }
 </script>

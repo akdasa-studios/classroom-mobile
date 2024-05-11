@@ -19,41 +19,29 @@
 
 <script lang="ts" setup>
 import { EmailInput, HelpMessage, useAuthService } from '@/auth'
-import { AsyncButton } from '@/shared'
+import { AsyncButton, useConfig } from '@/shared'
 import { ref } from 'vue'
 
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 const emit = defineEmits<{
   complete: []
 }>()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
+// --- Dependencies ----------------------------------------------------------
 const authService = useAuthService()
+const config = useConfig()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
-const email = ref('')
+// --- State -----------------------------------------------------------------
+const email = ref(config.email.value)
 const busy = ref(false)
 
-
-/* -------------------------------------------------------------------------- */
-/*                                   Handles                                  */
-/* -------------------------------------------------------------------------- */
-
+// --- Handlers --------------------------------------------------------------
 async function onSignInClicked() {
   // TODO: Handle errors and exceptions
   busy.value = true
-  // await authService.getSignInCode(email.value)
+  config.email.value = email.value
+  await authService.signIn({ email: email.value })
+
   emit('complete')
   busy.value = false
 }

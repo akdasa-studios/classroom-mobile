@@ -2,6 +2,7 @@
 export * from './composables/useNetworkStatus'
 export * from './composables/useDownloader'
 export * from './composables/useDownloaderQueue'
+export * from './composables/useConfig'
 
 // layouts
 export { default as PageWithHeaderLayout } from './layouts/PageWithHeaderLayout.vue'
@@ -21,11 +22,9 @@ export { default as TimePicker } from './components/TimePicker.vue'
 export { default as CongratsConfetti } from './components/CongratsConfetti.vue'
 export { default as WithListHeader } from './components/WithListHeader.vue'
 
-
 // services:
 export * from './services/IService'
 export * from './services/LocalStorageService'
-export * from './services/ServiceLocator'
 export * from './services/DownloaderService'
 export * from './services/RemoteService'
 

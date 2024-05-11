@@ -5,38 +5,50 @@ import { Database, UnknownGroupId, Services, Course, Group, Enrollment } from '@
 const Downloader = useDownloaderQueue()
 
 export async function UploadToRemoteServer(
-  userId: string = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
+  userId: string,
+  authToken: string,
 ) {
-  const enrollments = await Database.Enrollments.all()
-  for (const enrollment of enrollments) {
-    if (enrollment.isNotSubmitted) {
-         await Services.Enrollments.create({
-          id: enrollment.id,
-          groupId: enrollment.groupId !== UnknownGroupId ? enrollment.groupId : undefined,
-          courseId: enrollment.courseId,
-        })
-        enrollment.submit()
-        await Database.Enrollments.save(enrollment)
-    }
+  Services.Courses.setToken(authToken)
+  Services.Groups.setToken(authToken)
+  Services.Enrollments.setToken(authToken)
 
-    if (enrollment.isDeclinedBy(userId)) {
-      // TODO: check if is not allery updated
-      await Services.Enrollments.update(enrollment.id, { status: 'declined' })
-      await Database.Enrollments.delete(enrollment.id)
-      await Services.Enrollments.remove(enrollment.id)
-    }
+  if (authToken) {
+    const enrollments = await Database.Enrollments.all()
+    for (const enrollment of enrollments) {
+      if (enrollment.isNotSubmitted) {
+          await Services.Enrollments.create({
+            id: enrollment.id,
+            groupId: enrollment.groupId !== UnknownGroupId ? enrollment.groupId : undefined,
+            courseId: enrollment.courseId,
+          })
+          enrollment.submit()
+          await Database.Enrollments.save(enrollment)
+      }
 
-    if (enrollment.isArchived) {
-      await Services.Enrollments.remove(enrollment.id)
-      await Database.Enrollments.delete(enrollment.id)
+      if (enrollment.isDeclinedBy(userId)) {
+        // TODO: check if is not allery updated
+        await Services.Enrollments.update(enrollment.id, { status: 'declined' })
+        await Database.Enrollments.delete(enrollment.id)
+        await Services.Enrollments.remove(enrollment.id)
+      }
+
+      if (enrollment.isArchived) {
+        await Services.Enrollments.remove(enrollment.id)
+        await Database.Enrollments.delete(enrollment.id)
+      }
     }
   }
 }
 
 
 export async function SyncWithRemoteServer(
-  userId: string = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
+  userId: string,
+  authToken: string,
 ) {
+  Services.Courses.setToken(authToken)
+  Services.Groups.setToken(authToken)
+  Services.Enrollments.setToken(authToken)
+
   console.log('courses')
   const courses = await Services.Courses.getAll()
   for (const x of courses.items) {
@@ -56,20 +68,22 @@ export async function SyncWithRemoteServer(
       name: x.name,
       courseId: x.course.id,
       couratorName: x.leader.name,
-      couratorAvatarUrl: x.leader.avatarUrl || "https://i.pravatar.cc/300",
+      couratorAvatarUrl: x.leader.avatarUrl,
       startsAt: new Date(x.startsAt)
     }))
   }
 
-  console.log('enrollments')
-  const enrollments = await Services.Enrollments.getAll()
-  for (const e of enrollments.items) {
-    await Database.Enrollments.save(new Enrollment(e.id, {
-      groupId: e.group?.id,
-      courseId: e.course.id,
-      status: e.status,
-      declinedBy: e.declinedBy,
-    }))
+  if (authToken) {
+    console.log('enrollments')
+    const enrollments = await Services.Enrollments.getAll()
+    for (const e of enrollments.items) {
+      await Database.Enrollments.save(new Enrollment(e.id, {
+        groupId: e.group?.id,
+        courseId: e.course.id,
+        status: e.status,
+        declinedBy: e.declinedBy,
+      }))
+    }
   }
 
   console.log('lessons')

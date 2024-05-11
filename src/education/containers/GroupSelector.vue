@@ -37,6 +37,7 @@ const selectedGroup = defineModel<string>()
 const { groups } = toRefs(props)
 const groupsToShow = shallowRef<GroupViewModel[]>([])
 const NO_CLASS_AVATAR = 'class-is-recruiting-avatar.png'
+const NO_LEADER_AVATAR = 'user/no-avatar.jpg'
 
 /* -------------------------------------------------------------------------- */
 /*                                    Hooks                                   */
@@ -55,7 +56,7 @@ async function onFetchData() {
     id: x.id,
     name: x.name,
     leader: x.couratorName,
-    imageUrl: x.couratorAvatarUrl,
+    imageUrl: x.couratorAvatarUrl || NO_LEADER_AVATAR,
     startsAt: x.startsAt.getTime(),
   } as GroupViewModel))
 

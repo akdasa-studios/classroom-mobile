@@ -60,21 +60,13 @@
 import { computed, ref } from 'vue'
 import { IonPage, IonInput, IonList, IonCheckbox, useIonRouter } from '@ionic/vue'
 import { AsyncButton } from '@/shared'
-import { useAccountService } from '../composables/useAccountService'
+import { useProfileService } from '@/auth'
 
-
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
+// --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()
-const accountService = useAccountService()
+const profileService = useProfileService()
 
-
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
-
+// --- State -----------------------------------------------------------------
 const name = ref()
 const location = ref()
 const phoneNumber = ref()
@@ -84,16 +76,14 @@ const isSugnUpButtonEmabled = computed(
   () => true || name.value && phoneNumber.value && conditionsAccepted.value && location.value
 )
 
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
+// --- Handlers --------------------------------------------------------------
 async function onSignUpButtonClicked() {
   busy.value = true
   // TODO: handle eerors and exceptions
-  accountService.updateAccount({
-    name: name.value, phoneNumber: phoneNumber.value
+  await profileService.update({
+    name: name.value,
+    phone: phoneNumber.value,
+    location: location.value
   })
   router.navigate({name: 'courses'}, 'root', 'replace')
   busy.value = false

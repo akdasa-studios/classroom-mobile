@@ -1,4 +1,10 @@
 export abstract class RemoteService {
+  private token: string | undefined
+
+  setToken(token: string) {
+    this.token = token
+  }
+
   protected async get<TResponse>(
     url: string,
     queryParams: { [key: string]: string } | undefined = undefined
@@ -8,7 +14,10 @@ export abstract class RemoteService {
       : url
 
     const response = await fetch(finalUrl, {
-      headers: { 'accept': 'application/json' }
+      headers: {
+        'authorization': `Bearer ${this.token}`,
+        'accept': 'application/json'
+      }
     })
     if (response.ok) {
       return await response.json() as TResponse
@@ -21,6 +30,7 @@ export abstract class RemoteService {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
+        'authorization': `Bearer ${this.token}`,
         'accept': 'application/json',
         'content-type': 'application/json'
       },
@@ -37,6 +47,7 @@ export abstract class RemoteService {
     const response = await fetch(url, {
       method: 'PATCH',
       headers: {
+        'authorization': `Bearer ${this.token}`,
         'accept': 'application/json',
         'content-type': 'application/json'
       },
@@ -52,7 +63,10 @@ export abstract class RemoteService {
   protected async delete<TResponse>(url: string): Promise<void> {
     const response = await fetch(url, {
       method: 'DELETE',
-      headers: { 'accept': 'application/json' }
+      headers: {
+        'authorization': `Bearer ${this.token}`,
+        'accept': 'application/json'
+      }
     })
     if (response.ok) {
       return;// await response.json() as TResponse

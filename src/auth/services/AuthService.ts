@@ -1,7 +1,10 @@
+import { AuthRequest, AuthResponse } from "@protocol/AuthService"
+
 export class AuthService {
-  async getSignInCode(email: string) {
-    const url = 'https://bcs-sod.free.beeceptor.com/auth/email'
-    const data = { email }
+  async signIn(
+    request: AuthRequest
+  ): Promise<AuthResponse> {
+    const url = 'http://localhost:3000/auth/email'
 
     try {
       const response = await fetch(url, {
@@ -9,47 +12,16 @@ export class AuthService {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(request)
       })
 
       if (response.ok) {
-        // Handle successful response
-        const result = await response.json()
-        console.log(result)
+        return await response.json()
       } else {
-        // Handle error response
-        console.error('Request failed:', response.status)
+        throw new Error('Request failed:' + response.status)
       }
     } catch (error) {
-      // Handle network error
-      console.error('Network error:', error)
-    }
-  }
-
-  async signInWithCode(code: string) {
-    const url = 'https://bcs-sod.free.beeceptor.com/auth/email'
-    const data = { code }
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-
-      if (response.ok) {
-        // Handle successful response
-        const result = await response.json()
-        return result
-      } else {
-        // Handle error response
-        console.error('Request failed:', response.status)
-      }
-    } catch (error) {
-      // Handle network error
-      console.error('Network error:', error)
+      throw new Error('Network error:' + error)
     }
   }
 }

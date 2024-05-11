@@ -25,18 +25,21 @@ import '@ionic/vue/css/display.css'
 /* Theme variables */
 import './theme.css'
 import './lottie.css'
-import { LocalStorageService, serviceLocator } from './shared'
+import { useConfig, useConfigPersistence } from './shared/composables/useConfig'
 
-/** */
-const localStorage = new LocalStorageService()
-serviceLocator.add('localStorage', localStorage)
 
-const app = createApp(App)
-  .use(IonicVue)
-  .use(router)
-  .use(fluent)
+async function createAndRunApp() {
+  useConfig()
+  await useConfigPersistence()
 
-router.isReady().then(async () => {
-  await serviceLocator.init()
-  app.mount('#app')
-})
+  const app = createApp(App)
+    .use(IonicVue)
+    .use(router)
+    .use(fluent)
+
+  router.isReady().then(async () => {
+    app.mount('#app')
+  })
+}
+
+createAndRunApp()
