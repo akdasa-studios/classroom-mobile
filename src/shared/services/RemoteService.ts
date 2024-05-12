@@ -1,9 +1,5 @@
 export abstract class RemoteService {
-  private token: string | undefined
-
-  setToken(token: string) {
-    this.token = token
-  }
+  constructor(private readonly token: string) {}
 
   protected async get<TResponse>(
     url: string,

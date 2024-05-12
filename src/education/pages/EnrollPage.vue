@@ -68,10 +68,10 @@ import { v4 } from 'uuid'
 import { ref } from 'vue'
 import { useAsyncState } from '@vueuse/core'
 import { IonTextarea, IonItem, IonLabel, IonList,  useIonRouter } from '@ionic/vue'
-import { PageWithHeaderLayout, AsyncButton } from '@/shared'
+import { PageWithHeaderLayout, AsyncButton, useSync } from '@/shared'
 import {
   GroupSelector, TimeRangeSelector, TimeRange, TimeRangePreset,
-  FetchActiveGroupsOfCourse, Database, useSyncTask, Enrollment
+  FetchActiveGroupsOfCourse, Database, Enrollment
 } from '@/education'
 
 
@@ -82,9 +82,7 @@ const props = defineProps<{
 
 // --- Interface -------------------------------------------------------------
 const router = useIonRouter()
-const sync = useSyncTask()
-const userId = 'a243727d-57ab-4595-ba17-69f3a0679bf6'
-
+const sync = useSync()
 
 // --- State -----------------------------------------------------------------
 const timeRangePresets: TimeRangePreset[] = [

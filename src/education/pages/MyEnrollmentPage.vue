@@ -26,10 +26,10 @@
 
 <script lang="ts" setup>
 import { useAsyncState } from '@vueuse/core'
-import { PageWithHeaderLayout, useConfig } from '@/shared'
+import { PageWithHeaderLayout, useConfig, useSync } from '@/shared'
 import {
   LessonsList, Enrollment, EnrollmentReviewStatus, Database, Lesson,
-  FetchLessonsOfGroup, EmptyEnrollment, useSyncTask, Group,
+  FetchLessonsOfGroup, EmptyEnrollment, Group,
 } from '@/education'
 import { useIonRouter } from '@ionic/vue'
 import { useFluent } from 'fluent-vue';
@@ -37,7 +37,7 @@ import { computed } from 'vue';
 
 // --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()
-const sync = useSyncTask()
+const sync = useSync()
 const fluent = useFluent()
 const config = useConfig()
 

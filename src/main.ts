@@ -25,12 +25,12 @@ import '@ionic/vue/css/display.css'
 /* Theme variables */
 import './theme.css'
 import './lottie.css'
-import { useConfig, useConfigPersistence } from './shared/composables/useConfig'
+
+import { runConfigPersistence } from './shared'
 
 
 async function createAndRunApp() {
-  useConfig()
-  await useConfigPersistence()
+  await runConfigPersistence()
 
   const app = createApp(App)
     .use(IonicVue)

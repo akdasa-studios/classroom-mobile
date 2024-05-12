@@ -14,7 +14,7 @@
             <IonIcon
               slot="icon-only"
               color="primary"
-              :icon="cloudIcon"
+              :icon="cloudDownloadOutline"
             />
           </IonButton>
         </IonButtons>
@@ -45,18 +45,14 @@
 
 <script setup lang="ts">
 import {
-  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonIcon,
-  IonButton, useIonRouter,
+  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons,
+  IonBackButton, IonIcon, IonButton, useIonRouter,
 } from '@ionic/vue'
 import { computed, watch } from 'vue'
-import { LoadingSpinner, useDownloaderQueue } from '@/shared'
-import { cloudDownloadOutline, cloudUploadOutline } from 'ionicons/icons'
-import { useSyncTask } from '@/education'
+import { LoadingSpinner, useDownloaderQueue, useSync } from '@/shared'
+import { cloudDownloadOutline, } from 'ionicons/icons'
 
-/* -------------------------------------------------------------------------- */
-/*                                  Interface                                 */
-/* -------------------------------------------------------------------------- */
-
+// --- Interface -------------------------------------------------------------
 defineProps<{
   title: string,
   hasPadding?: boolean
@@ -67,34 +63,18 @@ const emit = defineEmits<{
   syncCompleted: []
 }>()
 
-/* -------------------------------------------------------------------------- */
-/*                                Dependencies                                */
-/* -------------------------------------------------------------------------- */
-
+// --- Dependencies ----------------------------------------------------------
 const downloaderQueue = useDownloaderQueue()
-const syncTask = useSyncTask()
+const sync = useSync()
 const router = useIonRouter()
 
+// --- State -----------------------------------------------------------------
+const busy = computed(() => downloaderQueue.isDownloading.value || sync.busy.value)
 
-/* -------------------------------------------------------------------------- */
-/*                                    State                                   */
-/* -------------------------------------------------------------------------- */
+// --- Hooks -----------------------------------------------------------------
+watch(sync.completedAt, () => emit('syncCompleted'))
 
-const busy = computed(() => downloaderQueue.isDownloading.value || syncTask.busy.value)
-const cloudIcon = computed(() => syncTask.direction.value === 'upload' ? cloudUploadOutline : cloudDownloadOutline)
-
-
-/* -------------------------------------------------------------------------- */
-/*                                    Hooks                                   */
-/* -------------------------------------------------------------------------- */
-
-watch(syncTask.completedAt, () => emit('syncCompleted'))
-
-
-/* -------------------------------------------------------------------------- */
-/*                                  Handlers                                  */
-/* -------------------------------------------------------------------------- */
-
+// --- Handlers --------------------------------------------------------------
 function onDownloadingIndicatorCkicked() {
   router.push({ name: 'downloads' })
 }

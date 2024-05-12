@@ -25,15 +25,15 @@
 <script setup lang="ts">
 import { onIonViewWillEnter, useIonRouter } from '@ionic/vue'
 import { useAsyncState } from '@vueuse/core'
-import { PageWithHeaderLayout, WithListHeader } from '@/shared'
+import { PageWithHeaderLayout, WithListHeader, useSync } from '@/shared'
 import {
   FetchHomeworkOfUser, StudentHomeworkList, EnrollmentsList, Database,
-  FetchEnrollmentsOfUser, useSyncTask
+  FetchEnrollmentsOfUser
 } from '@/education'
 
 // --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()
-const sync = useSyncTask()
+const sync = useSync()
 
 // --- State -----------------------------------------------------------------
 const { state: enrollments, execute: refreshEnrollments } =

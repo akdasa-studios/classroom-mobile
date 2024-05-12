@@ -28,7 +28,6 @@ export * from './components/TimeRange'
 export { default as GroupSelector } from './containers/GroupSelector.vue'
 
 // composables:
-export * from './composables/useSyncTask'
 export * from './composables/useTimeFormatter'
 
 // helpers:

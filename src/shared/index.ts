@@ -1,8 +1,21 @@
+// aggregates:
+export * from './aggregates/Aggregate'
+
+// ports:
+export * from './ports/PouchDb/PouchRepository'
+export * from './ports/CouchCacheDb'
+export * from './ports/DbScheme'
+
+// services:
+export * from './services/DownloaderService'
+export * from './services/RemoteService'
+
 // composables
 export * from './composables/useNetworkStatus'
 export * from './composables/useDownloader'
 export * from './composables/useDownloaderQueue'
 export * from './composables/useConfig'
+export * from './composables/useSync'
 
 // layouts
 export { default as PageWithHeaderLayout } from './layouts/PageWithHeaderLayout.vue'
@@ -22,16 +35,5 @@ export { default as TimePicker } from './components/TimePicker.vue'
 export { default as CongratsConfetti } from './components/CongratsConfetti.vue'
 export { default as WithListHeader } from './components/WithListHeader.vue'
 
-// services:
-export * from './services/IService'
-export * from './services/LocalStorageService'
-export * from './services/DownloaderService'
-export * from './services/RemoteService'
-
-// ports:
-export * from './ports/PouchDb/PouchRepository'
-export * from './ports/CouchCacheDb'
-export * from './ports/DbScheme'
-
-// aggregates:
-export * from './aggregates/Aggregate'
+// tasks:
+export * from './tasks/runConfigPersistence'
