@@ -1,22 +1,30 @@
 
 import { ref } from 'vue'
 import { createSharedComposable } from '@vueuse/core'
-import { steps } from '@/education/sync'
-import { useConfig } from '@/shared'
 
+import { steps as authSyncSteps } from '@/auth/sync'
+import { steps as educationSyncSteps } from '@/education/sync'
+
+export type SyncContext = {
+  accessToken: string
+  refreshToken: string
+  syncBaseUrl: string
+}
 
 export const useSync = createSharedComposable(() => {
   const busy = ref(false)
-  const config = useConfig()
   const completedAt = ref(0)
 
   async function start() {
     try {
       busy.value = true
-      for(const step of steps) {
-        await step(config.userId.value, config.token.value)
+      console.group('Sync')
+      for(const step of [...authSyncSteps, ...educationSyncSteps]) {
+        console.log(step.name)
+        await step()
       }
     } finally {
+      console.groupEnd()
       busy.value = false
       completedAt.value = Date.now()
     }

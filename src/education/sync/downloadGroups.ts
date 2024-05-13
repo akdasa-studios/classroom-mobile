@@ -1,12 +1,12 @@
 import { Database, Group, GroupsService } from "@/education"
+import { useConfig } from "@/shared"
 
-export async function downloadGroups(
-  userId: string,
-  authToken: string,
-) {
-  const groupsService = new GroupsService(authToken)
+export async function downloadGroups() {
+  const config = useConfig()
+  const groupsService = new GroupsService(
+    config.baseUrl.value, config.accessToken.value
+  )
 
-  console.log('groups')
   const groups = await groupsService.getAll() // TODO: get active only groups
   for (const x of groups.items) {
     await Database.Groups.save(new Group(x.id, {

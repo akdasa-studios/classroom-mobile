@@ -1,10 +1,9 @@
 import { Database, EnrollmentsService, UnknownGroupId } from "@/education"
+import { useConfig } from "@/shared"
 
-export async function uploadEnrollments(
-  userId: string,
-  authToken: string,
-) {
-  const enrollmentsService = new EnrollmentsService(authToken)
+export async function uploadEnrollments() {
+  const config = useConfig()
+  const enrollmentsService = new EnrollmentsService(config.baseUrl.value, config.accessToken.value)
   const enrollments = (await Database.Enrollments.all()).filter(x => x.isNotSubmitted)
 
   for (const enrollment of enrollments) {

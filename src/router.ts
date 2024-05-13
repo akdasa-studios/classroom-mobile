@@ -25,7 +25,7 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const config = useConfig()
-  const isAuthenticated = config.token.value
+  const isAuthenticated = config.accessToken.value
   if (
     !isAuthenticated &&
     to.name !== 'signin'

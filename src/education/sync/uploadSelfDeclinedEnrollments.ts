@@ -1,11 +1,10 @@
 import { Database, EnrollmentsService } from "@/education"
+import { useConfig } from "@/shared"
 
-export async function uploadSelfDeclinedEnrollments(
-  userId: string,
-  authToken: string,
-) {
-  const enrollmentsService = new EnrollmentsService(authToken)
-  const enrollments = (await Database.Enrollments.all()).filter(x => x.isDeclinedBy(userId))
+export async function uploadSelfDeclinedEnrollments() {
+  const config = useConfig()
+  const enrollmentsService = new EnrollmentsService(config.baseUrl.value, config.accessToken.value)
+  const enrollments = (await Database.Enrollments.all()).filter(x => x.isDeclinedBy(config.userId.value))
 
   for (const enrollment of enrollments) {
     await enrollmentsService.update(enrollment.id, { status: 'declined' })

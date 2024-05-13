@@ -1,14 +1,14 @@
 import { Database, Enrollment, EnrollmentsService } from "@/education"
+import { useConfig } from "@/shared"
 
-export async function downloadEnrollments(
-  userId: string,
-  authToken: string,
-) {
-  if (!authToken) { return }
+export async function downloadEnrollments() {
+  const config = useConfig()
+  if (!config.accessToken.value) { return }
 
-  const enrollmentsService = new EnrollmentsService(authToken)
+  const enrollmentsService = new EnrollmentsService(
+    config.baseUrl.value, config.accessToken.value
+  )
 
-  console.log('enrollments')
   const enrollments = await enrollmentsService.getAll()
   for (const e of enrollments.items) {
     await Database.Enrollments.save(new Enrollment(e.id, {

@@ -1,5 +1,7 @@
 import { AuthService } from '@/auth'
+import { useConfig } from '@/shared'
 
 export function useAuthService() {
-  return new AuthService()
+  const config = useConfig()
+  return new AuthService(config.baseUrl.value)
 }

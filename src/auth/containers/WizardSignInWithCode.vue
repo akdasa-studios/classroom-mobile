@@ -48,7 +48,8 @@ async function onValidateCodeClicked() {
   // Authenticate
   const email = config.email.value
   const authResult = await authService.signIn({ email: email, code: code.value })
-  config.token.value = authResult.accessToken
+  config.accessToken.value = authResult.accessToken
+  config.refreshToken.value = authResult.refreshToken
   profileService.setToken(authResult.accessToken)
 
   // Check if profile exists

@@ -1,12 +1,12 @@
 import { Course, CoursesService, Database } from "@/education"
+import { useConfig } from "@/shared"
 
-export async function downloadCourses(
-  userId: string,
-  authToken: string,
-) {
-  const coursesService = new CoursesService(authToken)
+export async function downloadCourses() {
+  const config = useConfig()
+  const coursesService = new CoursesService(
+    config.baseUrl.value, config.accessToken.value
+  )
 
-  console.log('courses')
   const courses = await coursesService.getAll()
   for (const x of courses.items) {
     await Database.Courses.save(new Course(x.id, {

@@ -1,5 +1,5 @@
 export abstract class RemoteService {
-  constructor(private readonly token: string) {}
+  constructor(private readonly baseUrl: string, private readonly token: string) {}
 
   protected async get<TResponse>(
     url: string,
@@ -9,7 +9,7 @@ export abstract class RemoteService {
       ? url + "?" + new URLSearchParams(queryParams)
       : url
 
-    const response = await fetch(finalUrl, {
+    const response = await fetch(`${this.baseUrl}${finalUrl}`, {
       headers: {
         'authorization': `Bearer ${this.token}`,
         'accept': 'application/json'
@@ -23,7 +23,7 @@ export abstract class RemoteService {
   }
 
   protected async post<TRequest, TResponse>(url: string, payload: TRequest) {
-    const response = await fetch(url, {
+    const response = await fetch(`${this.baseUrl}url`, {
       method: 'POST',
       headers: {
         'authorization': `Bearer ${this.token}`,
@@ -40,7 +40,7 @@ export abstract class RemoteService {
   }
 
   protected async patch<TRequest, TResponse>(url: string, payload: TRequest) {
-    const response = await fetch(url, {
+    const response = await fetch(`${this.baseUrl}url`, {
       method: 'PATCH',
       headers: {
         'authorization': `Bearer ${this.token}`,
@@ -57,7 +57,7 @@ export abstract class RemoteService {
   }
 
   protected async delete<TResponse>(url: string): Promise<void> {
-    const response = await fetch(url, {
+    const response = await fetch(`${this.baseUrl}url`, {
       method: 'DELETE',
       headers: {
         'authorization': `Bearer ${this.token}`,

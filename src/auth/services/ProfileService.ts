@@ -1,15 +1,14 @@
 import { GetProfileResponse, UpdateProfileRequest, UpdateProfileResponse } from "@protocol/ProfileService"
 
 export class ProfileService {
-  constructor(private token: string = "") {
-  }
+  constructor(private readonly baseUrl: string, private token: string = "") {}
 
   public setToken(token: string) {
     this.token = token
   }
 
   public async get(): Promise<GetProfileResponse> {
-    const url = 'http://localhost:3000/profile'
+    const url = `${this.baseUrl}/profile`
 
     try {
       const response = await fetch(url, {
@@ -33,7 +32,7 @@ export class ProfileService {
   public async update(
     request: UpdateProfileRequest
   ): Promise<UpdateProfileResponse> {
-    const url = 'http://localhost:3000/profile'
+    const url = `${this.baseUrl}/profile`
 
     try {
       const response = await fetch(url, {

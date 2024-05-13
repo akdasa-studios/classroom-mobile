@@ -14,13 +14,13 @@ const downloaderQueue = useDownloaderQueue()
 const config = useConfig()
 
 // TODO; Move to runSyncOnAuth
-watch(config.token, async (token) => {
+// watch(config.accessToken, async (token) => {
+//   await sync.start()
+//   await downloaderQueue.downloadAll()
+// })
+
+onMounted(async () => {
   await sync.start()
   await downloaderQueue.downloadAll()
 })
-
-// onMounted(async () => {
-//   await syncTask.start()
-//   await downloaderQueue.downloadAll()
-// })
 </script>
