@@ -1,5 +1,5 @@
-import { Database } from "@classroom/app/education"
-import { lessonSectionFixtures } from "@classroom/app/shared/fixtures"
+import { Database } from '@classroom/app/education'
+import { lessonSectionFixtures } from '@classroom/app/shared/fixtures'
 
 export async function downloadLessonSections() {
   // const myLessons = lessons.entities.map(x => x.id)

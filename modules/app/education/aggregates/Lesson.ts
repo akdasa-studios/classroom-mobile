@@ -1,4 +1,4 @@
-import { Aggregate } from "@classroom/app/shared"
+import { Aggregate } from '@classroom/app/shared'
 
 export type LessonProps = {
   courseId: string

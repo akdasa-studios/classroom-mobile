@@ -1,4 +1,4 @@
-import { AuthRequest, AuthResponse, RefreshTokenRequest, RefreshTokenResponse } from "@classroom/protocol/AuthService"
+import { AuthRequest, AuthResponse, RefreshTokenRequest, RefreshTokenResponse } from '@classroom/protocol/AuthService'
 
 export class AuthService {
   constructor(private readonly baseUrl: string) {}

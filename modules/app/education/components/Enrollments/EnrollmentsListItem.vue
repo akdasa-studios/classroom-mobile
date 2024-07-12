@@ -30,8 +30,8 @@
     <IonItemOptions>
       <IonItemOption
         color="danger"
-        @click="onDeleteClicked"
         expandable
+        @click="onDeleteClicked"
       >
         {{ $t('delete') }}
       </IonItemOption>
@@ -61,7 +61,7 @@ const emit = defineEmits<{
 
 // --- State -----------------------------------------------------------------
 const showStatus = computed(() => props.status !== 'approved')
-const slidingItem = ref<typeof IonItemSliding>();
+const slidingItem = ref<typeof IonItemSliding>()
 
 // --- Handlers --------------------------------------------------------------
 function onClicked() {

@@ -4,7 +4,7 @@ import { RemoteService } from '@classroom/app/shared'
 
 export class EnrollmentsService extends RemoteService {
   async create(enrollment: CreateEnrollmentRequest) {
-    return await this.post("/enrollments", enrollment)
+    return await this.post('/enrollments', enrollment)
   }
 
   async getOne(id: string): Promise<GetEnrollmentResponse> {
@@ -12,7 +12,7 @@ export class EnrollmentsService extends RemoteService {
   }
 
   async getAll(): Promise<GetEnrollmentsResponse> {
-    return await this.get("/enrollments")
+    return await this.get('/enrollments')
   }
 
   async update(id: string, request: UpdateEnrollmentRequest): Promise<UpdateEnrollmentResponse> {
@@ -20,7 +20,7 @@ export class EnrollmentsService extends RemoteService {
   }
 
   async find(query: string): Promise<GetEnrollmentsResponse> {
-    return await this.get("/enrollments", { query })
+    return await this.get('/enrollments', { query })
   }
 
   async remove(id: string): Promise<void> {

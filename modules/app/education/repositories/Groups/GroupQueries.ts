@@ -1,5 +1,5 @@
-import { Enrollment, Group } from "@classroom/app/education"
-import { QueryBuilder } from "@classroom/app/shared"
+import { Enrollment, Group } from '@classroom/app/education'
+import { QueryBuilder } from '@classroom/app/shared'
 
 const qb = new QueryBuilder<Group>()
 

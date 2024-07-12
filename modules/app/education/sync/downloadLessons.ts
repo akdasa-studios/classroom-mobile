@@ -1,5 +1,5 @@
-import { Database } from "@classroom/app/education"
-import { lessonsFixtures } from "@classroom/app/shared/fixtures"
+import { Database } from '@classroom/app/education'
+import { lessonsFixtures } from '@classroom/app/shared/fixtures'
 
 export async function downloadLessons() {
   // const myCourses = enrollments.items.map(x => new UuidIdentity(x.course.id))

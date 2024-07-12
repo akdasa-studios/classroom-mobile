@@ -1,5 +1,5 @@
-import { Database } from "@classroom/app/education"
-import { studentHomeworks } from "@classroom/app/shared/fixtures"
+import { Database } from '@classroom/app/education'
+import { studentHomeworks } from '@classroom/app/shared/fixtures'
 
 export async function downloadStudentHomework() {
   // const studentHomeworks = await Repositories.Remote.StudentHomeworks.find(OfStudent(userId))

@@ -1,5 +1,5 @@
-import { Database, Group, GroupsService } from "@classroom/app/education"
-import { useConfig } from "@classroom/app/shared"
+import { Database, Group, GroupsService } from '@classroom/app/education'
+import { useConfig } from '@classroom/app/shared'
 
 export async function downloadGroups() {
   const config = useConfig()

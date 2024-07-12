@@ -6,7 +6,7 @@ export abstract class RemoteService {
     queryParams: { [key: string]: string } | undefined = undefined
   ) {
     const finalUrl = queryParams
-      ? url + "?" + new URLSearchParams(queryParams)
+      ? url + '?' + new URLSearchParams(queryParams)
       : url
 
     const response = await fetch(`${this.baseUrl}${finalUrl}`, {
@@ -65,7 +65,7 @@ export abstract class RemoteService {
       }
     })
     if (response.ok) {
-      return;// await response.json() as TResponse
+      return// await response.json() as TResponse
     } else {
       throw Error('Failed to fetch data')
     }

@@ -1,4 +1,4 @@
-import { Aggregate } from "@classroom/app/shared"
+import { Aggregate } from '@classroom/app/shared'
 
 export type EnrollmentStatus = 'not-submitted' | 'pending' | 'approved' | 'declined' | 'graduated'
 

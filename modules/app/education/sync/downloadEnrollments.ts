@@ -1,5 +1,5 @@
-import { Database, Enrollment, EnrollmentsService } from "@classroom/app/education"
-import { useConfig } from "@classroom/app/shared"
+import { Database, Enrollment, EnrollmentsService } from '@classroom/app/education'
+import { useConfig } from '@classroom/app/shared'
 
 export async function downloadEnrollments() {
   const config = useConfig()

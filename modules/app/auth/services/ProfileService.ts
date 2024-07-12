@@ -1,7 +1,7 @@
-import { GetProfileResponse, UpdateProfileRequest, UpdateProfileResponse } from "@classroom/protocol/ProfileService"
+import { GetProfileResponse, UpdateProfileRequest, UpdateProfileResponse } from '@classroom/protocol/ProfileService'
 
 export class ProfileService {
-  constructor(private readonly baseUrl: string, private token: string = "") {}
+  constructor(private readonly baseUrl: string, private token: string = '') {}
 
   public setToken(token: string) {
     this.token = token

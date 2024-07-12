@@ -1,6 +1,6 @@
 import { deepMerge } from './DeepMerge'
 import { CouchDB } from './CouchDb'
-import { Aggregate, DbScheme } from '@classroom/app/shared';
+import { Aggregate, DbScheme } from '@classroom/app/shared'
 
 /**
  * Comparison operators. These are used to compare a field with a value.

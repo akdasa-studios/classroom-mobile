@@ -1,5 +1,5 @@
-import { Course, CoursesService, Database } from "@classroom/app/education"
-import { useConfig } from "@classroom/app/shared"
+import { Course, CoursesService, Database } from '@classroom/app/education'
+import { useConfig } from '@classroom/app/shared'
 
 export async function downloadCourses() {
   const config = useConfig()

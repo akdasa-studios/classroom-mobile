@@ -9,9 +9,9 @@
       :image="`enrollment/${state.enrollment.status}.webp`"
       :header="$t(`enrollment-${state.enrollment.status}`)"
       :text="i18n.enrollment['summary']"
-      :normalActionText="i18n.enrollment['normal-action']"
-      :dangerActionText="i18n.enrollment['danger-action']"
-      :dangerActionAlert="i18n.enrollment['danger-action-alert']"
+      :normal-action-text="i18n.enrollment['normal-action']"
+      :danger-action-text="i18n.enrollment['danger-action']"
+      :danger-action-alert="i18n.enrollment['danger-action-alert']"
       @click="onStatusButtonClicked"
     />
 
@@ -32,8 +32,8 @@ import {
   FetchLessonsOfGroup, EmptyEnrollment, Group,
 } from '@classroom/app/education'
 import { useIonRouter } from '@ionic/vue'
-import { useFluent } from 'fluent-vue';
-import { computed } from 'vue';
+import { useFluent } from 'fluent-vue'
+import { computed } from 'vue'
 
 // --- Dependencies ----------------------------------------------------------
 const router = useIonRouter()

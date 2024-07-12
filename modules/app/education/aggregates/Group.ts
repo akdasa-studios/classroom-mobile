@@ -1,4 +1,4 @@
-import { Aggregate } from "@classroom/app/shared"
+import { Aggregate } from '@classroom/app/shared'
 
 export type GroupProps = {
   name: string
@@ -20,4 +20,4 @@ export class Group extends Aggregate<string, GroupProps> {
   public get startsAt() { return this._props.startsAt }
 }
 
-export const UnknownGroupId = '00000000-0000-0000-0000-000000000000';
+export const UnknownGroupId = '00000000-0000-0000-0000-000000000000'
