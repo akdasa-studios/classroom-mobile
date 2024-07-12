@@ -17,11 +17,11 @@ export default defineConfig({
     }),
     legacy()
   ],
-  define: {global: 'window'},
+  define: { global: 'window' },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@protocol': path.resolve(__dirname, './submodules/protocol/lib'),
+      '@classroom/app':      path.resolve(__dirname, './modules/app'),
+      '@classroom/protocol': path.resolve(__dirname, './modules/protocol/lib'),
     },
   },
 })

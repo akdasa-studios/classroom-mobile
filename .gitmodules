@@ -1,6 +1,3 @@
 [submodule "protocol"]
-	path = submodules/protocol
-	url = https://github.com/akdasa-studios/classroom-protocol.git
-[submodule "framework"]
-	path = submodules/framework
-	url = git@github.com:akdasa-studios/framework.git
+	path = modules/protocol
+	url = git@github.com:akdasa-studios/classroom-protocol.git

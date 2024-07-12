@@ -15,13 +15,16 @@
     "skipLibCheck": true,
     "noEmit": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@protocol/*": ["./submodules/protocol/lib/*"],
+      "@classroom/app/*": ["./modules/app/*"],
+      "@classroom/protocol/*": ["./modules/protocol/lib/*"],
     }
   },
   "include": [
-    "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue",
-    "submodules/protocol/lib/**/*.ts",
+    "modules/app/**/*.ts",
+    "modules/app/**/*.d.ts",
+    "modules/app/**/*.tsx",
+    "modules/app/**/*.vue",
+    "modules/protocol/lib/**/*.ts",
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

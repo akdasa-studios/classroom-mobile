@@ -6,16 +6,14 @@ services:
       context: ..
       dockerfile: .devcontainer/Dockerfile
       args:
-        - USER_NAME=${DEVCONTAINER_USER_NAME}
-        - USER_UID=${DEVCONTAINER_USER_ID:-1000}
-        - USER_GID=${DEVCONTAINER_USER_GID:-1000}
-        - GITHUB_TOKEN=${GITHUB_PAT_TOKEN}
-    expose:
-      - 8080
+        - USER_ID=${DEVCONTAINER_USER_ID:-1000}
+        - USER_NAME=${DEVCONTAINER_USER_NAME:-node}
+        - GROUP_ID=${DEVCONTAINER_GROUP_ID:-100}
+        - GROUP_NAME=${DEVCONTAINER_GROUP_NAME:-dev}
     networks:
       - classroom
     volumes:
-      - ..:/workspaces
+      - ..:/akd-studios/classroom/classroom-mobile
 
 networks:
   classroom:
